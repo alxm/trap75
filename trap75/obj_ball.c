@@ -23,20 +23,8 @@
 #include "util_fix.h"
 #include "util_graphics.h"
 
-#define O_BALL_NUM 4
-#define O_BALL_ORIGIN_DIST 16
-
 #define O_BALL_TRAIL_ALPHA 128
 #define O_BALL_HISTORY_LEN 4
-
-typedef enum {
-    O_BALL_ID_INVALID = -1,
-    O_BALL_ID_1,
-    O_BALL_ID_2,
-    O_BALL_ID_3,
-    O_BALL_ID_4,
-    O_BALL_ID_NUM
-} OBallId;
 
 typedef struct {
     ZSpriteId sprite;
@@ -58,44 +46,37 @@ struct OBall {
     bool hitWall, hitBall, committed, ignore;
 };
 
-static OBall g_balls[O_BALL_NUM];
-
-static void ball_init(OBall* Ball, OBallId Id, int X, int Y, unsigned Angle)
-{
-    Ball->id = Id;
-
-    Ball->coords.x = z_fix_fromInt(X);
-    Ball->coords.y = z_fix_fromInt(Y);
-
-    Ball->coordsHistory[0] = z_vectorfix_toInt(Ball->coords);
-
-    for(int i = 1; i < O_BALL_HISTORY_LEN; i++) {
-        Ball->coordsHistory[i] = Ball->coordsHistory[0];
-    }
-
-    Ball->velocity.x = +z_fix_cos(Angle);
-    Ball->velocity.y = -z_fix_sin(Angle);
-
-    Ball->ignore = false;
-}
+static OBall g_balls[O_BALL_NUM_MAX];
+static int g_tail;
 
 void o_ball_setup(void)
 {
-    unsigned angleInc = Z_FIX_ANGLES_NUM / O_BALL_NUM;
-    unsigned angle = angleInc / 2;
+    g_tail = 0;
+}
 
-    for(int i = 0; i < O_BALL_NUM; i++, angle += angleInc) {
-        ball_init(&g_balls[i],
-                  z_random_int(10)
-                    ? z_random_int(O_BALL_ID_NUM - 1) : O_BALL_ID_4,
-                  N_MAP_BORDER_L
-                    + (Z_SCREEN_W - N_MAP_BORDER_L - N_MAP_BORDER_R) / 2
-                    + z_fix_toInt(z_fix_cos(angle) * O_BALL_ORIGIN_DIST),
-                  N_MAP_BORDER_U
-                    + (Z_SCREEN_H - N_MAP_BORDER_U - N_MAP_BORDER_D) / 2
-                    - z_fix_toInt(z_fix_sin(angle) * O_BALL_ORIGIN_DIST),
-                  angle);
+void o_ball_new(OBallId Id, int X, int Y, unsigned Angle)
+{
+    if(g_tail == O_BALL_NUM_MAX) {
+        return;
     }
+
+    OBall* b = &g_balls[g_tail++];
+
+    b->id = Id;
+
+    b->coords.x = z_fix_fromInt(X);
+    b->coords.y = z_fix_fromInt(Y);
+
+    b->coordsHistory[0] = z_vectorfix_toInt(b->coords);
+
+    for(int i = 1; i < O_BALL_HISTORY_LEN; i++) {
+        b->coordsHistory[i] = b->coordsHistory[0];
+    }
+
+    b->velocity.x = +z_fix_cos(Angle);
+    b->velocity.y = -z_fix_sin(Angle);
+
+    b->ignore = false;
 }
 
 static inline int ballRadius(const OBall* Ball)
@@ -177,7 +158,7 @@ static void ball_tick_validate(int Index)
         b1->hitWall = true;
     }
 
-    for(int i = Index + 1; i < O_BALL_NUM; i++) {
+    for(int i = Index + 1; i < g_tail; i++) {
         OBall* b2 = &g_balls[i];
 
         bool collide = circleAndCirclef(b1->coordsNext,
@@ -242,7 +223,7 @@ static bool ballCommitValid(const OBall* Ball, ZVectorFix Coords)
         return false;
     }
 
-    for(int i = 0; i < O_BALL_NUM; i++) {
+    for(int i = 0; i < g_tail; i++) {
         OBall* b = &g_balls[i];
 
         if(b == Ball || !b->committed) {
@@ -298,19 +279,19 @@ static void ball_tick_commit_2(OBall* Ball)
 
 void o_ball_tick(void)
 {
-    for(int i = 0; i < O_BALL_NUM; i++) {
+    for(int i = 0; i < g_tail; i++) {
         ball_tick_move(&g_balls[i]);
     }
 
-    for(int i = 0; i < O_BALL_NUM; i++) {
+    for(int i = 0; i < g_tail; i++) {
         ball_tick_validate(i);
     }
 
-    for(int i = 0; i < O_BALL_NUM; i++) {
+    for(int i = 0; i < g_tail; i++) {
         ball_tick_commit_1(&g_balls[i]);
     }
 
-    for(int i = 0; i < O_BALL_NUM; i++) {
+    for(int i = 0; i < g_tail; i++) {
         ball_tick_commit_2(&g_balls[i]);
     }
 }
@@ -339,14 +320,14 @@ void o_ball_draw(void)
     z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
     z_graphics_colorSetId(Z_COLOR_BG_4);
 
-    for(int i = 0; i < O_BALL_NUM; i++) {
+    for(int i = 0; i < g_tail; i++) {
         ball_draw_trail(&g_balls[i]);
     }
 
     z_graphics_alphaSet(256);
     z_graphics_colorSetId(Z_COLOR_BALL_Y1);
 
-    for(int i = 0; i < O_BALL_NUM; i++) {
+    for(int i = 0; i < g_tail; i++) {
         ball_draw_main(&g_balls[i]);
     }
 }
@@ -361,7 +342,7 @@ bool o_ball_checkArea(ZVectorInt Start, ZVectorInt Dim)
 
 bool o_ball_checkArea2(ZFix X, ZFix Y, ZFix W, ZFix H)
 {
-    for(int i = 0; i < O_BALL_NUM; i++) {
+    for(int i = 0; i < g_tail; i++) {
         const OBall* b = &g_balls[i];
 
         ZFix rad = z_fix_fromInt(ballRadius(b));

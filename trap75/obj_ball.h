@@ -22,9 +22,23 @@
 
 #include "util_fix.h"
 
+#define O_BALL_NUM_MAX 16
+
+typedef enum {
+    O_BALL_ID_INVALID = -1,
+    O_BALL_ID_1,
+    O_BALL_ID_2,
+    O_BALL_ID_3,
+    O_BALL_ID_4,
+    O_BALL_ID_NUM
+} OBallId;
+
 typedef struct OBall OBall;
 
 extern void o_ball_setup(void);
+
+extern void o_ball_new(OBallId Id, int X, int Y, unsigned Angle);
+
 extern void o_ball_tick(void);
 extern void o_ball_draw(void);
 

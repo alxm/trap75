@@ -23,7 +23,10 @@
 #include "obj_cursor.h"
 #include "obj_map.h"
 #include "obj_hud.h"
+#include "util_graphics.h"
 #include "util_save.h"
+
+#define N_GAME_LEVELS_NUM 1
 
 typedef struct {
     unsigned level;
@@ -43,6 +46,36 @@ void n_game_new(unsigned Level)
 
     n_cursor_new();
     o_ball_setup();
+
+    if(Level >= N_GAME_LEVELS_NUM) {
+        return;
+    }
+
+    static const OBallId levels[N_GAME_LEVELS_NUM][O_BALL_NUM_MAX + 1] = {
+        {O_BALL_ID_1, O_BALL_ID_1, O_BALL_ID_INVALID},
+    };
+
+    unsigned numBalls = 0;
+
+    while(levels[Level][numBalls] != O_BALL_ID_INVALID) {
+        numBalls++;
+    }
+
+    unsigned angleInc = Z_FIX_ANGLES_NUM / numBalls;
+    unsigned angle = angleInc * 2 / 3;
+
+    for(unsigned b = 0; b < numBalls; b++) {
+        o_ball_new(levels[Level][b],
+                   N_MAP_BORDER_L
+                    + (Z_SCREEN_W - N_MAP_BORDER_L - N_MAP_BORDER_R) / 2
+                    + z_fix_toInt(z_fix_cos(angle) * 16),
+                   N_MAP_BORDER_U
+                    + (Z_SCREEN_H - N_MAP_BORDER_U - N_MAP_BORDER_D) / 2
+                    - z_fix_toInt(z_fix_sin(angle) * 16),
+                   angle);
+
+        angle += angleInc;
+    }
 }
 
 void n_game_tick(void)
