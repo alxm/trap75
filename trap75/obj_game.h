@@ -20,12 +20,13 @@
 
 #include "platform.h"
 
-extern void n_game_new(unsigned Level);
+extern void n_game_new(void);
 
 extern void n_game_tick(void);
 extern void n_game_draw(void);
 
 extern unsigned n_game_levelGet(void);
+extern void n_game_levelSet(unsigned Level);
 
 extern unsigned n_game_scoreGet(void);
 extern void n_game_scoreAdd(unsigned Points);

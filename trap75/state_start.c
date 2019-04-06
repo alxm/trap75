@@ -19,6 +19,7 @@
 #include "state_start.h"
 
 #include "obj_game.h"
+#include "obj_map.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_sound.h"
@@ -29,13 +30,18 @@ void s_start_init(void)
     z_input_reset();
     z_light_reset();
 
-    n_game_new(0);
+    n_game_new();
+
     z_swipe_start(Z_SWIPE_LINES_SHOW);
 }
 
 void s_start_tick(void)
 {
     n_game_tick();
+
+    if(n_map_wallPercentGet() >= 75) {
+        n_game_levelSet(n_game_levelGet() + 1);
+    }
 }
 
 void s_start_draw(void)

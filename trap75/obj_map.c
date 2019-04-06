@@ -48,6 +48,10 @@ void n_map_new(void)
             g_map.field[y][x] = 1;
         }
 
+        for(int x = N_MAP_BORDER_L; x < Z_SCREEN_W - N_MAP_BORDER_R; x++) {
+            g_map.field[y][x] = 0;
+        }
+
         for(int x = Z_SCREEN_W - N_MAP_BORDER_R; x < Z_SCREEN_W; x++) {
             g_map.field[y][x] = 1;
         }
@@ -67,8 +71,8 @@ void n_map_draw(void)
     #define Z_DISTORT (4)
     #define Z_INC_MAX (Z_DEG_001_INT * 16)
 
-    #if Z_DISTORT > 16
-        #error Z_DISTORT > 16
+    #if Z_DISTORT > 4
+        #error Z_DISTORT > 4
     #endif
 
     ZPixel* screen = z_screen_pixelsGet();

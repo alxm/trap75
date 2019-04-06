@@ -26,23 +26,52 @@
 #include "util_graphics.h"
 #include "util_save.h"
 
-#define N_GAME_LEVELS_NUM 1
+#define N_GAME_LEVELS_NUM 8
 
 typedef struct {
-    unsigned level;
     unsigned score;
+    unsigned level;
 } NGame;
 
 static NGame g_game;
 
-void n_game_new(unsigned Level)
+void n_game_new(void)
+{
+    g_game.score = 0;
+
+    n_game_levelSet(0);
+}
+
+void n_game_tick(void)
+{
+    n_camera_tick();
+    n_map_tick();
+    o_ball_tick();
+    n_cursor_tick();
+    n_hud_tick();
+}
+
+void n_game_draw(void)
+{
+    n_map_draw();
+    o_ball_draw();
+    n_cursor_draw();
+    n_hud_draw();
+}
+
+unsigned n_game_levelGet(void)
+{
+    return g_game.level;
+}
+
+void n_game_levelSet(unsigned Level)
 {
     n_map_new();
     n_camera_new();
     n_hud_new();
 
     g_game.level = Level;
-    g_game.score = 0;
+
 
     n_cursor_new();
     o_ball_setup();
@@ -53,6 +82,13 @@ void n_game_new(unsigned Level)
 
     static const OBallId levels[N_GAME_LEVELS_NUM][O_BALL_NUM_MAX + 1] = {
         {O_BALL_ID_1, O_BALL_ID_1, O_BALL_ID_INVALID},
+        {O_BALL_ID_1, O_BALL_ID_1, O_BALL_ID_2, O_BALL_ID_INVALID},
+        {O_BALL_ID_1, O_BALL_ID_2, O_BALL_ID_1, O_BALL_ID_2, O_BALL_ID_INVALID},
+        {O_BALL_ID_1, O_BALL_ID_2, O_BALL_ID_1, O_BALL_ID_2, O_BALL_ID_3, O_BALL_ID_INVALID},
+        {O_BALL_ID_1, O_BALL_ID_3, O_BALL_ID_1, O_BALL_ID_3, O_BALL_ID_1, O_BALL_ID_3, O_BALL_ID_INVALID},
+        {O_BALL_ID_2, O_BALL_ID_4, O_BALL_ID_2, O_BALL_ID_3, O_BALL_ID_3, O_BALL_ID_INVALID},
+        {O_BALL_ID_1, O_BALL_ID_2, O_BALL_ID_4, O_BALL_ID_1, O_BALL_ID_2, O_BALL_ID_4, O_BALL_ID_INVALID},
+        {O_BALL_ID_3, O_BALL_ID_1, O_BALL_ID_4, O_BALL_ID_1, O_BALL_ID_4, O_BALL_ID_1, O_BALL_ID_3, O_BALL_ID_1, O_BALL_ID_INVALID},
     };
 
     unsigned numBalls = 0;
@@ -76,28 +112,6 @@ void n_game_new(unsigned Level)
 
         angle += angleInc;
     }
-}
-
-void n_game_tick(void)
-{
-    n_camera_tick();
-    n_map_tick();
-    o_ball_tick();
-    n_cursor_tick();
-    n_hud_tick();
-}
-
-void n_game_draw(void)
-{
-    n_map_draw();
-    o_ball_draw();
-    n_cursor_draw();
-    n_hud_draw();
-}
-
-unsigned n_game_levelGet(void)
-{
-    return g_game.level;
 }
 
 unsigned n_game_scoreGet(void)
