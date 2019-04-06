@@ -24,6 +24,7 @@
 
 typedef struct {
     uint8_t field[Z_SCREEN_H][Z_SCREEN_W]; // 0 free, 1 captured
+    int numCaptured;
 } NMap;
 
 static NMap g_map;
@@ -51,6 +52,8 @@ void n_map_new(void)
             g_map.field[y][x] = 1;
         }
     }
+
+    g_map.numCaptured = 0;
 }
 
 void n_map_tick(void)
@@ -121,6 +124,15 @@ void n_map_wallFill(int X, int Y, int W, int H)
             g_map.field[Y + y][X + x] = 1;
         }
     }
+
+    g_map.numCaptured += W * H;
+}
+
+int n_map_wallPercentGet(void)
+{
+    return 100 * g_map.numCaptured
+            / ((Z_SCREEN_W - N_MAP_BORDER_L - N_MAP_BORDER_R)
+                * (Z_SCREEN_H - N_MAP_BORDER_U - N_MAP_BORDER_D));
 }
 
 void n_map_wallBoundsGet(ZVectorInt Origin, int IncX, int IncY, ZVectorInt* Start, ZVectorInt* Dim)

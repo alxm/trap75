@@ -35,4 +35,5 @@ extern void n_map_draw(void);
 extern bool n_map_wallGet(ZVectorInt Coords);
 extern bool n_map_wallGet2(int X, int Y);
 extern void n_map_wallFill(int X, int Y, int W, int H);
+extern int n_map_wallPercentGet(void);
 extern void n_map_wallBoundsGet(ZVectorInt origin, int IncX, int IncY, ZVectorInt* Start, ZVectorInt* Dim);

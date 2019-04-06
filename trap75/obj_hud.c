@@ -20,6 +20,7 @@
 
 #include "obj_camera.h"
 #include "obj_game.h"
+#include "obj_map.h"
 #include "util_graphics.h"
 
 void n_hud_new(void)
@@ -61,10 +62,18 @@ static void hudDrawLevel(int X, int Y)
     drawNumber(X, Y, n_game_levelGet() + 1, 2, Z_SPRITE_FONT_LCDNUM);
 }
 
+static void hudDrawPercent(int X, int Y)
+{
+    z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
+
+    drawNumber(X, Y, (unsigned)n_map_wallPercentGet(), 2, Z_SPRITE_FONT_LCDNUM);
+}
+
 void n_hud_draw(void)
 {
     ZVectorInt shake = n_camera_shakeGet();
 
     hudDrawScore(Z_SCREEN_W - 20 - shake.x, 1 + shake.y);
     hudDrawLevel(1 - shake.x, 1 - shake.y);
+    hudDrawPercent(Z_SCREEN_W / 4 + shake.x, 1 + shake.y);
 }
