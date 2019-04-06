@@ -47,33 +47,33 @@ static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId F
     }
 }
 
-static void hudDrawScore(int X, int Y)
-{
-    z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
-
-    drawNumber(X, Y, n_game_scoreGet(), 4, Z_SPRITE_FONT_LCDNUM);
-}
-
 static void hudDrawLevel(int X, int Y)
 {
     z_graphics_colorSetId(Z_COLOR_CURSOR);
     z_graphics_alphaSet(192);
 
-    drawNumber(X, Y, n_game_levelGet() + 1, 2, Z_SPRITE_FONT_LCDNUM);
+    drawNumber(X, Y, n_game_levelGet() + 1, 2, Z_SPRITE_FONT_SMALLNUM);
 }
 
 static void hudDrawPercent(int X, int Y)
 {
     z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
 
-    drawNumber(X, Y, (unsigned)n_map_wallPercentGet(), 2, Z_SPRITE_FONT_LCDNUM);
+    drawNumber(X, Y, (unsigned)n_map_wallPercentGet(), 3, Z_SPRITE_FONT_SMALLNUM);
+}
+
+static void hudDrawScore(int X, int Y)
+{
+    z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
+
+    drawNumber(X, Y, n_game_scoreGet(), 4, Z_SPRITE_FONT_SMALLNUM);
 }
 
 void n_hud_draw(void)
 {
     ZVectorInt shake = n_camera_shakeGet();
 
-    hudDrawScore(Z_SCREEN_W - 20 - shake.x, 1 + shake.y);
-    hudDrawLevel(1 - shake.x, 1 - shake.y);
-    hudDrawPercent(Z_SCREEN_W / 4 + shake.x, 1 + shake.y);
+    hudDrawLevel(3 - shake.x, 3 - shake.y);
+    hudDrawPercent(32 + shake.x, 3 + shake.y);
+    hudDrawScore(Z_SCREEN_W - 18 - shake.x, 3 + shake.y);
 }

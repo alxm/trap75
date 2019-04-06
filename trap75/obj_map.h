@@ -22,7 +22,7 @@
 
 #include "util_fix.h"
 
-#define N_MAP_BORDER_U 9
+#define N_MAP_BORDER_U 1
 #define N_MAP_BORDER_D 1
 #define N_MAP_BORDER_L 1
 #define N_MAP_BORDER_R 1
