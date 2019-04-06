@@ -44,6 +44,8 @@ typedef enum {
     Z_COLOR_BG_2,
     Z_COLOR_BG_3,
     Z_COLOR_BG_4,
+    Z_COLOR_BG_5,
+    Z_COLOR_BG_6,
 
     Z_COLOR_BALL_Y1,
     Z_COLOR_BALL_Y2,
@@ -61,6 +63,9 @@ typedef enum {
 
     Z_SPRITE_ALXM,
     Z_SPRITE_ALXM_WING,
+
+    Z_SPRITE_ICON_HEART,
+    Z_SPRITE_ICON_LEVEL,
 
     Z_SPRITE_SPACE1,
 

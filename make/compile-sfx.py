@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-    Copyright 2010 Alex Margarit <alex@alxm.org>
+    Copyright 2019 Alex Margarit <alex@alxm.org>
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
