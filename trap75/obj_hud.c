@@ -94,9 +94,9 @@ static void hudDrawPercent(int X, int Y)
     drawBar(n_map_wallPercentGet(),
             75,
             X,
-            Y + 1,
+            Y,
             14,
-            3,
+            5,
             Z_COLOR_CURSOR_TRAIL,
             Z_COLOR_BG_5,
             Z_COLOR_CURSOR_TRAIL,
@@ -132,7 +132,7 @@ void n_hud_draw(void)
     z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
 
     hudDrawLevel(3 - shake.x, 3 - shake.y);
-    hudDrawPercent(22 + shake.x, 3 + shake.y);
-    hudDrawScore(Z_SCREEN_W - 41 - shake.x, 3 + shake.y);
-    hudDrawLives(Z_SCREEN_W - 14 - shake.x, 3 + shake.y);
+    hudDrawPercent(22 - shake.x, 3 + shake.y);
+    hudDrawScore(Z_SCREEN_W - 41 + shake.x, 3 - shake.y);
+    hudDrawLives(Z_SCREEN_W - 14 + shake.x, 3 + shake.y);
 }

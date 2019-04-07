@@ -26,6 +26,7 @@ typedef enum {
     Z_TIMER_INVALID = -1,
     Z_TIMER_CAMERA_SHAKE,
     Z_TIMER_G1,
+    Z_TIMER_LINE_HIT,
     Z_TIMER_NUM
 } ZTimerId;
 
