@@ -23,6 +23,8 @@
 #include "obj_map.h"
 #include "util_graphics.h"
 
+#define N_HUD_ALPHA 192
+
 void n_hud_new(void)
 {
     //
@@ -33,7 +35,7 @@ void n_hud_tick(void)
     //
 }
 
-static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, ZColorId ColorProg, ZColorId ColorBg, ZColorId ColorBorder, int Alpha)
+static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, ZColorId ColorProg, ZColorId ColorBg, ZColorId ColorBorder)
 {
     int progWidth = Width * Value / Total;
 
@@ -43,8 +45,6 @@ static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, Z
 
     // Main bar
 
-    z_graphics_alphaSet(Alpha);
-
     z_graphics_colorSetId(ColorProg);
     z_draw_rectangleAlpha(X, Y, progWidth, Height);
 
@@ -53,7 +53,7 @@ static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, Z
 
     // Glow border
 
-    z_graphics_alphaSet(Alpha >> 2);
+    z_graphics_alphaSet(N_HUD_ALPHA >> 2);
     z_graphics_colorSetId(ColorBorder);
 
     z_draw_rectangleAlpha(X, Y - 1, Width, 1);
@@ -61,7 +61,7 @@ static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, Z
     z_draw_rectangleAlpha(X - 1, Y, 1, Height);
     z_draw_rectangleAlpha(X + Width, Y, 1, Height);
 
-    z_graphics_alphaSet(256);
+    z_graphics_alphaSet(N_HUD_ALPHA);
 }
 
 static void drawNumber(unsigned Number, int NumDigits, int X, int Y, ZSpriteId Font)
@@ -70,7 +70,6 @@ static void drawNumber(unsigned Number, int NumDigits, int X, int Y, ZSpriteId F
 
     X += charSize * (NumDigits - 1);
 
-    z_graphics_alphaSet(256);
     z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
 
     for(int d = NumDigits; d--; X -= charSize, Number /= 10) {
@@ -95,22 +94,16 @@ static void hudDrawPercent(int X, int Y)
             75,
             X,
             Y,
-            14,
+            20,
             5,
             Z_COLOR_CURSOR_TRAIL,
             Z_COLOR_BG_5,
-            Z_COLOR_CURSOR_TRAIL,
-            256);
+            Z_COLOR_CURSOR_TRAIL);
 }
 
 static void hudDrawScore(int X, int Y)
 {
-    z_graphics_colorSetId(Z_COLOR_BALL_Y2);
-    z_sprite_blitAlphaMask(Z_SPRITE_BALL2, 0, X, Y);
-
-    X += z_sprite_sizeGetWidth(Z_SPRITE_BALL2) + 1;
-
-    z_graphics_colorSetId(Z_COLOR_CURSOR);
+    z_graphics_colorSetId(Z_COLOR_BALL_Y1);
     drawNumber(n_game_scoreGet(), 5, X, Y, Z_SPRITE_FONT_SMALLNUM);
 }
 
@@ -121,7 +114,7 @@ static void hudDrawLives(int X, int Y)
 
     X += z_sprite_sizeGetWidth(Z_SPRITE_ICON_HEART) + 1;
 
-    z_graphics_colorSetId(Z_COLOR_CURSOR);
+    z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
     drawNumber(n_game_scoreGet(), 1, X, Y, Z_SPRITE_FONT_SMALLNUM);
 }
 
@@ -129,10 +122,11 @@ void n_hud_draw(void)
 {
     ZVectorInt shake = n_camera_shakeGet();
 
+    z_graphics_alphaSet(N_HUD_ALPHA);
     z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
 
     hudDrawLevel(3 - shake.x, 3 - shake.y);
     hudDrawPercent(22 - shake.x, 3 + shake.y);
-    hudDrawScore(Z_SCREEN_W - 41 + shake.x, 3 - shake.y);
+    hudDrawScore(Z_SCREEN_W - 35 + shake.x, 3 - shake.y);
     hudDrawLives(Z_SCREEN_W - 14 + shake.x, 3 + shake.y);
 }
