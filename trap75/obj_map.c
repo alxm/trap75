@@ -98,7 +98,12 @@ void n_map_draw(void)
                         + (x + Z_DISTORT + z_fix_toInt(Z_DISTORT * z_fix_cosf(angle))));
 
             if(g_map.field[y][x] == 1) {
-                *screen |= 0xf800;
+                #if 1
+                    *screen |= 0xf800;
+                #else
+                    *screen &= 0x07ff;
+                    *screen |= 0xd000;
+                #endif
             }
 
             screen++;
