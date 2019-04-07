@@ -50,6 +50,7 @@ typedef enum {
     Z_COLOR_BALL_Y1,
     Z_COLOR_BALL_Y2,
     Z_COLOR_BALL_Y3,
+    Z_COLOR_BALL_Y4,
 
     Z_COLOR_CURSOR_TRAIL,
     Z_COLOR_CURSOR,

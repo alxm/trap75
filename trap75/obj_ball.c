@@ -23,8 +23,8 @@
 #include "util_fix.h"
 #include "util_graphics.h"
 
-#define O_BALL_TRAIL_ALPHA 128
-#define O_BALL_HISTORY_LEN 4
+#define O_BALL_TRAIL_ALPHA 160
+#define O_BALL_HISTORY_LEN 8
 
 typedef struct {
     ZSpriteId sprite;
@@ -318,7 +318,7 @@ static void ball_draw_main(const OBall* Ball)
 void o_ball_draw(void)
 {
     z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
-    z_graphics_colorSetId(Z_COLOR_BG_4);
+    z_graphics_colorSetId(Z_COLOR_BALL_Y4);
 
     for(int i = 0; i < g_tail; i++) {
         ball_draw_trail(&g_balls[i]);
