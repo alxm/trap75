@@ -144,18 +144,18 @@ void n_cursor_tick(void)
 
         if(g_cursor.line == Z_LINE_H) {
             hits = o_ball_checkArea2(
-                    g_cursor.coords.x - z_fix_fromInt(g_cursor.offsets[0]),
+                    g_cursor.coords.x - z_fix_fromInt(g_cursor.offsets[0] - 1),
                     g_cursor.coords.y,
                     z_fix_fromInt(
-                        g_cursor.offsets[0] + 1 + g_cursor.offsets[1]),
+                        g_cursor.offsets[0] + 1 + g_cursor.offsets[1] - 2),
                     Z_FIX_ONE);
         } else {
             hits = o_ball_checkArea2(
                     g_cursor.coords.x,
-                    g_cursor.coords.y - z_fix_fromInt(g_cursor.offsets[0]),
+                    g_cursor.coords.y - z_fix_fromInt(g_cursor.offsets[0] - 1),
                     Z_FIX_ONE,
                     z_fix_fromInt(
-                        g_cursor.offsets[0] + 1 + g_cursor.offsets[1]));
+                        g_cursor.offsets[0] + 1 + g_cursor.offsets[1] - 2));
         }
 
         if(hits) {
