@@ -102,7 +102,7 @@ void n_map_draw(void)
                     *screen |= 0xf800;
                 #else
                     *screen &= 0x07ff;
-                    *screen |= 0xd000;
+                    *screen |= 0xd800;
                 #endif
             }
 

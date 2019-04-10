@@ -84,7 +84,7 @@ static void hudDrawLevel(int X, int Y)
 
     X += z_sprite_sizeGetWidth(Z_SPRITE_ICON_LEVEL) + 1;
 
-    z_graphics_colorSetId(Z_COLOR_CURSOR);
+    z_graphics_colorSetId(Z_COLOR_CURSOR_MAIN);
     drawNumber(n_game_levelGet() + 1, 2, X, Y, Z_SPRITE_FONT_SMALLNUM);
 }
 
@@ -97,19 +97,19 @@ static void hudDrawPercent(int X, int Y)
             20,
             5,
             Z_COLOR_CURSOR_TRAIL,
-            Z_COLOR_BG_5,
+            Z_COLOR_BG_RED_2,
             Z_COLOR_CURSOR_TRAIL);
 }
 
 static void hudDrawScore(int X, int Y)
 {
-    z_graphics_colorSetId(Z_COLOR_BALL_Y1);
+    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_2);
     drawNumber(n_game_scoreGet(), 5, X, Y, Z_SPRITE_FONT_SMALLNUM);
 }
 
 static void hudDrawLives(int X, int Y)
 {
-    z_graphics_colorSetId(Z_COLOR_BG_6);
+    z_graphics_colorSetId(Z_COLOR_BG_RED_3);
     z_sprite_blitAlphaMask(Z_SPRITE_ICON_HEART, 0, X, Y - 1);
 
     X += z_sprite_sizeGetWidth(Z_SPRITE_ICON_HEART) + 1;

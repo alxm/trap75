@@ -218,7 +218,7 @@ void n_cursor_draw(void)
     ZVectorInt coords = z_vectorfix_toInt(g_cursor.coords);
 
     if(g_cursor.line == Z_LINE_H) {
-        z_graphics_colorSetId(hit ? Z_COLOR_BG_5 : Z_COLOR_CURSOR);
+        z_graphics_colorSetId(hit ? Z_COLOR_BG_RED_2 : Z_COLOR_CURSOR_MAIN);
         z_graphics_alphaSet(64);
 
         // Left glow
@@ -258,7 +258,7 @@ void n_cursor_draw(void)
                           coords.y + 1 - shake.y);
 
         // Main
-        z_graphics_colorSetId(flipColor ? Z_COLOR_BG_5 : Z_COLOR_CURSOR_TRAIL);
+        z_graphics_colorSetId(flipColor ? Z_COLOR_BG_RED_2 : Z_COLOR_CURSOR_TRAIL);
 
         z_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
                          coords.y - shake.y,
@@ -269,7 +269,7 @@ void n_cursor_draw(void)
                          g_cursor.offsets[1],
                          1);
     } else if(g_cursor.line == Z_LINE_V) {
-        z_graphics_colorSetId(hit ? Z_COLOR_BG_5 : Z_COLOR_CURSOR);
+        z_graphics_colorSetId(hit ? Z_COLOR_BG_RED_2 : Z_COLOR_CURSOR_MAIN);
         z_graphics_alphaSet(64);
 
         // Up glow
@@ -308,7 +308,7 @@ void n_cursor_draw(void)
                           coords.y + g_cursor.offsets[1] + 1 - shake.y);
 
         // Main
-        z_graphics_colorSetId(flipColor ? Z_COLOR_BG_5 : Z_COLOR_CURSOR_TRAIL);
+        z_graphics_colorSetId(flipColor ? Z_COLOR_BG_RED_2 : Z_COLOR_CURSOR_TRAIL);
 
         z_draw_rectangle(coords.x - shake.x,
                          coords.y - g_cursor.offsets[0] - shake.y,
@@ -320,7 +320,7 @@ void n_cursor_draw(void)
                          g_cursor.offsets[1]);
     }
 
-    z_graphics_colorSetId(flipColor ? Z_COLOR_BG_5 : Z_COLOR_CURSOR);
+    z_graphics_colorSetId(flipColor ? Z_COLOR_BG_RED_2 : Z_COLOR_CURSOR_MAIN);
     z_graphics_alphaSet(256);
 
     z_sprite_blitAlphaMask(

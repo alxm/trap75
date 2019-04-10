@@ -32,7 +32,7 @@ static ZSwipeId g_swipe = Z_SWIPE_INVALID;
 
 static void drawFadeHide(void)
 {
-    z_graphics_colorSetId(Z_COLOR_BG_1);
+    z_graphics_colorSetId(Z_COLOR_BG_PURPLE_1);
     z_graphics_alphaSet(z_fix_toInt(z_fix_sinf(g_angle) * 256));
 
     z_draw_rectangleAlpha(0, 0, Z_SCREEN_W, Z_SCREEN_H);
@@ -40,7 +40,7 @@ static void drawFadeHide(void)
 
 static void drawFadeShow(void)
 {
-    z_graphics_colorSetId(Z_COLOR_BG_1);
+    z_graphics_colorSetId(Z_COLOR_BG_PURPLE_1);
     z_graphics_alphaSet(z_fix_toInt(z_fix_sinf(Z_DEG_090_FIX - g_angle) * 256));
 
     z_draw_rectangleAlpha(0, 0, Z_SCREEN_W, Z_SCREEN_H);
@@ -52,13 +52,13 @@ static void drawLines(ZFixu Angle)
     int h = z_fix_toInt(sine * (Z_SCREEN_H / 2));
     int alpha = z_fix_toInt(sine * 256);
 
-    z_graphics_colorSetId(Z_COLOR_BG_1);
+    z_graphics_colorSetId(Z_COLOR_BG_PURPLE_1);
     z_graphics_alphaSet(alpha);
 
     z_draw_rectangleAlpha(0, 0, Z_SCREEN_W, h);
     z_draw_rectangleAlpha(0, Z_SCREEN_H - h, Z_SCREEN_W, h);
 
-    z_graphics_colorSetId(Z_COLOR_BG_2);
+    z_graphics_colorSetId(Z_COLOR_BG_PURPLE_2);
 
     z_draw_hline(0, Z_SCREEN_W - 1, h);
     z_draw_hline(0, Z_SCREEN_W - 1, Z_SCREEN_H - h - 1);

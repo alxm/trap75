@@ -26,7 +26,7 @@ static const struct {
     ZFixu counterSpeed[2];
 } g_patterns[Z_LIGHT_NUM] = {
     [Z_LIGHT_GAME_START] = {
-        Z_COLOR_BG_2,
+        Z_COLOR_BG_PURPLE_2,
         {Z_DEG_090_FIX / 2, Z_DEG_090_FIX / 4},
     },
 };

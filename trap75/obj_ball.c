@@ -318,14 +318,14 @@ static void ball_draw_main(const OBall* Ball)
 void o_ball_draw(void)
 {
     z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
-    z_graphics_colorSetId(Z_COLOR_BALL_Y4);
+    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_1);
 
     for(int i = 0; i < g_tail; i++) {
         ball_draw_trail(&g_balls[i]);
     }
 
     z_graphics_alphaSet(256);
-    z_graphics_colorSetId(Z_COLOR_BALL_Y1);
+    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_2);
 
     for(int i = 0; i < g_tail; i++) {
         ball_draw_main(&g_balls[i]);
