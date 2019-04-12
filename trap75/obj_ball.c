@@ -21,6 +21,7 @@
 #include "obj_cursor.h"
 #include "obj_map.h"
 #include "util_fix.h"
+#include "util_fps.h"
 #include "util_graphics.h"
 
 #define O_BALL_TRAIL_ALPHA 160
@@ -318,7 +319,8 @@ static void ball_draw_main(const OBall* Ball)
 void o_ball_draw(void)
 {
     z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
-    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_1);
+    z_graphics_colorSetId((z_fps_ticksGet() & 0x8)
+                            ? Z_COLOR_BALL_YELLOW_1 : Z_COLOR_BALL_YELLOW_2);
 
     for(int i = 0; i < g_tail; i++) {
         ball_draw_trail(&g_balls[i]);
