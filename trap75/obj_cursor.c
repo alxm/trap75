@@ -26,6 +26,7 @@
 #include "util_input.h"
 #include "util_timer.h"
 
+#define N_CURSOR_LINE_SPEED 2
 #define N_CURSOR_SPEED (Z_FIX_ONE / 1)
 #define Z_HIT_TIMEOUT_MS 750
 #define N_CURSOR_TRAIL_ALPHA 64
@@ -122,22 +123,27 @@ void n_cursor_tick(void)
         }
     } else {
         ZVectorInt origin = z_vectorfix_toInt(g_cursor.coords);
-        bool wall[2];
+        bool wall[2] = {false, false};
 
-        if(g_cursor.line == Z_LINE_H) {
-            wall[0] = n_map_wallGet2(origin.x - g_cursor.offsets[0], origin.y);
-            wall[1] = n_map_wallGet2(origin.x + g_cursor.offsets[1], origin.y);
-        } else {
-            wall[0] = n_map_wallGet2(origin.x, origin.y - g_cursor.offsets[0]);
-            wall[1] = n_map_wallGet2(origin.x, origin.y + g_cursor.offsets[1]);
-        }
+        int incs[Z_LINE_NUM][2][2] = {
+            [Z_LINE_H] = {{-1, 0}, {1, 0}},
+            [Z_LINE_V] = {{0, -1}, {0, 1}},
+        };
 
-        if(!wall[0]) {
-            g_cursor.offsets[0]++;
-        }
+        for(int w = 0; w < 2; w++) {
+            for(int i = N_CURSOR_LINE_SPEED; i--; ) {
+                int wx = origin.x
+                            + incs[g_cursor.line][w][0] * g_cursor.offsets[w];
+                int wy = origin.y
+                            + incs[g_cursor.line][w][1] * g_cursor.offsets[w];
 
-        if(!wall[1]) {
-            g_cursor.offsets[1]++;
+                if(n_map_wallGet2(wx, wy)) {
+                    wall[w] = true;
+                    break;
+                }
+
+                g_cursor.offsets[w]++;
+            }
         }
 
         bool hits;
