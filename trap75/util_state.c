@@ -22,6 +22,7 @@
 #include "obj_game.h"
 #include "state_intro.h"
 #include "state_start.h"
+#include "state_title.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_save.h"
@@ -49,6 +50,12 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_start_draw,
         NULL,
     },
+    [Z_STATE_TITLE] = {
+        s_title_init,
+        s_title_tick,
+        s_title_draw,
+        NULL,
+    }
 };
 
 static struct {
@@ -70,7 +77,7 @@ void z_state_setup(void)
     z_light_reset();
 
     #if Z_DEBUG
-        z_state_set(Z_STATE_START);
+        z_state_set(Z_STATE_TITLE);
     #else
         z_state_set(Z_STATE_INTRO);
     #endif

@@ -16,36 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "state_start.h"
+#pragma once
 
-#include "obj_game.h"
-#include "obj_map.h"
-#include "util_input.h"
-#include "util_light.h"
-#include "util_sound.h"
-#include "util_swipe.h"
+#include "platform.h"
 
-void s_start_init(void)
-{
-    z_input_reset();
-    z_light_reset();
+#include "util_state.h"
 
-    n_game_new();
-
-    z_swipe_start(Z_SWIPE_FADE_SHOW);
-}
-
-void s_start_tick(void)
-{
-    n_game_tick();
-
-    if(n_map_wallPercentGet() >= 75) {
-        n_game_levelSet(n_game_levelGet() + 1);
-        z_input_reset();
-    }
-}
-
-void s_start_draw(void)
-{
-    n_game_draw();
-}
+extern ZStateInit s_title_init;
+extern ZStateTick s_title_tick;
+extern ZStateDraw s_title_draw;

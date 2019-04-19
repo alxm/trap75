@@ -16,36 +16,42 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "state_start.h"
+#include "state_title.h"
 
 #include "obj_game.h"
 #include "obj_map.h"
+#include "util_graphics.h"
 #include "util_input.h"
-#include "util_light.h"
-#include "util_sound.h"
 #include "util_swipe.h"
 
-void s_start_init(void)
+void s_title_init(void)
 {
     z_input_reset();
-    z_light_reset();
 
-    n_game_new();
+    n_map_new();
+    n_map_wallFill(
+        N_MAP_BORDER_L, 30, Z_SCREEN_W - N_MAP_BORDER_L - N_MAP_BORDER_R, 18);
 
-    z_swipe_start(Z_SWIPE_FADE_SHOW);
+    z_swipe_start(Z_SWIPE_LINES_SHOW);
 }
 
-void s_start_tick(void)
+void s_title_tick(void)
 {
-    n_game_tick();
+    if(z_state_changed()) {
+        return;
+    }
 
-    if(n_map_wallPercentGet() >= 75) {
-        n_game_levelSet(n_game_levelGet() + 1);
-        z_input_reset();
+    if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGetOnce(Z_BUTTON_B)) {
+        z_state_set(Z_STATE_START);
+        z_swipe_start(Z_SWIPE_FADE_HIDE);
     }
 }
 
-void s_start_draw(void)
+void s_title_draw(void)
 {
-    n_game_draw();
+    n_map_draw();
+
+    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_TOP);
+    z_sprite_blit(Z_SPRITE_TITLE, 0, Z_SCREEN_W / 2, 10);
+    z_sprite_blit(Z_SPRITE_ALXM_FOOTER, 0, Z_SCREEN_W / 2, 53);
 }

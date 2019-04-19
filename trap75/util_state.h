@@ -26,6 +26,7 @@ typedef enum {
     Z_STATE_INVALID = -1,
     Z_STATE_INTRO,
     Z_STATE_START,
+    Z_STATE_TITLE,
     Z_STATE_NUM
 } ZStateId;
 

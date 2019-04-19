@@ -24,7 +24,7 @@
 #include "util_fps.h"
 #include "util_graphics.h"
 
-#define O_BALL_TRAIL_ALPHA 160
+#define O_BALL_TRAIL_ALPHA 64
 #define O_BALL_HISTORY_LEN 8
 
 typedef struct {
