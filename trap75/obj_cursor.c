@@ -111,11 +111,11 @@ void n_cursor_tick(void)
         }
 
         if(!n_map_wallGet(z_vectorfix_toInt(g_cursor.coords))) {
-            if(z_button_pressGet(Z_BUTTON_A)) {
+            if(z_button_pressGetOnce(Z_BUTTON_A)) {
                 g_cursor.line = Z_LINE_H;
                 g_cursor.offsets[0] = 0;
                 g_cursor.offsets[1] = 0;
-            } else if(z_button_pressGet(Z_BUTTON_B)) {
+            } else if(z_button_pressGetOnce(Z_BUTTON_B)) {
                 g_cursor.line = Z_LINE_V;
                 g_cursor.offsets[0] = 0;
                 g_cursor.offsets[1] = 0;

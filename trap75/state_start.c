@@ -41,6 +41,7 @@ void s_start_tick(void)
 
     if(n_map_wallPercentGet() >= 75) {
         n_game_levelSet(n_game_levelGet() + 1);
+        z_input_reset();
     }
 }
 
