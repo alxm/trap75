@@ -67,6 +67,11 @@ unsigned n_game_levelGet(void)
 void n_game_levelSet(unsigned Level)
 {
     n_map_new();
+    n_map_wallFill(0, 0, Z_SCREEN_W, 1);
+    n_map_wallFill(0, Z_SCREEN_H - 1, Z_SCREEN_W, 1);
+    n_map_wallFill(0, 1, 1, Z_SCREEN_H - 2);
+    n_map_wallFill(Z_SCREEN_W - 1, 1, 1, Z_SCREEN_H - 2);
+
     n_camera_new();
     n_hud_new();
 
@@ -102,12 +107,8 @@ void n_game_levelSet(unsigned Level)
 
     for(unsigned b = 0; b < numBalls; b++) {
         o_ball_new(levels[Level][b],
-                   N_MAP_BORDER_L
-                    + (Z_SCREEN_W - N_MAP_BORDER_L - N_MAP_BORDER_R) / 2
-                    + z_fix_toInt(z_fix_cos(angle) * 16),
-                   N_MAP_BORDER_U
-                    + (Z_SCREEN_H - N_MAP_BORDER_U - N_MAP_BORDER_D) / 2
-                    - z_fix_toInt(z_fix_sin(angle) * 16),
+                   Z_SCREEN_W / 2 + z_fix_toInt(z_fix_cos(angle) * 16),
+                   Z_SCREEN_H / 2 - z_fix_toInt(z_fix_sin(angle) * 16),
                    angle);
 
         angle += angleInc;

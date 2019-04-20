@@ -50,10 +50,8 @@ static NCursor g_cursor;
 
 void n_cursor_new(void)
 {
-    g_cursor.coords.x = z_fix_fromInt(
-        N_MAP_BORDER_L + (Z_SCREEN_W - N_MAP_BORDER_L - N_MAP_BORDER_R) / 2);
-    g_cursor.coords.y = z_fix_fromInt(
-        N_MAP_BORDER_U + (Z_SCREEN_H - N_MAP_BORDER_U - N_MAP_BORDER_D) / 2);
+    g_cursor.coords.x = z_fix_fromInt(Z_SCREEN_W / 2);
+    g_cursor.coords.y = z_fix_fromInt(Z_SCREEN_H / 2);
 
     g_cursor.coordsHistory[0] = z_vectorfix_toInt(g_cursor.coords);
 
@@ -87,27 +85,23 @@ void n_cursor_tick(void)
 
     if(g_cursor.line == Z_LINE_INVALID) {
         if(z_button_pressGet(Z_BUTTON_UP)) {
-            g_cursor.coords.y =
-                z_math_max(g_cursor.coords.y - N_CURSOR_SPEED,
-                           N_MAP_BORDER_U * Z_FIX_ONE);
+            g_cursor.coords.y = z_math_max(g_cursor.coords.y - N_CURSOR_SPEED,
+                                           Z_FIX_ONE);
         }
 
         if(z_button_pressGet(Z_BUTTON_DOWN)) {
-            g_cursor.coords.y =
-                z_math_min(g_cursor.coords.y + N_CURSOR_SPEED,
-                           (Z_SCREEN_H - 1 - N_MAP_BORDER_D) * Z_FIX_ONE);
+            g_cursor.coords.y = z_math_min(g_cursor.coords.y + N_CURSOR_SPEED,
+                                           (Z_SCREEN_H - 1) * Z_FIX_ONE - 1);
         }
 
         if(z_button_pressGet(Z_BUTTON_LEFT)) {
-            g_cursor.coords.x =
-                z_math_max(g_cursor.coords.x - N_CURSOR_SPEED,
-                           N_MAP_BORDER_L * Z_FIX_ONE);
+            g_cursor.coords.x = z_math_max(g_cursor.coords.x - N_CURSOR_SPEED,
+                                           Z_FIX_ONE);
         }
 
         if(z_button_pressGet(Z_BUTTON_RIGHT)) {
-            g_cursor.coords.x =
-                z_math_min(g_cursor.coords.x + N_CURSOR_SPEED,
-                           (Z_SCREEN_W - 1 - N_MAP_BORDER_R) * Z_FIX_ONE);
+            g_cursor.coords.x = z_math_min(g_cursor.coords.x + N_CURSOR_SPEED,
+                                           (Z_SCREEN_W - 1) * Z_FIX_ONE - 1);
         }
 
         if(!n_map_wallGet(z_vectorfix_toInt(g_cursor.coords))) {

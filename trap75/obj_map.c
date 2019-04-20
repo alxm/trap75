@@ -31,29 +31,9 @@ static NMap g_map;
 
 void n_map_new(void)
 {
-    for(int y = 0; y < N_MAP_BORDER_U; y++) {
-        for(int x = 0; x < Z_SCREEN_W; x++) {
-            g_map.field[y][x] = 1;
-        }
-    }
-
-    for(int y = Z_SCREEN_H - N_MAP_BORDER_D; y < Z_SCREEN_H; y++) {
-        for(int x = 0; x < Z_SCREEN_W; x++) {
-            g_map.field[y][x] = 1;
-        }
-    }
-
-    for(int y = N_MAP_BORDER_U; y < Z_SCREEN_H - N_MAP_BORDER_D; y++) {
-        for(int x = 0; x < N_MAP_BORDER_L; x++) {
-            g_map.field[y][x] = 1;
-        }
-
-        for(int x = N_MAP_BORDER_L; x < Z_SCREEN_W - N_MAP_BORDER_R; x++) {
+    for(int y = Z_SCREEN_H; y--; ) {
+        for(int x = Z_SCREEN_W; x--; ) {
             g_map.field[y][x] = 0;
-        }
-
-        for(int x = Z_SCREEN_W - N_MAP_BORDER_R; x < Z_SCREEN_W; x++) {
-            g_map.field[y][x] = 1;
         }
     }
 
@@ -139,9 +119,7 @@ void n_map_wallFill(int X, int Y, int W, int H)
 
 int n_map_wallPercentGet(void)
 {
-    return 100 * g_map.numCaptured
-            / ((Z_SCREEN_W - N_MAP_BORDER_L - N_MAP_BORDER_R)
-                * (Z_SCREEN_H - N_MAP_BORDER_U - N_MAP_BORDER_D));
+    return 100 * g_map.numCaptured / (Z_SCREEN_W * Z_SCREEN_H);
 }
 
 void n_map_wallBoundsGet(ZVectorInt Origin, int IncX, int IncY, ZVectorInt* Start, ZVectorInt* Dim)
