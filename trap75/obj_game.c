@@ -27,10 +27,12 @@
 #include "util_save.h"
 
 #define N_GAME_LEVELS_NUM 8
+#define N_GAME_LIVES_START 2
 
 typedef struct {
-    unsigned score;
     unsigned level;
+    unsigned score;
+    unsigned lives;
 } NGame;
 
 static NGame g_game;
@@ -38,6 +40,7 @@ static NGame g_game;
 void n_game_new(void)
 {
     g_game.score = 0;
+    g_game.lives = N_GAME_LIVES_START;
 
     n_game_levelSet(0);
 }
@@ -66,13 +69,11 @@ unsigned n_game_levelGet(void)
 
 void n_game_levelSet(unsigned Level)
 {
+    g_game.level = Level;
+
     n_map_new();
     n_camera_new();
     n_hud_new();
-
-    g_game.level = Level;
-
-
     n_cursor_new();
     o_ball_setup();
 
@@ -118,4 +119,16 @@ unsigned n_game_scoreGet(void)
 void n_game_scoreAdd(unsigned Points)
 {
     g_game.score += Points;
+}
+
+unsigned n_game_livesGet(void)
+{
+    return g_game.lives;
+}
+
+void n_game_livesDec(void)
+{
+    if(g_game.lives > 0) {
+        g_game.lives--;
+    }
 }

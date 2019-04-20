@@ -20,6 +20,7 @@
 
 #include "obj_ball.h"
 #include "obj_camera.h"
+#include "obj_game.h"
 #include "obj_map.h"
 #include "util_fix.h"
 #include "util_graphics.h"
@@ -159,6 +160,7 @@ void n_cursor_tick(void)
         }
 
         if(hits) {
+            n_game_livesDec();
             n_camera_shakeSet(Z_HIT_TIMEOUT_MS);
             z_timer_start(Z_TIMER_LINE_HIT, Z_HIT_TIMEOUT_MS, false);
         } else if(wall[0] && wall[1]) {

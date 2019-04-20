@@ -30,7 +30,7 @@ void s_title_init(void)
     z_input_reset();
     n_map_new();
 
-    z_swipe_start(Z_SWIPE_LINES_SHOW);
+    z_swipe_start(Z_SWIPE_FADE_SHOW);
 }
 
 void s_title_tick(void)

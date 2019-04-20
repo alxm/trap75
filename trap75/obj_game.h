@@ -30,3 +30,6 @@ extern void n_game_levelSet(unsigned Level);
 
 extern unsigned n_game_scoreGet(void);
 extern void n_game_scoreAdd(unsigned Points);
+
+extern unsigned n_game_livesGet(void);
+extern void n_game_livesDec(void);

@@ -52,11 +52,15 @@ void s_intro_init(void)
 
 void s_intro_tick(void)
 {
+    if(z_state_changed()) {
+        return;
+    }
+
     if(z_timer_isExpired(Z_TIMER_G1)
         || z_button_pressGetOnce(Z_BUTTON_A)
         || z_button_pressGetOnce(Z_BUTTON_B)) {
 
-        z_state_set(Z_STATE_START);
+        z_state_set(Z_STATE_TITLE);
         z_swipe_start(Z_SWIPE_FADE_HIDE);
 
         g_pc = Z_ARRAY_LEN(g_lines) - 1;

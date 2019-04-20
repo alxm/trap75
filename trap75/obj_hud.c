@@ -115,7 +115,7 @@ static void hudDrawLives(int X, int Y)
     X += z_sprite_sizeGetWidth(Z_SPRITE_ICON_HEART) + 1;
 
     z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
-    drawNumber(n_game_scoreGet(), 1, X, Y, Z_SPRITE_FONT_SMALLNUM);
+    drawNumber(n_game_livesGet(), 1, X, Y, Z_SPRITE_FONT_SMALLNUM);
 }
 
 void n_hud_draw(void)

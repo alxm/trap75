@@ -39,9 +39,18 @@ void s_start_tick(void)
 {
     n_game_tick();
 
+    if(z_state_changed()) {
+        return;
+    }
+
     if(n_map_wallPercentGet() >= 75) {
         n_game_levelSet(n_game_levelGet() + 1);
         z_input_reset();
+    }
+
+    if(n_game_livesGet() == 0) {
+        z_state_set(Z_STATE_TITLE);
+        z_swipe_start(Z_SWIPE_FADE_HIDE);
     }
 }
 
