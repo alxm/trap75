@@ -53,6 +53,16 @@ void s_title_draw(void)
     z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_1);
     z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_TOP);
 
+    #define Z_ALPHA_MIN 64
+    #define Z_ALPHA_BASELINE (Z_ALPHA_MIN + (256 - Z_ALPHA_MIN) / 2)
+
+    z_graphics_alphaSet(
+        Z_ALPHA_BASELINE
+            + z_fix_toInt(
+                (Z_ALPHA_BASELINE - Z_ALPHA_MIN) / 2
+                    * z_fix_sin(z_fps_ticksGet() << 5)));
+
+    z_sprite_blitAlphaMask(Z_SPRITE_TITLE_GLOW, 0, Z_SCREEN_W / 2, 6);
     z_sprite_blit(Z_SPRITE_TITLE, 0, Z_SCREEN_W / 2, 10);
 
     if(z_fps_ticksGet() & 0x28) {

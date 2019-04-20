@@ -25,6 +25,7 @@
 #include "generated/data_gfx_alxm_footer.h"
 
 #include "generated/data_gfx_title.h"
+#include "generated/data_gfx_title_glow.h"
 
 #include "generated/data_gfx_icon_heart.h"
 #include "generated/data_gfx_icon_level.h"
@@ -55,6 +56,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_ALXM_FOOTER, alxm_footer);
 
     z_sprite_load(Z_SPRITE_TITLE, title);
+    z_sprite_load(Z_SPRITE_TITLE_GLOW, title_glow);
 
     z_sprite_load(Z_SPRITE_ICON_HEART, icon_heart);
     z_sprite_load(Z_SPRITE_ICON_LEVEL, icon_level);
