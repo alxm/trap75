@@ -21,16 +21,14 @@
 #include "obj_game.h"
 #include "obj_map.h"
 #include "util_graphics.h"
+#include "util_fps.h"
 #include "util_input.h"
 #include "util_swipe.h"
 
 void s_title_init(void)
 {
     z_input_reset();
-
     n_map_new();
-    n_map_wallFill(
-        N_MAP_BORDER_L, 30, Z_SCREEN_W - N_MAP_BORDER_L - N_MAP_BORDER_R, 18);
 
     z_swipe_start(Z_SWIPE_LINES_SHOW);
 }
@@ -51,7 +49,15 @@ void s_title_draw(void)
 {
     n_map_draw();
 
+    z_graphics_alphaSet(256);
+    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_1);
     z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_TOP);
+
     z_sprite_blit(Z_SPRITE_TITLE, 0, Z_SCREEN_W / 2, 10);
+
+    if(z_fps_ticksGet() & 0x28) {
+        z_sprite_blitAlphaMask(Z_SPRITE_ICON_PRESS, 0, Z_SCREEN_W / 2, 34);
+    }
+
     z_sprite_blit(Z_SPRITE_ALXM_FOOTER, 0, Z_SCREEN_W / 2, 53);
 }

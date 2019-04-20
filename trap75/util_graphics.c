@@ -28,6 +28,7 @@
 
 #include "generated/data_gfx_icon_heart.h"
 #include "generated/data_gfx_icon_level.h"
+#include "generated/data_gfx_icon_press.h"
 
 #include "generated/data_gfx_space1.h"
 
@@ -57,6 +58,7 @@ void z_graphics_setup(void)
 
     z_sprite_load(Z_SPRITE_ICON_HEART, icon_heart);
     z_sprite_load(Z_SPRITE_ICON_LEVEL, icon_level);
+    z_sprite_load(Z_SPRITE_ICON_PRESS, icon_press);
 
     z_sprite_load(Z_SPRITE_SPACE1, space1);
 

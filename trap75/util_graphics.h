@@ -71,6 +71,7 @@ typedef enum {
 
     Z_SPRITE_ICON_HEART,
     Z_SPRITE_ICON_LEVEL,
+    Z_SPRITE_ICON_PRESS,
 
     Z_SPRITE_SPACE1,
 
