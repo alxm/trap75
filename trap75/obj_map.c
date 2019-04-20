@@ -98,12 +98,20 @@ void n_map_draw(void)
 
 bool n_map_wallGet(ZVectorInt Coords)
 {
-    return g_map.field[Coords.y][Coords.x] > 0;
+    return Coords.x < 0
+        || Coords.x >= Z_SCREEN_W
+        || Coords.y < 0
+        || Coords.y >= Z_SCREEN_H
+        || g_map.field[Coords.y][Coords.x] > 0;
 }
 
 bool n_map_wallGet2(int X, int Y)
 {
-    return g_map.field[Y][X] > 0;
+    return X < 0
+        || X >= Z_SCREEN_W
+        || Y < 0
+        || Y >= Z_SCREEN_H
+        || g_map.field[Y][X] > 0;
 }
 
 void n_map_wallFill(int X, int Y, int W, int H)

@@ -67,11 +67,6 @@ unsigned n_game_levelGet(void)
 void n_game_levelSet(unsigned Level)
 {
     n_map_new();
-    n_map_wallFill(0, 0, Z_SCREEN_W, 1);
-    n_map_wallFill(0, Z_SCREEN_H - 1, Z_SCREEN_W, 1);
-    n_map_wallFill(0, 1, 1, Z_SCREEN_H - 2);
-    n_map_wallFill(Z_SCREEN_W - 1, 1, 1, Z_SCREEN_H - 2);
-
     n_camera_new();
     n_hud_new();
 
