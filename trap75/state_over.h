@@ -20,32 +20,8 @@
 
 #include "platform.h"
 
-Z_EXTERN_C_START
+#include "util_state.h"
 
-typedef enum {
-    Z_STATE_INVALID = -1,
-    Z_STATE_INTRO,
-    Z_STATE_TITLE,
-    Z_STATE_START,
-    Z_STATE_PLAY,
-    Z_STATE_NEXT,
-    Z_STATE_OVER,
-    Z_STATE_NUM
-} ZStateId;
-
-typedef void (ZStateInit)(void);
-typedef void (ZStateTick)(void);
-typedef void (ZStateDraw)(void);
-typedef void (ZStateFree)(void);
-
-extern void z_state_setup(void);
-
-extern void z_state_tick(void);
-extern void z_state_draw(void);
-
-extern ZStateId z_state_getCurrent(void);
-extern ZStateId z_state_getNext(void);
-extern void z_state_set(ZStateId NewState);
-extern bool z_state_changed(void);
-
-Z_EXTERN_C_END
+extern ZStateInit s_over_init;
+extern ZStateTick s_over_tick;
+extern ZStateDraw s_over_draw;

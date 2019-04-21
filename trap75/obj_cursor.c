@@ -25,6 +25,7 @@
 #include "util_fix.h"
 #include "util_graphics.h"
 #include "util_input.h"
+#include "util_state.h"
 #include "util_timer.h"
 
 #define N_CURSOR_LINE_SPEED 2
@@ -70,6 +71,10 @@ void n_cursor_new(void)
 
 void n_cursor_tick(void)
 {
+    if(z_state_getCurrent() != Z_STATE_PLAY) {
+        return;
+    }
+
     if(z_timer_isRunning(Z_TIMER_LINE_HIT)) {
         return;
     }

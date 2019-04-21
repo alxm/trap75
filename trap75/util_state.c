@@ -21,6 +21,9 @@
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "state_intro.h"
+#include "state_next.h"
+#include "state_over.h"
+#include "state_play.h"
 #include "state_start.h"
 #include "state_title.h"
 #include "util_input.h"
@@ -42,6 +45,24 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_intro_init,
         s_intro_tick,
         s_intro_draw,
+        NULL,
+    },
+    [Z_STATE_NEXT] = {
+        s_next_init,
+        s_next_tick,
+        s_next_draw,
+        s_next_free,
+    },
+    [Z_STATE_OVER] = {
+        s_over_init,
+        s_over_tick,
+        s_over_draw,
+        NULL,
+    },
+    [Z_STATE_PLAY] = {
+        NULL,
+        s_play_tick,
+        s_play_draw,
         NULL,
     },
     [Z_STATE_START] = {

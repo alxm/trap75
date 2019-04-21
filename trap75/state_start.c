@@ -19,39 +19,23 @@
 #include "state_start.h"
 
 #include "obj_game.h"
-#include "obj_map.h"
 #include "util_input.h"
-#include "util_light.h"
-#include "util_sound.h"
 #include "util_swipe.h"
 
 void s_start_init(void)
 {
     z_input_reset();
-    z_light_reset();
-
-    n_game_new();
 
     z_swipe_start(Z_SWIPE_FADE_SHOW);
 }
 
 void s_start_tick(void)
 {
+    if(z_button_pressGetAny()) {
+        z_state_set(Z_STATE_PLAY);
+    }
+
     n_game_tick();
-
-    if(z_state_changed()) {
-        return;
-    }
-
-    if(n_map_wallPercentGet() >= 75) {
-        n_game_levelSet(n_game_levelGet() + 1);
-        z_input_reset();
-    }
-
-    if(n_game_livesGet() == 0) {
-        z_state_set(Z_STATE_TITLE);
-        z_swipe_start(Z_SWIPE_FADE_HIDE);
-    }
 }
 
 void s_start_draw(void)

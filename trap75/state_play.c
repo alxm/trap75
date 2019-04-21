@@ -16,36 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "state_play.h"
 
-#include "platform.h"
+#include "obj_game.h"
+#include "obj_map.h"
 
-Z_EXTERN_C_START
+void s_play_tick(void)
+{
+    n_game_tick();
 
-typedef enum {
-    Z_STATE_INVALID = -1,
-    Z_STATE_INTRO,
-    Z_STATE_TITLE,
-    Z_STATE_START,
-    Z_STATE_PLAY,
-    Z_STATE_NEXT,
-    Z_STATE_OVER,
-    Z_STATE_NUM
-} ZStateId;
+    if(n_game_livesGet() == 0) {
+        z_state_set(Z_STATE_OVER);
+    } else if(n_map_wallPercentGet() >= 75) {
+        z_state_set(Z_STATE_NEXT);
+    }
+}
 
-typedef void (ZStateInit)(void);
-typedef void (ZStateTick)(void);
-typedef void (ZStateDraw)(void);
-typedef void (ZStateFree)(void);
-
-extern void z_state_setup(void);
-
-extern void z_state_tick(void);
-extern void z_state_draw(void);
-
-extern ZStateId z_state_getCurrent(void);
-extern ZStateId z_state_getNext(void);
-extern void z_state_set(ZStateId NewState);
-extern bool z_state_changed(void);
-
-Z_EXTERN_C_END
+void s_play_draw(void)
+{
+    n_game_draw();
+}

@@ -28,6 +28,7 @@
 void s_title_init(void)
 {
     z_input_reset();
+
     n_map_new();
 
     z_swipe_start(Z_SWIPE_FADE_SHOW);
@@ -39,9 +40,11 @@ void s_title_tick(void)
         return;
     }
 
-    if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGetOnce(Z_BUTTON_B)) {
+    if(z_button_pressGetAny()) {
         z_state_set(Z_STATE_START);
         z_swipe_start(Z_SWIPE_FADE_HIDE);
+
+        n_game_new();
     }
 }
 

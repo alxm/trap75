@@ -37,6 +37,10 @@ void n_hud_tick(void)
 
 static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, ZColorId ColorProg, ZColorId ColorBg, ZColorId ColorBorder)
 {
+    if(Value > Total) {
+        Value = Total;
+    }
+
     int progWidth = Width * Value / Total;
 
     if(Width > 0 && Value > 0 && progWidth == 0) {
