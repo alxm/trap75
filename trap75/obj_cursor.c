@@ -180,23 +180,29 @@ void n_cursor_tick(void)
                 n_map_wallBoundsGet(origin, 1, 0, &start[1], &dim[1]);
             }
 
+            unsigned area;
+
             if(!o_ball_checkArea(start[0], dim[0])) {
-                n_map_wallFill(start[0].x, start[0].y, dim[0].x, dim[0].y);
+                area = n_map_wallFill(
+                        start[0].x, start[0].y, dim[0].x, dim[0].y);
             } else if(!o_ball_checkArea(start[1], dim[1])) {
-                n_map_wallFill(start[1].x, start[1].y, dim[1].x, dim[1].y);
+                area = n_map_wallFill(
+                        start[1].x, start[1].y, dim[1].x, dim[1].y);
             } else if(g_cursor.line == Z_LINE_H) {
-                n_map_wallFill(
-                    origin.x - g_cursor.offsets[0] + 1,
-                    origin.y,
-                    g_cursor.offsets[0] + 1 + g_cursor.offsets[1] - 2,
-                    1);
+                area = n_map_wallFill(
+                        origin.x - g_cursor.offsets[0] + 1,
+                        origin.y,
+                        g_cursor.offsets[0] + 1 + g_cursor.offsets[1] - 2,
+                        1);
             } else {
-                n_map_wallFill(
-                    origin.x,
-                    origin.y - g_cursor.offsets[0] + 1,
-                    1,
-                    g_cursor.offsets[0] + 1 + g_cursor.offsets[1] - 2);
+                area = n_map_wallFill(
+                        origin.x,
+                        origin.y - g_cursor.offsets[0] + 1,
+                        1,
+                        g_cursor.offsets[0] + 1 + g_cursor.offsets[1] - 2);
             }
+
+            n_game_scoreAdd(area);
 
             g_cursor.line = Z_LINE_INVALID;
         }

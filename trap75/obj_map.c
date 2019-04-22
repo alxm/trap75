@@ -114,15 +114,19 @@ bool n_map_wallGet2(int X, int Y)
         || g_map.field[Y][X] > 0;
 }
 
-void n_map_wallFill(int X, int Y, int W, int H)
+unsigned n_map_wallFill(int X, int Y, int W, int H)
 {
+    int area = W * H;
+
     for(int y = H; y--; ) {
         for(int x = W; x--; ) {
             g_map.field[Y + y][X + x] = 1;
         }
     }
 
-    g_map.numCaptured += W * H;
+    g_map.numCaptured += area;
+
+    return (unsigned)area;
 }
 
 int n_map_wallPercentGet(void)
