@@ -46,7 +46,7 @@
 
 static ZRgb g_rgb;
 static int g_alpha;
-static ZAlign g_align;
+static ZAlign g_align = Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP;
 
 void z_graphics_setup(void)
 {
@@ -95,8 +95,6 @@ void z_graphics_setup(void)
             break;
         }
     }
-
-    g_align = Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP;
 }
 
 void z_graphics_colorSetId(ZColorId Color)

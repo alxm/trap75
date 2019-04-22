@@ -19,17 +19,42 @@
 #include "util_font.h"
 
 static ZSpriteId g_sprite = Z_SPRITE_FONT_AA;
+static ZAlign g_align = Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP;
 
 void z_font_set(ZSpriteId Sprite)
 {
     g_sprite = Sprite;
 }
 
+void z_font_align(ZAlign Alignment)
+{
+    g_align = Alignment;
+}
+
 void z_font_printText(int X, int Y, const char* Text)
 {
     int charWidth = z_sprite_sizeGetWidth(g_sprite) + 1;
 
-    z_graphics_alphaSet(256);
+    if(g_align & Z_ALIGN_Y_CENTER) {
+        Y -= z_sprite_sizeGetHeight(g_sprite) / 2;
+    } else if(g_align & Z_ALIGN_Y_BOTTOM) {
+        Y -= z_sprite_sizeGetHeight(g_sprite);
+    }
+
+    if(g_align & (Z_ALIGN_X_CENTER | Z_ALIGN_X_RIGHT)) {
+        int tally = -1;
+
+        for(const char* text = Text; *text++ != '\0'; ) {
+            tally += charWidth;
+        }
+
+        if(g_align & Z_ALIGN_X_CENTER) {
+            X -= tally / 2;
+        } else {
+            X -= tally;
+        }
+    }
+
     z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
 
     for(char ch = *Text; ch != '\0'; ch = *++Text) {
