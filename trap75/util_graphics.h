@@ -83,6 +83,7 @@ typedef enum {
     Z_SPRITE_BALL3,
     Z_SPRITE_BALL4,
 
+    Z_SPRITE_FONT_AA,
     Z_SPRITE_FONT_LCDNUM,
     Z_SPRITE_FONT_SMALLNUM,
 

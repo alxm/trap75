@@ -18,7 +18,7 @@
 
 #include "util_font.h"
 
-static ZSpriteId g_sprite = -1;//U_SPRITE_FONT_1;
+static ZSpriteId g_sprite = Z_SPRITE_FONT_AA;
 
 void z_font_set(ZSpriteId Sprite)
 {
@@ -27,10 +27,13 @@ void z_font_set(ZSpriteId Sprite)
 
 void z_font_printText(int X, int Y, const char* Text)
 {
-    int charWidth = z_sprite_sizeGetWidth(g_sprite);
+    int charWidth = z_sprite_sizeGetWidth(g_sprite) + 1;
+
+    z_graphics_alphaSet(256);
+    z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
 
     for(char ch = *Text; ch != '\0'; ch = *++Text) {
-        z_sprite_blit(g_sprite, ((unsigned)ch - 32), X, Y);
+        z_sprite_blitAlphaMask(g_sprite, ((unsigned)ch - 32), X, Y);
         X += charWidth;
     }
 }

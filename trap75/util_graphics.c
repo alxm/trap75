@@ -40,6 +40,7 @@
 #include "generated/data_gfx_ball3.h"
 #include "generated/data_gfx_ball4.h"
 
+#include "generated/data_gfx_font_aa_grid3x5.h"
 #include "generated/data_gfx_font_lcdnum_grid4x7.h"
 #include "generated/data_gfx_font_smallnum_grid3x5.h"
 
@@ -71,6 +72,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_BALL3, ball3);
     z_sprite_load(Z_SPRITE_BALL4, ball4);
 
+    z_sprite_load(Z_SPRITE_FONT_AA, font_aa_grid3x5);
     z_sprite_load(Z_SPRITE_FONT_LCDNUM, font_lcdnum_grid4x7);
     z_sprite_load(Z_SPRITE_FONT_SMALLNUM, font_smallnum_grid3x5);
 
