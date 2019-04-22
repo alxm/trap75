@@ -21,6 +21,7 @@
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
+#include "util_font.h"
 #include "util_graphics.h"
 
 #define N_HUD_ALPHA 192
@@ -68,19 +69,6 @@ static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, Z
     z_graphics_alphaSet(N_HUD_ALPHA);
 }
 
-static void drawNumber(unsigned Number, int NumDigits, int X, int Y, ZSpriteId Font)
-{
-    int charSize = z_sprite_sizeGetWidth(Font) + 1;
-
-    X += charSize * (NumDigits - 1);
-
-    z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
-
-    for(int d = NumDigits; d--; X -= charSize, Number /= 10) {
-        z_sprite_blitAlphaMask(Font, Number % 10, X, Y);
-    }
-}
-
 static void hudDrawLevel(int X, int Y)
 {
     z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
@@ -89,7 +77,8 @@ static void hudDrawLevel(int X, int Y)
     X += z_sprite_sizeGetWidth(Z_SPRITE_ICON_LEVEL) + 1;
 
     z_graphics_colorSetId(Z_COLOR_CURSOR_MAIN);
-    drawNumber(n_game_levelGet() + 1, 2, X, Y, Z_SPRITE_FONT_SMALLNUM);
+    z_font_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+    z_font_printIntup(X, Y, n_game_levelGet() + 1, 2);
 }
 
 static void hudDrawPercent(int X, int Y)
@@ -108,7 +97,8 @@ static void hudDrawPercent(int X, int Y)
 static void hudDrawScore(int X, int Y)
 {
     z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_2);
-    drawNumber(n_game_scoreGet(), 5, X, Y, Z_SPRITE_FONT_SMALLNUM);
+    z_font_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+    z_font_printIntup(X, Y, n_game_scoreGet(), 5);
 }
 
 static void hudDrawLives(int X, int Y)
@@ -119,7 +109,8 @@ static void hudDrawLives(int X, int Y)
     X += z_sprite_sizeGetWidth(Z_SPRITE_ICON_HEART) + 1;
 
     z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
-    drawNumber(n_game_livesGet(), 1, X, Y, Z_SPRITE_FONT_SMALLNUM);
+    z_font_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+    z_font_printIntu(X, Y, n_game_livesGet());
 }
 
 void n_hud_draw(void)

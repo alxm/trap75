@@ -29,7 +29,6 @@
 
 #include "generated/data_gfx_icon_heart.h"
 #include "generated/data_gfx_icon_level.h"
-#include "generated/data_gfx_icon_press.h"
 
 #include "generated/data_gfx_space1.h"
 
@@ -41,8 +40,6 @@
 #include "generated/data_gfx_ball4.h"
 
 #include "generated/data_gfx_font_aa_grid3x5.h"
-#include "generated/data_gfx_font_lcdnum_grid4x7.h"
-#include "generated/data_gfx_font_smallnum_grid3x5.h"
 
 static ZRgb g_rgb;
 static int g_alpha;
@@ -61,7 +58,6 @@ void z_graphics_setup(void)
 
     z_sprite_load(Z_SPRITE_ICON_HEART, icon_heart);
     z_sprite_load(Z_SPRITE_ICON_LEVEL, icon_level);
-    z_sprite_load(Z_SPRITE_ICON_PRESS, icon_press);
 
     z_sprite_load(Z_SPRITE_SPACE1, space1);
 
@@ -73,8 +69,6 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_BALL4, ball4);
 
     z_sprite_load(Z_SPRITE_FONT_AA, font_aa_grid3x5);
-    z_sprite_load(Z_SPRITE_FONT_LCDNUM, font_lcdnum_grid4x7);
-    z_sprite_load(Z_SPRITE_FONT_SMALLNUM, font_smallnum_grid3x5);
 
     int palWidth = z_sprite_sizeGetWidth(Z_SPRITE_PALETTE);
     int palHeight = z_sprite_sizeGetHeight(Z_SPRITE_PALETTE) - 1;

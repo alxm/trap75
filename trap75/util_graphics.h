@@ -72,7 +72,6 @@ typedef enum {
 
     Z_SPRITE_ICON_HEART,
     Z_SPRITE_ICON_LEVEL,
-    Z_SPRITE_ICON_PRESS,
 
     Z_SPRITE_SPACE1,
 
@@ -84,8 +83,6 @@ typedef enum {
     Z_SPRITE_BALL4,
 
     Z_SPRITE_FONT_AA,
-    Z_SPRITE_FONT_LCDNUM,
-    Z_SPRITE_FONT_SMALLNUM,
 
     Z_SPRITE_NUM
 } ZSpriteId;

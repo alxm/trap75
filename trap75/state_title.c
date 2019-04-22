@@ -21,6 +21,7 @@
 #include "obj_game.h"
 #include "obj_map.h"
 #include "util_graphics.h"
+#include "util_font.h"
 #include "util_fps.h"
 #include "util_input.h"
 #include "util_swipe.h"
@@ -67,10 +68,11 @@ void s_title_draw(void)
 
     z_sprite_blit(Z_SPRITE_TITLE, 0, Z_SCREEN_W / 2, 10);
 
+    z_sprite_blit(Z_SPRITE_ALXM_FOOTER, 0, Z_SCREEN_W / 2, 53);
+
     if(z_fps_ticksGet() & 0x28) {
         z_graphics_alphaSet(256);
-        z_sprite_blitAlphaMask(Z_SPRITE_ICON_PRESS, 0, Z_SCREEN_W / 2, 34);
+        z_font_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_TOP);
+        z_font_printText(Z_SCREEN_W / 2, 34, "Press Any Key");
     }
-
-    z_sprite_blit(Z_SPRITE_ALXM_FOOTER, 0, Z_SCREEN_W / 2, 53);
 }
