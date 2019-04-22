@@ -78,3 +78,11 @@ void z_font_printIntu(int X, int Y, unsigned Integer)
 
     z_font_printText(X, Y, buffer);
 }
+
+void z_font_printIntup(int X, int Y, unsigned Integer, int NumDigits)
+{
+    char buffer[16];
+    snprintf(buffer, sizeof(buffer), "%0*u", NumDigits, Integer);
+
+    z_font_printText(X, Y, buffer);
+}

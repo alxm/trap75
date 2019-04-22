@@ -27,3 +27,4 @@ extern void z_font_align(ZAlign Alignment);
 extern void z_font_printText(int X, int Y, const char* Text);
 extern void z_font_printInt(int X, int Y, int Integer);
 extern void z_font_printIntu(int X, int Y, unsigned Integer);
+extern void z_font_printIntup(int X, int Y, unsigned Integer, int NumDigits);
