@@ -19,6 +19,7 @@
 #include "state_over.h"
 
 #include "obj_game.h"
+#include "util_save.h"
 #include "util_swipe.h"
 
 void s_over_init(void)
@@ -35,4 +36,9 @@ void s_over_tick(void)
 void s_over_draw(void)
 {
     n_game_draw();
+}
+
+void s_over_free(void)
+{
+    z_save_hiscoreSet(n_game_scoreGet());
 }

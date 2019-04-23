@@ -23,6 +23,7 @@
 #include "obj_map.h"
 #include "util_font.h"
 #include "util_graphics.h"
+#include "util_save.h"
 
 #define N_HUD_ALPHA 192
 
@@ -96,9 +97,13 @@ static void hudDrawPercent(int X, int Y)
 
 static void hudDrawScore(int X, int Y)
 {
-    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_2);
+    unsigned score = n_game_scoreGet();
+
+    z_graphics_colorSetId(score > z_save_hiscoreGet()
+                            ? Z_COLOR_BALL_YELLOW_2 : Z_COLOR_BALL_YELLOW_1);
+
     z_font_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
-    z_font_printIntup(X, Y, n_game_scoreGet(), 5);
+    z_font_printIntup(X, Y, score, 5);
 }
 
 static void hudDrawLives(int X, int Y)

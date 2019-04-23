@@ -57,7 +57,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_over_init,
         s_over_tick,
         s_over_draw,
-        NULL,
+        s_over_free,
     },
     [Z_STATE_PLAY] = {
         NULL,

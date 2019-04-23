@@ -24,6 +24,7 @@
 #include "util_font.h"
 #include "util_fps.h"
 #include "util_input.h"
+#include "util_save.h"
 #include "util_swipe.h"
 
 void s_title_init(void)
@@ -70,9 +71,18 @@ void s_title_draw(void)
 
     z_sprite_blit(Z_SPRITE_ALXM_FOOTER, 0, Z_SCREEN_W / 2, 53);
 
+    z_graphics_alphaSet(256);
+
     if(z_fps_ticksGet() & 0x28) {
-        z_graphics_alphaSet(256);
         z_font_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_TOP);
-        z_font_printText(Z_SCREEN_W / 2, 34, "Press Any Key");
+        z_font_printText(Z_SCREEN_W / 2, 38, "Press Any Key");
     }
+
+    z_font_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+
+    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_2);
+    z_font_printText(15, 31, "Hiscore");
+
+    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_3);
+    z_font_printIntup(47, 31, z_save_hiscoreGet(), 5);
 }

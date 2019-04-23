@@ -22,12 +22,10 @@
 
 typedef struct {
     uint32_t version;
-    uint32_t lastUnlocked;
-    uint32_t hiscores[Z_LEVELS_NUM];
+    uint32_t hiscore;
 } ZSaveFile;
 
 ZSaveFile g_save;
-bool g_dirty;
 
 void z_save_setup(void)
 {
@@ -36,36 +34,16 @@ void z_save_setup(void)
     z_file_readOnce(Z_SAVE_FILE_NAME, &g_save, sizeof(g_save));
 }
 
-void z_save_commit(void)
+unsigned z_save_hiscoreGet(void)
 {
-    if(g_dirty) {
-        g_dirty = false;
+    return g_save.hiscore;
+}
+
+void z_save_hiscoreSet(unsigned Score)
+{
+    if(Score > g_save.hiscore) {
+        g_save.hiscore = Score;
+
         z_file_writeOnce(Z_SAVE_FILE_NAME, &g_save, sizeof(g_save));
-    }
-}
-
-unsigned z_save_unlockedGet(void)
-{
-    return g_save.lastUnlocked;
-}
-
-void z_save_unlockedSet(unsigned Level)
-{
-    if(Level > g_save.lastUnlocked) {
-        g_save.lastUnlocked = Level;
-        g_dirty = true;
-    }
-}
-
-unsigned z_save_hiscoreGet(unsigned Level)
-{
-    return g_save.hiscores[Level];
-}
-
-void z_save_hiscoreSet(unsigned Level, unsigned Score)
-{
-    if(Score > g_save.hiscores[Level]) {
-        g_save.hiscores[Level] = Score;
-        g_dirty = true;
     }
 }

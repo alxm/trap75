@@ -20,14 +20,7 @@
 
 #include "platform.h"
 
-#define Z_LEVELS_NUM 32
-
 extern void z_save_setup(void);
 
-extern void z_save_commit(void);
-
-extern unsigned z_save_unlockedGet(void);
-extern void z_save_unlockedSet(unsigned Level);
-
-extern unsigned z_save_hiscoreGet(unsigned Level);
-extern void z_save_hiscoreSet(unsigned Level, unsigned Score);
+extern unsigned z_save_hiscoreGet(void);
+extern void z_save_hiscoreSet(unsigned Score);
