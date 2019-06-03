@@ -1,5 +1,5 @@
 /assets/gfx/mockups/
 /assets/sfx/music/
-/bin/
-/obj/
-/trap75/generated/*
+/build/shared/
+/build/builds/
+/trap75/generated/

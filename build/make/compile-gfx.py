@@ -51,7 +51,7 @@ class Sheet:
         else:
             self.transparentColor = 0
 
-        grid_match = re.match('^.*_grid([0-9]+)x([0-9]+)\..*$', ImageName)
+        grid_match = re.match('^.*_([0-9]+)x([0-9]+)\..*$', ImageName)
 
         if grid_match:
             self.frameWidth = int(grid_match.group(1))
