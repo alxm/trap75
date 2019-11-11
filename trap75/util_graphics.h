@@ -47,6 +47,7 @@ typedef enum {
     Z_COLOR_BG_RED_1,
     Z_COLOR_BG_RED_2,
     Z_COLOR_BG_RED_3,
+    Z_COLOR_BG_RED_4,
 
     Z_COLOR_BALL_YELLOW_1,
     Z_COLOR_BALL_YELLOW_2,

@@ -108,7 +108,7 @@ static void hudDrawScore(int X, int Y)
 
 static void hudDrawLives(int X, int Y)
 {
-    z_graphics_colorSetId(Z_COLOR_BG_RED_3);
+    z_graphics_colorSetId(Z_COLOR_BG_RED_4);
     z_sprite_blitAlphaMask(Z_SPRITE_ICON_HEART, 0, X, Y - 1);
 
     X += z_sprite_sizeGetWidth(Z_SPRITE_ICON_HEART) + 1;

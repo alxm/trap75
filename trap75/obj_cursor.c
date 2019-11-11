@@ -234,7 +234,7 @@ void n_cursor_draw(void)
     if(z_timer_isRunning(Z_TIMER_LINE_HIT)) {
         if(z_fps_ticksGet() & 0x8) {
             colorLine = Z_COLOR_BG_RED_2;
-            colorLineGlow = Z_COLOR_BG_RED_3;
+            colorLineGlow = Z_COLOR_BG_RED_4;
         }
     } else {
         if(z_fps_ticksGet() & 0x4) {
