@@ -119,7 +119,7 @@ static void hudDrawLives(int X, int Y)
 
 void n_hud_draw(void)
 {
-    ZVectorInt shake = n_camera_shakeGet();
+    FVectorInt shake = n_camera_shakeGet();
 
     z_graphics_alphaSet(N_HUD_ALPHA);
     z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);

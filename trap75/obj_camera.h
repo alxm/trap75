@@ -19,11 +19,9 @@
 
 #include "platform.h"
 
-#include "util_fix.h"
-
 extern void n_camera_new(void);
 
 extern void n_camera_tick(void);
 
-extern ZVectorInt n_camera_shakeGet(void);
+extern FVectorInt n_camera_shakeGet(void);
 extern void n_camera_shakeSet(unsigned Ms);

@@ -77,11 +77,11 @@ void z_platform_spriteBlit(int Sprite, int X, int Y, unsigned Frame)
     f_sprite_blit(g_sprites[Sprite], Frame, X, Y);
 }
 
-ZVectorInt z_sprite_sizeGet(ZSpriteId Sprite)
+FVectorInt z_sprite_sizeGet(ZSpriteId Sprite)
 {
     FVectorInt size = f_sprite_sizeGet(g_sprites[Sprite]);
 
-    return (ZVectorInt){size.x, size.y};
+    return (FVectorInt){size.x, size.y};
 }
 
 int z_sprite_sizeGetWidth(ZSpriteId Sprite)

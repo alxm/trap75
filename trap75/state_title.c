@@ -60,8 +60,8 @@ void s_title_draw(void)
 
     z_graphics_alphaSet(
         Z_ALPHA_BASELINE
-            + z_fix_toInt((Z_ALPHA_BASELINE - Z_ALPHA_MIN)
-                            * z_fix_sin(f_fps_ticksGet() << 5)));
+            + f_fix_toInt((Z_ALPHA_BASELINE - Z_ALPHA_MIN)
+                            * f_fix_sin(f_fps_ticksGet() << 5)));
 
     z_sprite_blitAlphaMask(Z_SPRITE_TITLE_GLOW, 0, Z_SCREEN_W / 2, 6);
 

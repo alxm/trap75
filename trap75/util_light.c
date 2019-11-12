@@ -17,22 +17,20 @@
 
 #include "util_light.h"
 
-#include "util_fix.h"
-
 static const struct {
     ZColorId color;
-    ZFixu counterSpeed[2];
+    FFixu counterSpeed[2];
 } g_patterns[Z_LIGHT_NUM] = {
     [Z_LIGHT_GAME_START] = {
         Z_COLOR_BG_PURPLE_2,
-        {Z_DEG_090_FIX / 2, Z_DEG_090_FIX / 4},
+        {F_DEG_090_FIX / 2, F_DEG_090_FIX / 4},
     },
 };
 
 static struct {
     ZColorId bgColor;
     ZLightId pulseId;
-    ZFixu counter;
+    FFixu counter;
 } g_light;
 
 static struct {
@@ -55,10 +53,10 @@ void z_light_reset(void)
 void z_light_tick(void)
 {
     if(g_light.pulseId != Z_LIGHT_INVALID) {
-        bool goingDown = g_light.counter >= Z_DEG_090_FIX;
+        bool goingDown = g_light.counter >= F_DEG_090_FIX;
         g_light.counter += g_patterns[g_light.pulseId].counterSpeed[goingDown];
 
-        if(g_light.counter >= Z_DEG_180_FIX) {
+        if(g_light.counter >= F_DEG_180_FIX) {
             g_light.pulseId = Z_LIGHT_INVALID;
         }
     }
@@ -71,7 +69,7 @@ void z_light_draw(void)
 
     if(g_light.pulseId != Z_LIGHT_INVALID) {
         color = g_patterns[g_light.pulseId].color;
-        alpha = z_fix_toInt(z_fix_sinf(g_light.counter) * 256);
+        alpha = f_fix_toInt(f_fix_sinf(g_light.counter) * 256);
     }
 
     if(g_light.bgColor != g_last.bgColor

@@ -21,8 +21,6 @@
 
 Z_EXTERN_C_START
 
-#include "util_fix.h"
-
 #define Z_SCREEN_W F_CONFIG_SCREEN_SIZE_WIDTH
 #define Z_SCREEN_H F_CONFIG_SCREEN_SIZE_HEIGHT
 
@@ -117,7 +115,7 @@ extern const ZPixel* z_sprite_pixelsGet(ZSpriteId Sprite, unsigned Frame);
 extern ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y);
 extern void z_sprite_blit(ZSpriteId Sprite, unsigned Frame, int X, int Y);
 extern void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, unsigned Frame, int X, int Y);
-extern ZVectorInt z_sprite_sizeGet(ZSpriteId Sprite);
+extern FVectorInt z_sprite_sizeGet(ZSpriteId Sprite);
 extern int z_sprite_sizeGetWidth(ZSpriteId Sprite);
 extern int z_sprite_sizeGetHeight(ZSpriteId Sprite);
 extern unsigned z_sprite_framesNumGet(ZSpriteId Sprite);

@@ -19,8 +19,6 @@
 
 #include "platform.h"
 
-#include "util_fix.h"
-
 #define O_BALL_NUM_MAX 16
 
 typedef enum {
@@ -41,5 +39,5 @@ extern void o_ball_new(OBallId Id, int X, int Y, unsigned Angle);
 extern void o_ball_tick(void);
 extern void o_ball_draw(void);
 
-extern bool o_ball_checkArea(ZVectorInt Start, ZVectorInt Dim);
-extern bool o_ball_checkArea2(ZFix X, ZFix Y, ZFix W, ZFix H);
+extern bool o_ball_checkArea(FVectorInt Start, FVectorInt Dim);
+extern bool o_ball_checkArea2(FFix X, FFix Y, FFix W, FFix H);

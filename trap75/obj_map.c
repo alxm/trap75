@@ -47,7 +47,7 @@ void n_map_draw(void)
 {
     #define Z_SPEED (8)
     #define Z_DISTORT (4)
-    #define Z_INC_MAX (Z_DEG_001_INT * 16)
+    #define Z_INC_MAX (F_DEG_001_INT * 16)
 
     #if Z_DISTORT > 4
         #error Z_DISTORT > 4
@@ -55,27 +55,27 @@ void n_map_draw(void)
 
     ZPixel* screen = z_screen_pixelsGet();
     const ZPixel* sprite = z_sprite_pixelsGet(Z_SPRITE_SPACE1, 0);
-    ZFixu angleStart =
-        z_fixu_fromInt(
-            (f_fps_ticksGet() & (Z_FIX_ANGLES_NUM / Z_SPEED - 1)) * Z_SPEED);
+    FFixu angleStart =
+        f_fixu_fromInt(
+            (f_fps_ticksGet() & (F_FIX_ANGLES_NUM / Z_SPEED - 1)) * Z_SPEED);
 
     for(int y = 0; y < Z_SCREEN_H; y++) {
-        ZFixu angle = angleStart;
-        ZFixu angleInc = 0;
+        FFixu angle = angleStart;
+        FFixu angleInc = 0;
 
         for(int x = 0; x < Z_SCREEN_W; x++) {
             if((x & 7) == 0) {
-                ZFix sinv = z_fix_sin(Z_DEG_180_INT * (unsigned)x / Z_SCREEN_W);
-                ZFix mulv = z_fix_mul(sinv, sinv);
+                FFix sinv = f_fix_sin(F_DEG_180_INT * (unsigned)x / Z_SCREEN_W);
+                FFix mulv = f_fix_mul(sinv, sinv);
 
-                angleInc = (ZFixu)((Z_FIX_ONE - mulv) * Z_INC_MAX);
+                angleInc = (FFixu)((F_FIX_ONE - mulv) * Z_INC_MAX);
             }
 
             angle += angleInc;
 
             *screen = *(sprite
-                        + (y + Z_DISTORT + z_fix_toInt(Z_DISTORT * z_fix_sinf(angle))) * 88
-                        + (x + Z_DISTORT + z_fix_toInt(Z_DISTORT * z_fix_cosf(angle))));
+                        + (y + Z_DISTORT + f_fix_toInt(Z_DISTORT * f_fix_sinf(angle))) * 88
+                        + (x + Z_DISTORT + f_fix_toInt(Z_DISTORT * f_fix_cosf(angle))));
 
             if(g_map.field[y][x] == 1) {
                 #if 1
@@ -89,14 +89,14 @@ void n_map_draw(void)
             screen++;
         }
 
-        ZFix sinv = z_fix_sin(Z_DEG_180_INT * (unsigned)y / Z_SCREEN_H);
-        ZFix mulv = z_fix_mul(sinv, sinv);
+        FFix sinv = f_fix_sin(F_DEG_180_INT * (unsigned)y / Z_SCREEN_H);
+        FFix mulv = f_fix_mul(sinv, sinv);
 
-        angleStart += (ZFixu)((Z_FIX_ONE - mulv) * Z_INC_MAX);
+        angleStart += (FFixu)((F_FIX_ONE - mulv) * Z_INC_MAX);
     }
 }
 
-bool n_map_wallGet(ZVectorInt Coords)
+bool n_map_wallGet(FVectorInt Coords)
 {
     return Coords.x < 0
         || Coords.x >= Z_SCREEN_W
@@ -134,10 +134,10 @@ int n_map_wallPercentGet(void)
     return 100 * g_map.numCaptured / (Z_SCREEN_W * Z_SCREEN_H);
 }
 
-void n_map_wallBoundsGet(ZVectorInt Origin, int IncX, int IncY, ZVectorInt* Start, ZVectorInt* Dim)
+void n_map_wallBoundsGet(FVectorInt Origin, int IncX, int IncY, FVectorInt* Start, FVectorInt* Dim)
 {
-    ZVectorInt start = Origin;
-    ZVectorInt end = Origin;
+    FVectorInt start = Origin;
+    FVectorInt end = Origin;
 
     if(IncX == 0) {
         while(!n_map_wallGet(start)) {

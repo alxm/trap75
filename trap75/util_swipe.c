@@ -20,19 +20,19 @@
 #include "util_graphics.h"
 #include "util_sound.h"
 
-#define Z_ANGLE_INC (Z_DEG_090_FIX / 16)
+#define Z_ANGLE_INC (F_DEG_090_FIX / 16)
 
 typedef void (ZSwipeInit)(void);
 typedef bool (ZSwipeTick)(void);
 typedef void (ZSwipeDraw)(void);
 
-static ZFixu g_angle;
+static FFixu g_angle;
 static ZSwipeId g_swipe = Z_SWIPE_INVALID;
 
 static void drawFadeHide(void)
 {
     z_graphics_colorSetId(Z_COLOR_BG_PURPLE_1);
-    z_graphics_alphaSet(z_fix_toInt(z_fix_sinf(g_angle) * 256));
+    z_graphics_alphaSet(f_fix_toInt(f_fix_sinf(g_angle) * 256));
 
     z_draw_rectangleAlpha(0, 0, Z_SCREEN_W, Z_SCREEN_H);
 }
@@ -40,16 +40,16 @@ static void drawFadeHide(void)
 static void drawFadeShow(void)
 {
     z_graphics_colorSetId(Z_COLOR_BG_PURPLE_1);
-    z_graphics_alphaSet(z_fix_toInt(z_fix_sinf(Z_DEG_090_FIX - g_angle) * 256));
+    z_graphics_alphaSet(f_fix_toInt(f_fix_sinf(F_DEG_090_FIX - g_angle) * 256));
 
     z_draw_rectangleAlpha(0, 0, Z_SCREEN_W, Z_SCREEN_H);
 }
 
-static void drawLines(ZFixu Angle)
+static void drawLines(FFixu Angle)
 {
-    ZFix sine = z_fix_sinf(Angle);
-    int h = z_fix_toInt(sine * (Z_SCREEN_H / 2));
-    int alpha = z_fix_toInt(sine * 256);
+    FFix sine = f_fix_sinf(Angle);
+    int h = f_fix_toInt(sine * (Z_SCREEN_H / 2));
+    int alpha = f_fix_toInt(sine * 256);
 
     z_graphics_colorSetId(Z_COLOR_BG_PURPLE_1);
     z_graphics_alphaSet(alpha);
@@ -70,7 +70,7 @@ static void drawLinesHide(void)
 
 static void drawLinesShow(void)
 {
-    drawLines(Z_DEG_090_FIX - g_angle);
+    drawLines(F_DEG_090_FIX - g_angle);
 }
 
 static const struct {
@@ -109,7 +109,7 @@ void z_swipe_tick(void)
     if(g_swipe != Z_SWIPE_INVALID) {
         g_angle += Z_ANGLE_INC;
 
-        if(g_angle > Z_DEG_090_FIX) {
+        if(g_angle > F_DEG_090_FIX) {
             g_swipe = Z_SWIPE_INVALID;
         }
     }

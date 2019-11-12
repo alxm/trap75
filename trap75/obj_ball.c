@@ -19,7 +19,6 @@
 
 #include "obj_cursor.h"
 #include "obj_map.h"
-#include "util_fix.h"
 #include "util_graphics.h"
 
 #define O_BALL_TRAIL_ALPHA 64
@@ -39,9 +38,9 @@ static const OBallData g_ballsData[O_BALL_ID_NUM] = {
 
 struct OBall {
     OBallId id;
-    ZVectorFix coords, coordsNext;
-    ZVectorInt coordsHistory[O_BALL_HISTORY_LEN];
-    ZVectorFix velocity, velocityNext;
+    FVectorFix coords, coordsNext;
+    FVectorInt coordsHistory[O_BALL_HISTORY_LEN];
+    FVectorFix velocity, velocityNext;
     bool hitWall, hitBall, committed, ignore;
 };
 
@@ -63,17 +62,17 @@ void o_ball_new(OBallId Id, int X, int Y, unsigned Angle)
 
     b->id = Id;
 
-    b->coords.x = z_fix_fromInt(X);
-    b->coords.y = z_fix_fromInt(Y);
+    b->coords.x = f_fix_fromInt(X);
+    b->coords.y = f_fix_fromInt(Y);
 
-    b->coordsHistory[0] = z_vectorfix_toInt(b->coords);
+    b->coordsHistory[0] = f_vectorfix_toInt(b->coords);
 
     for(int i = 1; i < O_BALL_HISTORY_LEN; i++) {
         b->coordsHistory[i] = b->coordsHistory[0];
     }
 
-    b->velocity.x = +z_fix_cos(Angle);
-    b->velocity.y = -z_fix_sin(Angle);
+    b->velocity.x = +f_fix_cos(Angle);
+    b->velocity.y = -f_fix_sin(Angle);
 
     b->ignore = false;
 }
@@ -83,18 +82,18 @@ static inline int ballRadius(const OBall* Ball)
     return g_ballsData[Ball->id].radius;
 }
 
-static inline ZFix ballRadiusf(const OBall* Ball)
+static inline FFix ballRadiusf(const OBall* Ball)
 {
-    return z_fix_fromInt(ballRadius(Ball));
+    return f_fix_fromInt(ballRadius(Ball));
 }
 
-static int ballCheckWalls(const OBall* Ball, ZVectorFix Coords)
+static int ballCheckWalls(const OBall* Ball, FVectorFix Coords)
 {
-    ZVectorInt coords = z_vectorfix_toInt(Coords);
-    ZVectorInt up = {coords.x, coords.y - ballRadius(Ball)};
-    ZVectorInt down = {coords.x, coords.y + ballRadius(Ball)};
-    ZVectorInt left = {coords.x - ballRadius(Ball), coords.y};
-    ZVectorInt right = {coords.x + ballRadius(Ball), coords.y};
+    FVectorInt coords = f_vectorfix_toInt(Coords);
+    FVectorInt up = {coords.x, coords.y - ballRadius(Ball)};
+    FVectorInt down = {coords.x, coords.y + ballRadius(Ball)};
+    FVectorInt left = {coords.x - ballRadius(Ball), coords.y};
+    FVectorInt right = {coords.x + ballRadius(Ball), coords.y};
 
     int ret = 0;
 
@@ -114,7 +113,7 @@ static inline bool collideBoxes(int X1, int Y1, int W1, int H1, int X2, int Y2, 
     return !(Y1 >= Y2 + H2 || Y2 >= Y1 + H1 || X1 >= X2 + W2 || X2 >= X1 + W1);
 }
 
-static inline bool circleAndCirclef(ZVectorFix Coords1, ZFix R1, ZVectorFix Coords2, ZFix R2)
+static inline bool circleAndCirclef(FVectorFix Coords1, FFix R1, FVectorFix Coords2, FFix R2)
 {
     const int64_t x = Coords1.x - Coords2.x;
     const int64_t y = Coords1.y - Coords2.y;
@@ -133,7 +132,7 @@ static void ball_tick_move(OBall* Ball)
         Ball->coordsHistory[i + 1] = Ball->coordsHistory[i];
     }
 
-    Ball->coordsHistory[0] = z_vectorfix_toInt(Ball->coords);
+    Ball->coordsHistory[0] = f_vectorfix_toInt(Ball->coords);
 
     Ball->coordsNext.x = Ball->coords.x + Ball->velocity.x;
     Ball->coordsNext.y = Ball->coords.y + Ball->velocity.y;
@@ -199,11 +198,11 @@ static void ball_tick_commit_1(OBall* Ball)
         Ball->velocityNext = Ball->velocity;
     }
 
-    unsigned angle = z_fix_atan(
+    unsigned angle = f_fix_atan(
                         0, 0, Ball->velocityNext.x, Ball->velocityNext.y);
 
-    Ball->velocity.x = +z_fix_cos(angle);
-    Ball->velocity.y = -z_fix_sin(angle);
+    Ball->velocity.x = +f_fix_cos(angle);
+    Ball->velocity.y = -f_fix_sin(angle);
 
     if(!Ball->hitWall) {
         if(!Ball->hitBall) {
@@ -216,7 +215,7 @@ static void ball_tick_commit_1(OBall* Ball)
     }
 }
 
-static bool ballCommitValid(const OBall* Ball, ZVectorFix Coords)
+static bool ballCommitValid(const OBall* Ball, FVectorFix Coords)
 {
     if(ballCheckWalls(Ball, Coords)) {
         return false;
@@ -248,9 +247,9 @@ static void ball_tick_commit_2(OBall* Ball)
         return;
     }
 
-    ZVectorFix vel = Ball->velocity;
+    FVectorFix vel = Ball->velocity;
 
-    ZVectorFix nextCoords[] = {
+    FVectorFix nextCoords[] = {
         Ball->coords,
         {Ball->coords.x + vel.x / 4, Ball->coords.y + vel.y / 4},
         {Ball->coords.x - vel.x / 4, Ball->coords.y - vel.y / 4},
@@ -309,7 +308,7 @@ static void ball_draw_trail(const OBall* Ball)
 
 static void ball_draw_main(const OBall* Ball)
 {
-    ZVectorInt screen = z_vectorfix_toInt(Ball->coords);
+    FVectorInt screen = f_vectorfix_toInt(Ball->coords);
 
     z_sprite_blitAlphaMask(g_ballsData[Ball->id].sprite, 0, screen.x, screen.y);
 }
@@ -332,21 +331,21 @@ void o_ball_draw(void)
     }
 }
 
-bool o_ball_checkArea(ZVectorInt Start, ZVectorInt Dim)
+bool o_ball_checkArea(FVectorInt Start, FVectorInt Dim)
 {
-    ZVectorFix start = z_vectorint_toFix(Start);
-    ZVectorFix dim = z_vectorint_toFix(Dim);
+    FVectorFix start = f_vectorint_toFix(Start);
+    FVectorFix dim = f_vectorint_toFix(Dim);
 
     return o_ball_checkArea2(start.x, start.y, dim.x, dim.y);
 }
 
-bool o_ball_checkArea2(ZFix X, ZFix Y, ZFix W, ZFix H)
+bool o_ball_checkArea2(FFix X, FFix Y, FFix W, FFix H)
 {
     for(int i = 0; i < g_tail; i++) {
         const OBall* b = &g_balls[i];
 
-        ZFix rad = z_fix_fromInt(ballRadius(b));
-        ZFix diameter = rad * 2 + Z_FIX_ONE;
+        FFix rad = f_fix_fromInt(ballRadius(b));
+        FFix diameter = rad * 2 + F_FIX_ONE;
 
         bool hit = collideBoxes(b->coords.x - rad,
                                 b->coords.y - rad,

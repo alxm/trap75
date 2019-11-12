@@ -20,14 +20,14 @@
 #include "util_timer.h"
 
 typedef struct {
-    ZVectorInt shake;
+    FVectorInt shake;
 } NCamera;
 
 static NCamera g_camera;
 
 void n_camera_new(void)
 {
-    g_camera.shake = (ZVectorInt){0, 0};
+    g_camera.shake = (FVectorInt){0, 0};
 
     z_timer_stop(Z_TIMER_CAMERA_SHAKE);
 }
@@ -35,14 +35,14 @@ void n_camera_new(void)
 void n_camera_tick(void)
 {
     if(z_timer_isRunning(Z_TIMER_CAMERA_SHAKE)) {
-        g_camera.shake = (ZVectorInt){z_random_range(-1, 2),
-                                      z_random_range(-1, 2)};
+        g_camera.shake = (FVectorInt){f_random_range(-1, 2),
+                                      f_random_range(-1, 2)};
     } else {
-        g_camera.shake = (ZVectorInt){0, 0};
+        g_camera.shake = (FVectorInt){0, 0};
     }
 }
 
-ZVectorInt n_camera_shakeGet(void)
+FVectorInt n_camera_shakeGet(void)
 {
     return g_camera.shake;
 }

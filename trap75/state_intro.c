@@ -91,7 +91,7 @@ void s_intro_draw(void)
         return;
     }
 
-    ZVectorInt logoSize = z_sprite_sizeGet(Z_SPRITE_ALXM);
+    FVectorInt logoSize = z_sprite_sizeGet(Z_SPRITE_ALXM);
     int startX1 = Z_SCREEN_W / 2 - logoSize.x / 2;
     int startX2 = Z_SCREEN_W / 2 + (logoSize.x + 1) / 2 - 2;
     int startY = Z_SCREEN_H / 2 - logoSize.y / 2;

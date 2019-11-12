@@ -112,7 +112,7 @@ void z_sprite_align(ZAlign Alignment)
 
 void z_sprite_blit(ZSpriteId Sprite, unsigned Frame, int X, int Y)
 {
-    ZVectorInt spriteSize = z_sprite_sizeGet(Sprite);
+    FVectorInt spriteSize = z_sprite_sizeGet(Sprite);
 
     if(g_align & Z_ALIGN_X_CENTER) {
         X -= spriteSize.x >> 1;
@@ -135,7 +135,7 @@ void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, unsigned Frame, int X, int Y)
         return;
     }
 
-    ZVectorInt spriteSize = z_sprite_sizeGet(AlphaMask);
+    FVectorInt spriteSize = z_sprite_sizeGet(AlphaMask);
 
     if(g_align & Z_ALIGN_X_CENTER) {
         X -= spriteSize.x >> 1;

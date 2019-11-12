@@ -97,13 +97,13 @@ void n_game_levelSet(unsigned Level)
         numBalls++;
     }
 
-    unsigned angleInc = Z_FIX_ANGLES_NUM / numBalls;
+    unsigned angleInc = F_FIX_ANGLES_NUM / numBalls;
     unsigned angle = angleInc * 2 / 3;
 
     for(unsigned b = 0; b < numBalls; b++) {
         o_ball_new(levels[Level][b],
-                   Z_SCREEN_W / 2 + z_fix_toInt(z_fix_cos(angle) * 16),
-                   Z_SCREEN_H / 2 - z_fix_toInt(z_fix_sin(angle) * 16),
+                   Z_SCREEN_W / 2 + f_fix_toInt(f_fix_cos(angle) * 16),
+                   Z_SCREEN_H / 2 - f_fix_toInt(f_fix_sin(angle) * 16),
                    angle);
 
         angle += angleInc;
