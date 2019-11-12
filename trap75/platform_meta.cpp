@@ -19,7 +19,6 @@
 
 #include "util_graphics.h"
 #include "util_input.h"
-#include "util_sound.h"
 #include "util_state.h"
 
 #include "generated/data_gfx_palette.h"
@@ -30,22 +29,8 @@ typedef struct {
     const uint16_t* buffer;
 } ZSprite;
 
-typedef struct {
-    const uint8_t* buffer;
-    uint32_t size;
-} ZSfx;
-
 ZColor z_colors[Z_COLOR_NUM];
 static ZSprite g_sprites[Z_SPRITE_NUM];
-static ZSfx g_sfx[Z_SFX_NUM];
-
-void z_platform_init(void)
-{
-}
-
-void z_platform_uninit(void)
-{
-}
 
 ZPixel* z_screen_pixelsGet(void)
 {
@@ -145,17 +130,5 @@ int z_sprite_sizeGetHeight(ZSpriteId Sprite)
 unsigned z_sprite_framesNumGet(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].buffer[2];
-}
-
-void z_platform__loadSfx(int Sfx, const uint8_t* Buffer, uint32_t Size)
-{
-    g_sfx[Sfx].buffer = Buffer;
-    g_sfx[Sfx].size = Size;
-}
-
-void z_sfx_play(ZSfxId Sfx)
-{
-    gb.sound.stop(0);
-    gb.sound.play(g_sfx[Sfx].buffer, g_sfx[Sfx].size);
 }
 #endif // Z_PLATFORM_META

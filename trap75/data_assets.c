@@ -15,22 +15,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "data_assets.h"
 
-typedef enum {
-    Z_SFX_INVALID = -1,
-    Z_SFX_PRESSED_A,
-    Z_SFX_SWIPE_HIDE,
-    Z_SFX_SWIPE_SHOW,
-    Z_SFX_NUM
-} ZSfxId;
-
-#include "platform.h"
-
-Z_EXTERN_C_START
-
-extern void z_sound_setup(void);
-
-extern void z_sfx_play(ZSfxId Sfx);
-
-Z_EXTERN_C_END
+//
+// Workaround for Arduino not building code from subdirs
+//
+#if F_CONFIG_SYSTEM_GAMEBUINO
+    #include "faur_gen/sfx/assets/sfx/swipe_hide.wav.c"
+    #include "faur_gen/sfx/assets/sfx/swipe_show.wav.c"
+#endif

@@ -17,8 +17,8 @@
 
 #include "util_swipe.h"
 
+#include "data_assets.h"
 #include "util_graphics.h"
-#include "util_sound.h"
 
 #define Z_ANGLE_INC (F_DEG_090_FIX / 16)
 
@@ -75,12 +75,12 @@ static void drawLinesShow(void)
 
 static const struct {
     ZSwipeDraw* draw;
-    ZSfxId sfx;
+    const FSample* const * sample;
 } g_callbacks[Z_SWIPE_NUM] = {
-    [Z_SWIPE_FADE_HIDE] = {drawFadeHide, Z_SFX_SWIPE_HIDE},
-    [Z_SWIPE_FADE_SHOW] = {drawFadeShow, Z_SFX_SWIPE_SHOW},
-    [Z_SWIPE_LINES_HIDE] = {drawLinesHide, Z_SFX_SWIPE_HIDE},
-    [Z_SWIPE_LINES_SHOW] = {drawLinesShow, Z_SFX_SWIPE_SHOW},
+    [Z_SWIPE_FADE_HIDE] = {drawFadeHide, &f_sfx_assets_sfx_swipe_hide_wav},
+    [Z_SWIPE_FADE_SHOW] = {drawFadeShow, &f_sfx_assets_sfx_swipe_show_wav},
+    [Z_SWIPE_LINES_HIDE] = {drawLinesHide, &f_sfx_assets_sfx_swipe_hide_wav},
+    [Z_SWIPE_LINES_SHOW] = {drawLinesShow, &f_sfx_assets_sfx_swipe_show_wav},
 };
 
 void z_swipe_start(ZSwipeId Swipe)
@@ -90,7 +90,8 @@ void z_swipe_start(ZSwipeId Swipe)
     if(g_swipe != Z_SWIPE_INVALID) {
         g_angle = 0;
 
-        z_sfx_play(g_callbacks[g_swipe].sfx);
+        f_channel_play(
+            F_CHANNEL_ANY, *g_callbacks[g_swipe].sample, F_CHANNEL_PLAY_NORMAL);
     }
 }
 

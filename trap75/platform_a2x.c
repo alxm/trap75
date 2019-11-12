@@ -19,33 +19,11 @@
 
 #include "util_graphics.h"
 #include "util_input.h"
-#include "util_sound.h"
 #include "util_state.h"
 
 #if Z_PLATFORM_FAUR
-typedef struct {
-    FSample* sample;
-    int channel;
-} ZSfx;
-
 ZColor z_colors[Z_COLOR_NUM];
 static FSprite* g_sprites[Z_SPRITE_NUM];
-static ZSfx g_sfx[Z_SFX_NUM];
-
-void z_platform_init(void)
-{
-}
-
-void z_platform_uninit(void)
-{
-    for(int s = 0; s < Z_SPRITE_NUM; s++) {
-        f_sprite_free(g_sprites[s]);
-    }
-
-    for(int s = 0; s < Z_SFX_NUM; s++) {
-        f_sample_free(g_sfx[s].sample);
-    }
-}
 
 ZPixel* z_screen_pixelsGet(void)
 {
@@ -97,17 +75,5 @@ int z_sprite_sizeGetHeight(ZSpriteId Sprite)
 unsigned z_sprite_framesNumGet(ZSpriteId Sprite)
 {
     return f_sprite_framesNumGet(g_sprites[Sprite]);
-}
-
-void z_platform__loadSfx(int Sfx, const char* Path)
-{
-    g_sfx[Sfx].sample = f_sample_new(Path);
-    g_sfx[Sfx].channel = f_channel_new();
-}
-
-void z_sfx_play(ZSfxId Sfx)
-{
-    f_channel_play(
-        g_sfx[Sfx].channel, g_sfx[Sfx].sample, F_CHANNEL_PLAY_RESTART);
 }
 #endif // Z_PLATFORM_FAUR

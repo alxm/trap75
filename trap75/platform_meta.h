@@ -55,13 +55,7 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
 #define z_sprite_load(Index, Id)                             \
     z_platform__loadSprite(Index, z_data_gfx_##Id##_buffer);
 
-#define z_sfx_load(Index, Id)                     \
-    z_platform__loadSfx(Index,                    \
-                        z_data_sfx_##Id##_buffer, \
-                        z_data_sfx_##Id##_size);
-
 extern void z_platform__loadSprite(int Sprite, const uint16_t* Buffer);
-extern void z_platform__loadSfx(int Sfx, const uint8_t* Buffer, uint32_t Size);
 
 extern void z_platform_meta_lightsFill(int BgColorId, int ColorId, int Alpha);
 extern void z_platform_meta_lightsDraw(int ColorId, int Alpha, int X, int Y);

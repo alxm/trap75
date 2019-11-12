@@ -43,7 +43,6 @@ static void t_run(void)
     F_STATE_FREE
     {
         u_input_uninit();
-        z_platform_uninit();
     }
 }
 
