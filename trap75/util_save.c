@@ -30,7 +30,12 @@ void z_save_setup(void)
 {
     g_save.version = 1;
 
-    z_file_readOnce(Z_SAVE_FILE_NAME, &g_save, sizeof(g_save));
+    FFile* f = f_file_new(Z_SAVE_FILE_NAME, F_FILE_READ);
+
+    if(f) {
+        f_file_read(f, &g_save, sizeof(g_save));
+        f_file_free(f);
+    }
 }
 
 unsigned z_save_hiscoreGet(void)
@@ -43,6 +48,11 @@ void z_save_hiscoreSet(unsigned Score)
     if(Score > g_save.hiscore) {
         g_save.hiscore = Score;
 
-        z_file_writeOnce(Z_SAVE_FILE_NAME, &g_save, sizeof(g_save));
+        FFile* f = f_file_new(Z_SAVE_FILE_NAME, F_FILE_WRITE);
+
+        if(f) {
+            f_file_write(f, &g_save, sizeof(g_save));
+            f_file_free(f);
+        }
     }
 }

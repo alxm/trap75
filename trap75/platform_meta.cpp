@@ -158,49 +158,4 @@ void z_sfx_play(ZSfxId Sfx)
     gb.sound.stop(0);
     gb.sound.play(g_sfx[Sfx].buffer, g_sfx[Sfx].size);
 }
-
-bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size)
-{
-    File f = SD.open(FileName, O_RDONLY);
-
-    if(!f) {
-        return false;
-    }
-
-    int ret = f.read(Buffer, Size);
-
-    f.close();
-
-    if(ret < (int)Size) {
-        SerialUSB.printf("Read(%s, %u) failed: %d\n", FileName, Size, ret);
-        return false;
-    }
-
-    return true;
-}
-
-bool z_file_writeOnce(const char* FileName, const void* Buffer, size_t Size)
-{
-    File f = SD.open(FileName, O_RDWR | O_CREAT);
-
-    if(!f) {
-        SerialUSB.printf("Cannot open %s for write\n", FileName);
-        return false;
-    }
-
-    int ret = f.write(Buffer, Size);
-    f.close();
-
-    if(ret < (int)Size) {
-        SerialUSB.printf("Write(%s, %u) failed: %d\n", FileName, Size, ret);
-        return false;
-    }
-
-    return true;
-}
-
-void z_out(const char* Text)
-{
-    SerialUSB.printf("%s\n", Text);
-}
 #endif // Z_PLATFORM_META

@@ -110,38 +110,4 @@ void z_sfx_play(ZSfxId Sfx)
     f_channel_play(
         g_sfx[Sfx].channel, g_sfx[Sfx].sample, F_CHANNEL_PLAY_RESTART);
 }
-
-bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size)
-{
-    FFile* f = f_file_new(FileName, F_FILE_READ | F_FILE_BINARY);
-
-    if(f == NULL) {
-        return false;
-    }
-
-    bool ret = f_file_read(f, Buffer, Size);
-
-    f_file_free(f);
-
-    return ret;
-}
-
-bool z_file_writeOnce(const char* FileName, const void* Buffer, size_t Size)
-{
-    FFile* f = f_file_new(FileName, F_FILE_WRITE | F_FILE_BINARY);
-
-    if(f == NULL) {
-        return false;
-    }
-
-    bool ret = f_file_write(f, Buffer, Size);
-    f_file_free(f);
-
-    return ret;
-}
-
-void z_out(const char* Text)
-{
-    f_out_text(Text);
-}
 #endif // Z_PLATFORM_FAUR
