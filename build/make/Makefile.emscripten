@@ -2,11 +2,8 @@ include global.mk
 
 F_CONFIG_SCREEN_ZOOM := 8
 
-Z_DIR_GFX := assets/gfx
-Z_DIR_SFX := assets/sfx
-
 F_CONFIG_PATH_EMBED_EMSCRIPTEN := \
-	$(addprefix $(Z_DIR_GFX)/, $(notdir $(wildcard $(Z_PROJECT_ROOT)/$(Z_DIR_GFX)/*.png))) \
-	$(addprefix $(Z_DIR_SFX)/, $(notdir $(wildcard $(Z_PROJECT_ROOT)/$(Z_DIR_SFX)/*.wav))) \
+	$(F_CONFIG_PATH_GFX) \
+	$(F_CONFIG_PATH_SFX) \
 
 include $(FAUR_PATH)/make/emscripten.mk

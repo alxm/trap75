@@ -4,14 +4,6 @@ F_CONFIG_MAKE_CLEAN := genclean
 
 F_CONFIG_SCREEN_ZOOM := 4
 
-F_CONFIG_PATH_GFX := $(shell find $(Z_PROJECT_ROOT)/assets/gfx -name "*.png")
-F_CONFIG_PATH_GFX := $(F_CONFIG_PATH_GFX:$(Z_PROJECT_ROOT)/%=%)
-
-F_CONFIG_PATH_SFX := $(shell find $(Z_PROJECT_ROOT)/assets/sfx -name "*.wav")
-F_CONFIG_PATH_SFX := $(F_CONFIG_PATH_SFX:$(Z_PROJECT_ROOT)/%=%)
-
-F_CONFIG_PATH_SRC_GEN := 1
-
 include $(FAUR_PATH)/make/dev.mk
 
 Z_DIR_GEN := $(F_DIR_ROOT)/$(F_CONFIG_DIR_SRC)/generated

@@ -1,7 +1,3 @@
-ifdef F_DIR_ROOT_ABS
-    include $(F_DIR_ROOT_ABS)/build/make/global.mk
-else
-    include global.mk
-endif
+include $(dir $(lastword $(MAKEFILE_LIST)))/global.mk
 
 include $(FAUR_PATH)/make/gamebuino.mk
