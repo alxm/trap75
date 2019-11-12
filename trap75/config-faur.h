@@ -15,4 +15,40 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <faur.h>
+#pragma once
+
+#ifndef F_CONFIG_APP_AUTHOR
+#define F_CONFIG_APP_AUTHOR "alxm"
+#endif
+
+#ifndef F_CONFIG_APP_DIR
+#define F_CONFIG_APP_DIR "Trap75"
+#endif
+
+#ifndef F_CONFIG_APP_NAME
+#define F_CONFIG_APP_NAME "Trap75"
+#endif
+
+#ifndef F_CONFIG_APP_VERSION_MAJOR
+#define F_CONFIG_APP_VERSION_MAJOR 0
+#endif
+
+#ifndef F_CONFIG_APP_VERSION_MINOR
+#define F_CONFIG_APP_VERSION_MINOR 2
+#endif
+
+#ifndef F_CONFIG_APP_VERSION_MICRO
+#define F_CONFIG_APP_VERSION_MICRO 0
+#endif
+
+#ifndef F_CONFIG_BUILD_DEBUG
+#define F_CONFIG_BUILD_DEBUG 1
+#endif
+
+#ifndef F_CONFIG_FPS_RATE_DRAW
+#define F_CONFIG_FPS_RATE_DRAW 30
+#endif
+
+#ifndef F_CONFIG_FPS_RATE_TICK
+#define F_CONFIG_FPS_RATE_TICK 30
+#endif

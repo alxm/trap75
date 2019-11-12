@@ -34,73 +34,53 @@ static FSprite* g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
 static FButton* g_buttons[Z_BUTTON_NUM];
 
-void s_run(void)
+void z_platform_init(void)
 {
-    F_STATE_INIT
-    {
-        g_buttons[Z_BUTTON_UP] = f_button_new();
-        f_button_bindKey(g_buttons[Z_BUTTON_UP], F_KEY_UP);
-        f_button_bindButton(g_buttons[Z_BUTTON_UP], NULL, F_BUTTON_UP);
+    g_buttons[Z_BUTTON_UP] = f_button_new();
+    f_button_bindKey(g_buttons[Z_BUTTON_UP], F_KEY_UP);
+    f_button_bindButton(g_buttons[Z_BUTTON_UP], NULL, F_BUTTON_UP);
 
-        g_buttons[Z_BUTTON_DOWN] = f_button_new();
-        f_button_bindKey(g_buttons[Z_BUTTON_DOWN], F_KEY_DOWN);
-        f_button_bindButton(g_buttons[Z_BUTTON_DOWN], NULL, F_BUTTON_DOWN);
+    g_buttons[Z_BUTTON_DOWN] = f_button_new();
+    f_button_bindKey(g_buttons[Z_BUTTON_DOWN], F_KEY_DOWN);
+    f_button_bindButton(g_buttons[Z_BUTTON_DOWN], NULL, F_BUTTON_DOWN);
 
-        g_buttons[Z_BUTTON_LEFT] = f_button_new();
-        f_button_bindKey(g_buttons[Z_BUTTON_LEFT], F_KEY_LEFT);
-        f_button_bindButton(g_buttons[Z_BUTTON_LEFT], NULL, F_BUTTON_LEFT);
-        f_button_bindButton(g_buttons[Z_BUTTON_LEFT], NULL, F_BUTTON_L);
+    g_buttons[Z_BUTTON_LEFT] = f_button_new();
+    f_button_bindKey(g_buttons[Z_BUTTON_LEFT], F_KEY_LEFT);
+    f_button_bindButton(g_buttons[Z_BUTTON_LEFT], NULL, F_BUTTON_LEFT);
+    f_button_bindButton(g_buttons[Z_BUTTON_LEFT], NULL, F_BUTTON_L);
 
-        g_buttons[Z_BUTTON_RIGHT] = f_button_new();
-        f_button_bindKey(g_buttons[Z_BUTTON_RIGHT], F_KEY_RIGHT);
-        f_button_bindButton(g_buttons[Z_BUTTON_RIGHT], NULL, F_BUTTON_RIGHT);
-        f_button_bindButton(g_buttons[Z_BUTTON_RIGHT], NULL, F_BUTTON_R);
+    g_buttons[Z_BUTTON_RIGHT] = f_button_new();
+    f_button_bindKey(g_buttons[Z_BUTTON_RIGHT], F_KEY_RIGHT);
+    f_button_bindButton(g_buttons[Z_BUTTON_RIGHT], NULL, F_BUTTON_RIGHT);
+    f_button_bindButton(g_buttons[Z_BUTTON_RIGHT], NULL, F_BUTTON_R);
 
-        g_buttons[Z_BUTTON_A] = f_button_new();
-        f_button_bindKey(g_buttons[Z_BUTTON_A], F_KEY_SPACE);
-        f_button_bindKey(g_buttons[Z_BUTTON_A], F_KEY_Z);
-        f_button_bindButton(g_buttons[Z_BUTTON_A], NULL, F_BUTTON_A);
+    g_buttons[Z_BUTTON_A] = f_button_new();
+    f_button_bindKey(g_buttons[Z_BUTTON_A], F_KEY_SPACE);
+    f_button_bindKey(g_buttons[Z_BUTTON_A], F_KEY_Z);
+    f_button_bindButton(g_buttons[Z_BUTTON_A], NULL, F_BUTTON_A);
 
-        g_buttons[Z_BUTTON_B] = f_button_new();
-        f_button_bindKey(g_buttons[Z_BUTTON_B], F_KEY_X);
-        f_button_bindButton(g_buttons[Z_BUTTON_B], NULL, F_BUTTON_B);
+    g_buttons[Z_BUTTON_B] = f_button_new();
+    f_button_bindKey(g_buttons[Z_BUTTON_B], F_KEY_X);
+    f_button_bindButton(g_buttons[Z_BUTTON_B], NULL, F_BUTTON_B);
 
-        g_buttons[Z_BUTTON_MENU] = f_button_new();
-        f_button_bindKey(g_buttons[Z_BUTTON_MENU], F_KEY_ENTER);
-        f_button_bindButton(g_buttons[Z_BUTTON_MENU], NULL, F_BUTTON_START);
-
-        z_state_setup();
-    }
-
-    F_STATE_TICK
-    {
-        z_state_tick();
-    }
-
-    F_STATE_DRAW
-    {
-        z_state_draw();
-    }
-
-    F_STATE_FREE
-    {
-        for(int b = 0; b < Z_BUTTON_NUM; b++) {
-            f_button_free(g_buttons[b]);
-        }
-
-        for(int s = 0; s < Z_SPRITE_NUM; s++) {
-            f_sprite_free(g_sprites[s]);
-        }
-
-        for(int s = 0; s < Z_SFX_NUM; s++) {
-            f_sample_free(g_sfx[s].sample);
-        }
-    }
+    g_buttons[Z_BUTTON_MENU] = f_button_new();
+    f_button_bindKey(g_buttons[Z_BUTTON_MENU], F_KEY_ENTER);
+    f_button_bindButton(g_buttons[Z_BUTTON_MENU], NULL, F_BUTTON_START);
 }
 
-void f_main(void)
+void z_platform_uninit(void)
 {
-    f_state_push(s_run);
+    for(int b = 0; b < Z_BUTTON_NUM; b++) {
+        f_button_free(g_buttons[b]);
+    }
+
+    for(int s = 0; s < Z_SPRITE_NUM; s++) {
+        f_sprite_free(g_sprites[s]);
+    }
+
+    for(int s = 0; s < Z_SFX_NUM; s++) {
+        f_sample_free(g_sfx[s].sample);
+    }
 }
 
 bool z_platform_buttonPressGet(int Button)

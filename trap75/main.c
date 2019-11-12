@@ -16,3 +16,36 @@
 */
 
 #include <faur.h>
+
+#include "platform.h"
+
+#include "util_state.h"
+
+static void t_run(void)
+{
+    F_STATE_INIT
+    {
+        z_platform_init();
+        z_state_setup();
+    }
+
+    F_STATE_TICK
+    {
+        z_state_tick();
+    }
+
+    F_STATE_DRAW
+    {
+        z_state_draw();
+    }
+
+    F_STATE_FREE
+    {
+        z_platform_uninit();
+    }
+}
+
+void f_main(void)
+{
+    f_state_push(t_run);
+}

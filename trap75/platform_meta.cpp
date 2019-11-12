@@ -50,42 +50,12 @@ static const Button g_buttons[Z_BUTTON_NUM] = {
     [Z_BUTTON_MENU] = BUTTON_MENU,
 };
 
-void setup(void)
+void z_platform_init(void)
 {
-    gb.begin();
-    gb.setFrameRate(Z_FPS);
-
-    SerialUSB.begin(9600);
-
-    #if Z_DEBUG
-        unsigned now = millis();
-
-        while(!SerialUSB && millis() - now < 1000) {
-            continue;
-        }
-    #endif
-
-    z_state_setup();
 }
 
-void loop(void)
+void z_platform_uninit(void)
 {
-    if(!gb.update()) {
-        return;
-    }
-
-    z_state_tick();
-    z_state_draw();
-
-    #if Z_DEBUG
-        gb.display.setColor(WHITE);
-        gb.display.setCursor(2, 46);
-        gb.display.print(gb.getCpuLoad(), DEC);
-        gb.display.setCursor(2, 52);
-        gb.display.print(gb.getFreeRam(), DEC);
-        gb.display.setCursor(2, 58);
-        gb.display.print(gb.frameCount, DEC);
-    #endif
 }
 
 bool z_platform_buttonPressGet(int Button)

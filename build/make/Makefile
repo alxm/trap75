@@ -1,9 +1,8 @@
 include global.mk
 
-F_CONFIG_SCREEN_MAXIMIZED := 0
-F_CONFIG_SCREEN_ZOOM := 4
-
 F_CONFIG_MAKE_CLEAN := genclean
+
+F_CONFIG_SCREEN_ZOOM := 4
 
 include $(FAUR_PATH)/make/dev.mk
 

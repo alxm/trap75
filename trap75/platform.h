@@ -60,6 +60,9 @@ Z_EXTERN_C_START
 #define Z_FLAG_TEST_ANY(Value, Mask) !!((Value) & (Mask))
 #define Z_FLAG_TEST_ALL(Value, Mask) (((Value) & (Mask)) == (Mask))
 
+extern void z_platform_init(void);
+extern void z_platform_uninit(void);
+
 extern void z_platform_spriteBlit(int Sprite, int X, int Y, unsigned Frame);
 
 extern bool z_platform_buttonPressGet(int Button);
