@@ -19,13 +19,14 @@
 
 #include "platform.h"
 
+#include "util_input.h"
 #include "util_state.h"
 
 static void t_run(void)
 {
     F_STATE_INIT
     {
-        z_platform_init();
+        u_input_init();
         z_state_setup();
     }
 
@@ -41,6 +42,7 @@ static void t_run(void)
 
     F_STATE_FREE
     {
+        u_input_uninit();
         z_platform_uninit();
     }
 }

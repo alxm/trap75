@@ -56,8 +56,8 @@ void s_intro_tick(void)
     }
 
     if(z_timer_isExpired(Z_TIMER_G1)
-        || z_button_pressGetOnce(Z_BUTTON_A)
-        || z_button_pressGetOnce(Z_BUTTON_B)) {
+        || f_button_pressGetOnce(u_input_get(U_BUTTON_A))
+        || f_button_pressGetOnce(u_input_get(U_BUTTON_B))) {
 
         z_state_set(Z_STATE_TITLE);
         z_swipe_start(Z_SWIPE_FADE_HIDE);

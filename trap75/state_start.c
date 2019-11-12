@@ -23,14 +23,14 @@
 
 void s_start_init(void)
 {
-    z_input_reset();
+    u_input_reset();
 
     z_swipe_start(Z_SWIPE_FADE_SHOW);
 }
 
 void s_start_tick(void)
 {
-    if(z_button_pressGetAny()) {
+    if(u_input_any()) {
         z_state_set(Z_STATE_PLAY);
     }
 

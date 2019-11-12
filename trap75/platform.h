@@ -65,8 +65,6 @@ extern void z_platform_uninit(void);
 
 extern void z_platform_spriteBlit(int Sprite, int X, int Y, unsigned Frame);
 
-extern bool z_platform_buttonPressGet(int Button);
-
 extern bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size);
 extern bool z_file_writeOnce(const char* FileName, const void* Buffer, size_t Size);
 

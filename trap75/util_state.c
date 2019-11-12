@@ -93,7 +93,7 @@ void z_state_setup(void)
     z_graphics_setup();
     z_sound_setup();
 
-    z_input_reset();
+    u_input_reset();
     z_light_reset();
 
     #if Z_DEBUG
@@ -126,7 +126,6 @@ void z_state_tick(void)
     z_timer_tick();
     z_swipe_tick();
     z_light_tick();
-    z_input_tick();
 
     checkNewState();
 

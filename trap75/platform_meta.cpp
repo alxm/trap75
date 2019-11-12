@@ -40,27 +40,12 @@ ZColor z_colors[Z_COLOR_NUM];
 static ZSprite g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
 
-static const Button g_buttons[Z_BUTTON_NUM] = {
-    [Z_BUTTON_UP] = BUTTON_UP,
-    [Z_BUTTON_DOWN] = BUTTON_DOWN,
-    [Z_BUTTON_LEFT] = BUTTON_LEFT,
-    [Z_BUTTON_RIGHT] = BUTTON_RIGHT,
-    [Z_BUTTON_A] = BUTTON_A,
-    [Z_BUTTON_B] = BUTTON_B,
-    [Z_BUTTON_MENU] = BUTTON_MENU,
-};
-
 void z_platform_init(void)
 {
 }
 
 void z_platform_uninit(void)
 {
-}
-
-bool z_platform_buttonPressGet(int Button)
-{
-    return gb.buttons.repeat(g_buttons[Button], 0);
 }
 
 ZPixel* z_screen_pixelsGet(void)

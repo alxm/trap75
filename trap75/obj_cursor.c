@@ -89,32 +89,32 @@ void n_cursor_tick(void)
     g_cursor.coordsHistory[0] = z_vectorfix_toInt(g_cursor.coords);
 
     if(g_cursor.line == Z_LINE_INVALID) {
-        if(z_button_pressGet(Z_BUTTON_UP)) {
+        if(f_button_pressGet(u_input_get(U_BUTTON_UP))) {
             g_cursor.coords.y = z_math_max(g_cursor.coords.y - N_CURSOR_SPEED,
                                            Z_FIX_ONE);
         }
 
-        if(z_button_pressGet(Z_BUTTON_DOWN)) {
+        if(f_button_pressGet(u_input_get(U_BUTTON_DOWN))) {
             g_cursor.coords.y = z_math_min(g_cursor.coords.y + N_CURSOR_SPEED,
                                            (Z_SCREEN_H - 1) * Z_FIX_ONE - 1);
         }
 
-        if(z_button_pressGet(Z_BUTTON_LEFT)) {
+        if(f_button_pressGet(u_input_get(U_BUTTON_LEFT))) {
             g_cursor.coords.x = z_math_max(g_cursor.coords.x - N_CURSOR_SPEED,
                                            Z_FIX_ONE);
         }
 
-        if(z_button_pressGet(Z_BUTTON_RIGHT)) {
+        if(f_button_pressGet(u_input_get(U_BUTTON_RIGHT))) {
             g_cursor.coords.x = z_math_min(g_cursor.coords.x + N_CURSOR_SPEED,
                                            (Z_SCREEN_W - 1) * Z_FIX_ONE - 1);
         }
 
         if(!n_map_wallGet(z_vectorfix_toInt(g_cursor.coords))) {
-            if(z_button_pressGetOnce(Z_BUTTON_A)) {
+            if(f_button_pressGetOnce(u_input_get(U_BUTTON_A))) {
                 g_cursor.line = Z_LINE_H;
                 g_cursor.offsets[0] = 0;
                 g_cursor.offsets[1] = 0;
-            } else if(z_button_pressGetOnce(Z_BUTTON_B)) {
+            } else if(f_button_pressGetOnce(u_input_get(U_BUTTON_B))) {
                 g_cursor.line = Z_LINE_V;
                 g_cursor.offsets[0] = 0;
                 g_cursor.offsets[1] = 0;

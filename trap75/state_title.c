@@ -28,7 +28,7 @@
 
 void s_title_init(void)
 {
-    z_input_reset();
+    u_input_reset();
 
     n_map_new();
 
@@ -41,7 +41,7 @@ void s_title_tick(void)
         return;
     }
 
-    if(z_button_pressGetAny()) {
+    if(u_input_any()) {
         z_state_set(Z_STATE_START);
         z_swipe_start(Z_SWIPE_FADE_HIDE);
 

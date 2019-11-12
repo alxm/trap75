@@ -21,26 +21,23 @@
 
 Z_EXTERN_C_START
 
-typedef enum Z_PACK_ENUM {
-    Z_BUTTON_INVALID = -1,
-    Z_BUTTON_UP,
-    Z_BUTTON_DOWN,
-    Z_BUTTON_LEFT,
-    Z_BUTTON_RIGHT,
-    Z_BUTTON_A,
-    Z_BUTTON_B,
-    Z_BUTTON_MENU,
-    Z_BUTTON_NUM
-} ZButtonId;
+typedef enum {
+    U_BUTTON_INVALID = -1,
+    U_BUTTON_UP,
+    U_BUTTON_DOWN,
+    U_BUTTON_LEFT,
+    U_BUTTON_RIGHT,
+    U_BUTTON_A,
+    U_BUTTON_B,
+    U_BUTTON_MENU,
+    U_BUTTON_NUM
+} UButtonId;
 
-extern void z_input_reset(void);
+extern void u_input_init(void);
+extern void u_input_uninit(void);
 
-extern void z_input_tick(void);
-
-extern bool z_button_pressGet(ZButtonId Button);
-extern bool z_button_pressGetOnce(ZButtonId Button);
-extern bool z_button_pressGetDelay(ZButtonId Button, unsigned Ms);
-extern bool z_button_pressGetAny(void);
-extern void z_button_pressClear(ZButtonId Button);
+extern FButton* u_input_get(UButtonId Button);
+extern void u_input_reset(void);
+extern bool u_input_any(void);
 
 Z_EXTERN_C_END
