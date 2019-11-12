@@ -231,12 +231,12 @@ void n_cursor_draw(void)
     ZVectorInt coords = z_vectorfix_toInt(g_cursor.coords);
 
     if(z_timer_isRunning(Z_TIMER_LINE_HIT)) {
-        if(z_fps_ticksGet() & 0x8) {
+        if(f_fps_ticksGet() & 0x8) {
             colorLine = Z_COLOR_BG_RED_2;
             colorLineGlow = Z_COLOR_BG_RED_4;
         }
     } else {
-        if(z_fps_ticksGet() & 0x4) {
+        if(f_fps_ticksGet() & 0x4) {
             colorLine = Z_COLOR_CURSOR_MAIN;
         }
     }

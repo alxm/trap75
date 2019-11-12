@@ -21,7 +21,6 @@
 #include "obj_map.h"
 #include "util_graphics.h"
 #include "util_font.h"
-#include "util_fps.h"
 #include "util_input.h"
 #include "util_save.h"
 #include "util_swipe.h"
@@ -62,7 +61,7 @@ void s_title_draw(void)
     z_graphics_alphaSet(
         Z_ALPHA_BASELINE
             + z_fix_toInt((Z_ALPHA_BASELINE - Z_ALPHA_MIN)
-                            * z_fix_sin(z_fps_ticksGet() << 5)));
+                            * z_fix_sin(f_fps_ticksGet() << 5)));
 
     z_sprite_blitAlphaMask(Z_SPRITE_TITLE_GLOW, 0, Z_SCREEN_W / 2, 6);
 
@@ -72,7 +71,7 @@ void s_title_draw(void)
 
     z_graphics_alphaSet(256);
 
-    if(z_fps_ticksGet() & 0x28) {
+    if(f_fps_ticksGet() & 0x28) {
         z_font_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_TOP);
         z_font_printText(Z_SCREEN_W / 2, 38, "Press Any Key");
     }

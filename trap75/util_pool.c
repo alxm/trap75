@@ -17,8 +17,6 @@
 
 #include "util_pool.h"
 
-#include "util_fps.h"
-
 void z_pool_clear(ZPool* Pool)
 {
     ZPoolFreeObject* current = (ZPoolFreeObject*)(Pool + 1);
@@ -41,7 +39,7 @@ void* z_pool_alloc(ZPool* Pool)
     if(Pool->freeList == NULL) {
         #if Z_DEBUG_INSTRUMENT
             printf("%08x: %s pool out of space (%d)\n",
-                   (uint32_t)z_fps_ticksGet(),
+                   (uint32_t)f_fps_ticksGet(),
                    Pool->name,
                    ++(Pool->fails));
         #endif

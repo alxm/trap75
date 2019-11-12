@@ -33,7 +33,7 @@ static ZTimer g_timers[Z_TIMER_NUM];
 
 void z_timer_tick(void)
 {
-    unsigned now = z_fps_ticksGet();
+    unsigned now = f_fps_ticksGet();
 
     for(int t = 0; t < Z_TIMER_NUM; t++) {
         ZTimer* timer = &g_timers[t];
@@ -61,8 +61,8 @@ void z_timer_start(ZTimerId Timer, unsigned Ms, bool Repeat)
 {
     ZTimer* timer = &g_timers[Timer];
 
-    timer->base = z_fps_ticksGet();
-    timer->period = z_timer_msToTicks(Ms);
+    timer->base = f_fps_ticksGet();
+    timer->period = f_time_ticksFromMs(Ms);
     timer->flags = Z_RUNNING;
 
     if(Ms == 0) {

@@ -18,7 +18,6 @@
 #include "util_light.h"
 
 #include "util_fix.h"
-#include "util_fps.h"
 
 static const struct {
     ZColorId color;

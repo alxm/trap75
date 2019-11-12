@@ -19,8 +19,6 @@
 
 #include "platform.h"
 
-#include "util_fps.h"
-
 typedef enum {
     Z_TIMER_INVALID = -1,
     Z_TIMER_CAMERA_SHAKE,
@@ -35,8 +33,3 @@ extern void z_timer_start(ZTimerId Timer, unsigned Ms, bool Repeat);
 extern void z_timer_stop(ZTimerId Timer);
 extern bool z_timer_isRunning(ZTimerId Timer);
 extern bool z_timer_isExpired(ZTimerId Timer);
-
-static inline unsigned z_timer_msToTicks(unsigned Ms)
-{
-    return (Z_FPS * Ms + 500) / 1000;
-}

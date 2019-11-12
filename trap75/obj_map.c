@@ -18,7 +18,6 @@
 #include "obj_map.h"
 
 #include "obj_camera.h"
-#include "util_fps.h"
 #include "util_graphics.h"
 
 typedef struct {
@@ -56,7 +55,9 @@ void n_map_draw(void)
 
     ZPixel* screen = z_screen_pixelsGet();
     const ZPixel* sprite = z_sprite_pixelsGet(Z_SPRITE_SPACE1, 0);
-    ZFixu angleStart = z_fixu_fromInt((z_fps_ticksGet() & (Z_FIX_ANGLES_NUM / Z_SPEED - 1)) * Z_SPEED);
+    ZFixu angleStart =
+        z_fixu_fromInt(
+            (f_fps_ticksGet() & (Z_FIX_ANGLES_NUM / Z_SPEED - 1)) * Z_SPEED);
 
     for(int y = 0; y < Z_SCREEN_H; y++) {
         ZFixu angle = angleStart;

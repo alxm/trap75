@@ -17,7 +17,6 @@
 
 #include "platform.h"
 
-#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
 #include "util_sound.h"
@@ -98,16 +97,6 @@ int z_sprite_sizeGetHeight(ZSpriteId Sprite)
 unsigned z_sprite_framesNumGet(ZSpriteId Sprite)
 {
     return f_sprite_framesNumGet(g_sprites[Sprite]);
-}
-
-unsigned z_fps_ticksGet(void)
-{
-    return f_fps_ticksGet();
-}
-
-bool z_fps_ticksNth(unsigned N)
-{
-    return f_fps_ticksNth(N);
 }
 
 void z_platform__loadSfx(int Sfx, const char* Path)
