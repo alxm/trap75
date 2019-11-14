@@ -29,7 +29,7 @@
     #include "faur_gen/gfx/assets/gfx/ball3.png.c"
     #include "faur_gen/gfx/assets/gfx/ball4.png.c"
     #include "faur_gen/gfx/assets/gfx/cursor.png.c"
-    #include "faur_gen/gfx/assets/gfx/font_aa_3x5.png.c"
+    #include "faur_gen/gfx/assets/gfx/font_aa_4x5.png.c"
     #include "faur_gen/gfx/assets/gfx/icon_heart.png.c"
     #include "faur_gen/gfx/assets/gfx/icon_level.png.c"
     #include "faur_gen/gfx/assets/gfx/palette.png.c"

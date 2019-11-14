@@ -25,7 +25,7 @@
 #include "faur_gen/gfx/assets/gfx/ball3.png.h"
 #include "faur_gen/gfx/assets/gfx/ball4.png.h"
 #include "faur_gen/gfx/assets/gfx/cursor.png.h"
-#include "faur_gen/gfx/assets/gfx/font_aa_3x5.png.h"
+#include "faur_gen/gfx/assets/gfx/font_aa_4x5.png.h"
 #include "faur_gen/gfx/assets/gfx/icon_heart.png.h"
 #include "faur_gen/gfx/assets/gfx/icon_level.png.h"
 #include "faur_gen/gfx/assets/gfx/palette.png.h"

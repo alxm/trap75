@@ -21,7 +21,6 @@
 #include "obj_game.h"
 #include "obj_map.h"
 #include "util_graphics.h"
-#include "util_font.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_save.h"
@@ -89,16 +88,22 @@ void s_title_draw(void)
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
     f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
+    f_font_fontSet(f_gfx_assets_gfx_font_aa_4x5_png);
+
     if(f_fps_ticksGet() & 0x28) {
-        z_font_align(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_TOP);
-        z_font_printText(F_CONFIG_SCREEN_SIZE_WIDTH / 2, 38, "Press Any Key");
+        f_font_alignSet(F_FONT_ALIGN_MIDDLE);
+        f_font_coordsSet(F_CONFIG_SCREEN_SIZE_WIDTH / 2, 38);
+
+        f_font_print("Press Any Key");
     }
 
-    z_font_align(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
-
+    f_font_alignSet(F_FONT_ALIGN_LEFT);
     f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_2].pixel);
-    z_font_printText(15, 31, "Hiscore");
+    f_font_coordsSet(14, 31);
+    f_font_print("Hiscore");
 
+    f_font_alignSet(F_FONT_ALIGN_RIGHT);
     f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_3].pixel);
-    z_font_printIntup(47, 31, z_save_hiscoreGet(), 5);
+    f_font_coordsSet(66, 31);
+    f_font_printf("%0*u", 5, z_save_hiscoreGet());
 }

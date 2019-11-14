@@ -21,7 +21,6 @@
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
-#include "util_font.h"
 #include "util_graphics.h"
 #include "util_save.h"
 
@@ -77,8 +76,8 @@ static void hudDrawLevel(int X, int Y)
     X += f_sprite_sizeGetWidth(f_gfx_assets_gfx_icon_level_png) + 1;
 
     f_color_colorSetPixel(z_colors[Z_COLOR_CURSOR_MAIN].pixel);
-    z_font_align(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
-    z_font_printIntup(X, Y, n_game_levelGet() + 1, 2);
+    f_font_coordsSet(X, Y);
+    f_font_printf("%0*u", 2, n_game_levelGet());
 }
 
 static void hudDrawPercent(int X, int Y)
@@ -102,8 +101,8 @@ static void hudDrawScore(int X, int Y)
                         ? Z_COLOR_BALL_YELLOW_2 : Z_COLOR_BALL_YELLOW_1;
     f_color_colorSetPixel(z_colors[color].pixel);
 
-    z_font_align(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
-    z_font_printIntup(X, Y, score, 5);
+    f_font_coordsSet(X, Y);
+    f_font_printf("%0*u", 5, score);
 }
 
 static void hudDrawLives(int X, int Y)
@@ -114,8 +113,8 @@ static void hudDrawLives(int X, int Y)
     X += f_sprite_sizeGetWidth(f_gfx_assets_gfx_icon_heart_png) + 1;
 
     f_color_colorSetPixel(z_colors[Z_COLOR_CURSOR_TRAIL].pixel);
-    z_font_align(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
-    z_font_printIntu(X, Y, n_game_livesGet());
+    f_font_coordsSet(X, Y);
+    f_font_printf("%u", n_game_livesGet());
 }
 
 void n_hud_draw(void)
@@ -125,6 +124,8 @@ void n_hud_draw(void)
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
     f_color_alphaSet(N_HUD_ALPHA);
     f_sprite_alignSet(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
+
+    f_font_alignSet(F_FONT_ALIGN_LEFT);
 
     hudDrawLevel(3 - shake.x, 3 - shake.y);
     hudDrawPercent(22 - shake.x, 3 + shake.y);
