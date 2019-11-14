@@ -17,9 +17,9 @@
 
 #pragma once
 
-#include "platform.h"
+#include <faur.h>
 
-Z_EXTERN_C_START
+F_EXTERN_C_START
 
 typedef enum {
     Z_COLOR_INVALID = -1,
@@ -63,4 +63,4 @@ extern ZColor z_colors[Z_COLOR_NUM];
 
 extern void z_graphics_setup(void);
 
-Z_EXTERN_C_END
+F_EXTERN_C_END

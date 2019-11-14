@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "platform.h"
+#include <faur.h>
 
 typedef struct ZPoolFreeObject {
     struct ZPoolFreeObject* next;
@@ -27,13 +27,13 @@ typedef struct {
     ZPoolFreeObject* freeList;
     const size_t capacity;
     const size_t objSize;
-    #if Z_DEBUG_INSTRUMENT
+    #if F_CONFIG_BUILD_DEBUG && F_BUILD_SYSTEM_DESKTOP
         const char* name;
         int fails;
     #endif
 } ZPool;
 
-#if Z_DEBUG_INSTRUMENT
+#if F_CONFIG_BUILD_DEBUG && F_BUILD_SYSTEM_DESKTOP
     #define Z__POOL_INIT_DEBUG(Name) \
         .name = #Name,               \
         .fails = 0,

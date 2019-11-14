@@ -94,7 +94,7 @@ void z_state_setup(void)
     u_input_reset();
     z_light_reset();
 
-    #if Z_DEBUG
+    #if F_CONFIG_BUILD_DEBUG
         z_state_set(Z_STATE_TITLE);
     #else
         z_state_set(Z_STATE_INTRO);

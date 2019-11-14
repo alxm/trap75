@@ -260,7 +260,7 @@ static void ball_tick_commit_2(OBall* Ball)
         {Ball->coords.x - vel.x / 1, Ball->coords.y - vel.y / 1},
     };
 
-    for(int i = 0; i < (int)Z_ARRAY_LEN(nextCoords); i++) {
+    for(unsigned i = 0; i < F_ARRAY_LEN(nextCoords); i++) {
         if(ballCommitValid(Ball, nextCoords[i])) {
             Ball->coords = nextCoords[i];
             Ball->committed = true;

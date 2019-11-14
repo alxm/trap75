@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "platform.h"
+#include <faur.h>
 
 extern void z_save_setup(void);
 

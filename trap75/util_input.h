@@ -17,9 +17,9 @@
 
 #pragma once
 
-#include "platform.h"
+#include <faur.h>
 
-Z_EXTERN_C_START
+F_EXTERN_C_START
 
 typedef enum {
     U_BUTTON_INVALID = -1,
@@ -40,4 +40,4 @@ extern FButton* u_input_get(UButtonId Button);
 extern void u_input_reset(void);
 extern bool u_input_any(void);
 
-Z_EXTERN_C_END
+F_EXTERN_C_END

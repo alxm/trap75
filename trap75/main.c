@@ -17,8 +17,6 @@
 
 #include <faur.h>
 
-#include "platform.h"
-
 #include "util_input.h"
 #include "util_state.h"
 

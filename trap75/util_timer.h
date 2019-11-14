@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "platform.h"
+#include <faur.h>
 
 typedef enum {
     Z_TIMER_INVALID = -1,

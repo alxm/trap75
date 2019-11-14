@@ -37,7 +37,7 @@ void z_pool_clear(ZPool* Pool)
 void* z_pool_alloc(ZPool* Pool)
 {
     if(Pool->freeList == NULL) {
-        #if Z_DEBUG_INSTRUMENT
+        #if F_CONFIG_BUILD_DEBUG && F_BUILD_SYSTEM_DESKTOP
             printf("%08x: %s pool out of space (%d)\n",
                    (uint32_t)f_fps_ticksGet(),
                    Pool->name,

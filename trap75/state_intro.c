@@ -64,7 +64,7 @@ void s_intro_tick(void)
         z_state_set(Z_STATE_TITLE);
         z_swipe_start(Z_SWIPE_FADE_HIDE);
 
-        g_pc = Z_ARRAY_LEN(g_lines) - 1;
+        g_pc = F_ARRAY_LEN(g_lines) - 1;
     }
 
     if(z_state_changed() || z_timer_isRunning(Z_TIMER_G1)) {

@@ -17,9 +17,9 @@
 
 #pragma once
 
-#include "platform.h"
+#include <faur.h>
 
-Z_EXTERN_C_START
+F_EXTERN_C_START
 
 typedef enum {
     Z_STATE_INVALID = -1,
@@ -47,4 +47,4 @@ extern ZStateId z_state_getNext(void);
 extern void z_state_set(ZStateId NewState);
 extern bool z_state_changed(void);
 
-Z_EXTERN_C_END
+F_EXTERN_C_END

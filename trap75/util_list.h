@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "platform.h"
+#include <faur.h>
 
 typedef struct ZListNode {
     struct ZListNode* prev;

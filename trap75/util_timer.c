@@ -18,9 +18,9 @@
 #include "util_timer.h"
 
 typedef enum {
-    Z_EXPIRED = Z_FLAG_BIT(0),
-    Z_REPEAT = Z_FLAG_BIT(1),
-    Z_RUNNING = Z_FLAG_BIT(2),
+    Z_EXPIRED = F_FLAGS_BIT(0),
+    Z_REPEAT = F_FLAGS_BIT(1),
+    Z_RUNNING = F_FLAGS_BIT(2),
 } ZTimerFlags;
 
 typedef struct {
@@ -38,21 +38,21 @@ void z_timer_tick(void)
     for(int t = 0; t < Z_TIMER_NUM; t++) {
         ZTimer* timer = &g_timers[t];
 
-        if(!Z_FLAG_TEST_ANY(timer->flags, Z_RUNNING)) {
-            Z_FLAG_CLEAR(timer->flags, Z_EXPIRED);
+        if(!F_FLAGS_TEST_ANY(timer->flags, Z_RUNNING)) {
+            F_FLAGS_CLEAR(timer->flags, Z_EXPIRED);
             continue;
         }
 
         if(now - timer->base >= timer->period) {
-            Z_FLAG_SET(timer->flags, Z_EXPIRED);
+            F_FLAGS_SET(timer->flags, Z_EXPIRED);
 
-            if(Z_FLAG_TEST_ANY(timer->flags, Z_REPEAT)) {
+            if(F_FLAGS_TEST_ANY(timer->flags, Z_REPEAT)) {
                 timer->base = now;
             } else {
-                Z_FLAG_CLEAR(timer->flags, Z_RUNNING);
+                F_FLAGS_CLEAR(timer->flags, Z_RUNNING);
             }
         } else {
-            Z_FLAG_CLEAR(timer->flags, Z_EXPIRED);
+            F_FLAGS_CLEAR(timer->flags, Z_EXPIRED);
         }
     }
 }
@@ -66,11 +66,11 @@ void z_timer_start(ZTimerId Timer, unsigned Ms, bool Repeat)
     timer->flags = Z_RUNNING;
 
     if(Ms == 0) {
-        Z_FLAG_SET(timer->flags, Z_EXPIRED);
+        F_FLAGS_SET(timer->flags, Z_EXPIRED);
     }
 
     if(Repeat) {
-        Z_FLAG_SET(timer->flags, Z_REPEAT);
+        F_FLAGS_SET(timer->flags, Z_REPEAT);
     }
 }
 
@@ -78,15 +78,15 @@ void z_timer_stop(ZTimerId Timer)
 {
     ZTimer* timer = &g_timers[Timer];
 
-    Z_FLAG_CLEAR(timer->flags, Z_RUNNING | Z_EXPIRED);
+    F_FLAGS_CLEAR(timer->flags, Z_RUNNING | Z_EXPIRED);
 }
 
 bool z_timer_isRunning(ZTimerId Timer)
 {
-    return Z_FLAG_TEST_ANY(g_timers[Timer].flags, Z_RUNNING);
+    return F_FLAGS_TEST_ANY(g_timers[Timer].flags, Z_RUNNING);
 }
 
 bool z_timer_isExpired(ZTimerId Timer)
 {
-    return Z_FLAG_TEST_ANY(g_timers[Timer].flags, Z_EXPIRED);
+    return F_FLAGS_TEST_ANY(g_timers[Timer].flags, Z_EXPIRED);
 }
