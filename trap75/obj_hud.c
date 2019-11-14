@@ -17,6 +17,7 @@
 
 #include "obj_hud.h"
 
+#include "data_assets.h"
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
@@ -33,7 +34,6 @@ void n_hud_new(void)
 
 void n_hud_tick(void)
 {
-    //
 }
 
 static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, ZColorId ColorProg, ZColorId ColorBg, ZColorId ColorBorder)
@@ -50,34 +50,34 @@ static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, Z
 
     // Main bar
 
-    z_graphics_colorSetId(ColorProg);
-    z_draw_rectangleAlpha(X, Y, progWidth, Height);
+    f_color_colorSetPixel(z_colors[ColorProg].pixel);
+    f_draw_rectangle(X, Y, progWidth, Height);
 
-    z_graphics_colorSetId(ColorBg);
-    z_draw_rectangleAlpha(X + progWidth, Y, Width - progWidth, Height);
+    f_color_colorSetPixel(z_colors[ColorBg].pixel);
+    f_draw_rectangle(X + progWidth, Y, Width - progWidth, Height);
 
     // Glow border
 
-    z_graphics_alphaSet(N_HUD_ALPHA >> 2);
-    z_graphics_colorSetId(ColorBorder);
+    f_color_colorSetPixel(z_colors[ColorBorder].pixel);
+    f_color_alphaSet(N_HUD_ALPHA >> 2);
 
-    z_draw_rectangleAlpha(X, Y - 1, Width, 1);
-    z_draw_rectangleAlpha(X, Y + Height, Width, 1);
-    z_draw_rectangleAlpha(X - 1, Y, 1, Height);
-    z_draw_rectangleAlpha(X + Width, Y, 1, Height);
+    f_draw_rectangle(X, Y - 1, Width, 1);
+    f_draw_rectangle(X, Y + Height, Width, 1);
+    f_draw_rectangle(X - 1, Y, 1, Height);
+    f_draw_rectangle(X + Width, Y, 1, Height);
 
-    z_graphics_alphaSet(N_HUD_ALPHA);
+    f_color_alphaSet(N_HUD_ALPHA);
 }
 
 static void hudDrawLevel(int X, int Y)
 {
-    z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
-    z_sprite_blitAlphaMask(Z_SPRITE_ICON_LEVEL, 0, X, Y);
+    f_color_colorSetPixel(z_colors[Z_COLOR_CURSOR_TRAIL].pixel);
+    f_sprite_blit(f_gfx_assets_gfx_icon_level_png, 0, X, Y);
 
-    X += z_sprite_sizeGetWidth(Z_SPRITE_ICON_LEVEL) + 1;
+    X += f_sprite_sizeGetWidth(f_gfx_assets_gfx_icon_level_png) + 1;
 
-    z_graphics_colorSetId(Z_COLOR_CURSOR_MAIN);
-    z_font_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+    f_color_colorSetPixel(z_colors[Z_COLOR_CURSOR_MAIN].pixel);
+    z_font_align(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
     z_font_printIntup(X, Y, n_game_levelGet() + 1, 2);
 }
 
@@ -98,22 +98,23 @@ static void hudDrawScore(int X, int Y)
 {
     unsigned score = n_game_scoreGet();
 
-    z_graphics_colorSetId(score > z_save_hiscoreGet()
-                            ? Z_COLOR_BALL_YELLOW_2 : Z_COLOR_BALL_YELLOW_1);
+    ZColorId color = score > z_save_hiscoreGet()
+                        ? Z_COLOR_BALL_YELLOW_2 : Z_COLOR_BALL_YELLOW_1;
+    f_color_colorSetPixel(z_colors[color].pixel);
 
-    z_font_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+    z_font_align(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
     z_font_printIntup(X, Y, score, 5);
 }
 
 static void hudDrawLives(int X, int Y)
 {
-    z_graphics_colorSetId(Z_COLOR_BG_RED_4);
-    z_sprite_blitAlphaMask(Z_SPRITE_ICON_HEART, 0, X, Y - 1);
+    f_color_colorSetPixel(z_colors[Z_COLOR_BG_RED_4].pixel);
+    f_sprite_blit(f_gfx_assets_gfx_icon_heart_png, 0, X, Y - 1);
 
-    X += z_sprite_sizeGetWidth(Z_SPRITE_ICON_HEART) + 1;
+    X += f_sprite_sizeGetWidth(f_gfx_assets_gfx_icon_heart_png) + 1;
 
-    z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
-    z_font_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+    f_color_colorSetPixel(z_colors[Z_COLOR_CURSOR_TRAIL].pixel);
+    z_font_align(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
     z_font_printIntu(X, Y, n_game_livesGet());
 }
 
@@ -121,11 +122,12 @@ void n_hud_draw(void)
 {
     FVectorInt shake = n_camera_shakeGet();
 
-    z_graphics_alphaSet(N_HUD_ALPHA);
-    z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+    f_color_alphaSet(N_HUD_ALPHA);
+    f_sprite_alignSet(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
 
     hudDrawLevel(3 - shake.x, 3 - shake.y);
     hudDrawPercent(22 - shake.x, 3 + shake.y);
-    hudDrawScore(Z_SCREEN_W - 35 + shake.x, 3 - shake.y);
-    hudDrawLives(Z_SCREEN_W - 14 + shake.x, 3 + shake.y);
+    hudDrawScore(F_CONFIG_SCREEN_SIZE_WIDTH - 35 + shake.x, 3 - shake.y);
+    hudDrawLives(F_CONFIG_SCREEN_SIZE_WIDTH - 14 + shake.x, 3 + shake.y);
 }

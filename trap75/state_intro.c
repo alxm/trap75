@@ -17,6 +17,7 @@
 
 #include "state_intro.h"
 
+#include "data_assets.h"
 #include "util_graphics.h"
 #include "util_input.h"
 #include "util_swipe.h"
@@ -44,9 +45,10 @@ static int g_pc;
 
 void s_intro_init(void)
 {
-    z_graphics_colorSetId(Z_COLOR_ALXM_BG);
+    f_color_blendSet(F_COLOR_BLEND_PLAIN);
+    f_color_colorSetPixel(z_colors[Z_COLOR_ALXM_BG].pixel);
 
-    z_draw_fill();
+    f_draw_fill();
 }
 
 void s_intro_tick(void)
@@ -84,27 +86,32 @@ void s_intro_tick(void)
 
 void s_intro_draw(void)
 {
-    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
-    z_sprite_blit(Z_SPRITE_ALXM, 0, Z_SCREEN_W / 2, Z_SCREEN_H / 2);
+    f_color_blendSet(F_COLOR_BLEND_PLAIN);
+
+    f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
+    f_sprite_blit(f_gfx_assets_gfx_alxm_png,
+                  0,
+                  F_CONFIG_SCREEN_SIZE_WIDTH / 2,
+                  F_CONFIG_SCREEN_SIZE_HEIGHT / 2);
 
     if(g_lines[g_pc] < 0) {
         return;
     }
 
-    FVectorInt logoSize = z_sprite_sizeGet(Z_SPRITE_ALXM);
-    int startX1 = Z_SCREEN_W / 2 - logoSize.x / 2;
-    int startX2 = Z_SCREEN_W / 2 + (logoSize.x + 1) / 2 - 2;
-    int startY = Z_SCREEN_H / 2 - logoSize.y / 2;
+    FVectorInt logoSize = f_sprite_sizeGet(f_gfx_assets_gfx_alxm_png);
+    int startX1 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 - logoSize.x / 2;
+    int startX2 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 + (logoSize.x + 1) / 2 - 2;
+    int startY = F_CONFIG_SCREEN_SIZE_HEIGHT / 2 - logoSize.y / 2;
 
-    z_graphics_colorSetId(Z_COLOR_ALXM_BG);
+    f_color_colorSetPixel(z_colors[Z_COLOR_ALXM_BG].pixel);
 
     for(int pc = g_pc; g_lines[pc] != -2; pc++) {
         while(g_lines[pc] != -1) {
             int8_t x = g_lines[pc++];
             int8_t y = g_lines[pc++];
 
-            z_draw_rectangle(startX1 + x, startY + y, 2, 1);
-            z_draw_rectangle(startX2 - x, startY + y, 2, 1);
+            f_draw_rectangle(startX1 + x, startY + y, 2, 1);
+            f_draw_rectangle(startX2 - x, startY + y, 2, 1);
         }
     }
 }

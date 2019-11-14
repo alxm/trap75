@@ -23,8 +23,6 @@
     #define Z_PLATFORM_FAUR 1
 #endif
 
-#define Z_DEBUG F_CONFIG_BUILD_DEBUG
-
 #ifdef __cplusplus
 #define Z_EXTERN_C_START extern "C" {
 #define Z_EXTERN_C_END }
@@ -39,9 +37,9 @@
 #include <stdint.h>
 #include <limits.h>
 
-typedef struct {
-    int r, g, b;
-} ZRgb;
+#include "config-faur.h"
+
+#define Z_DEBUG F_CONFIG_BUILD_DEBUG
 
 #if Z_PLATFORM_FAUR
     #include "platform_a2x.h"
@@ -59,7 +57,5 @@ Z_EXTERN_C_START
 #define Z_FLAG_CLEAR(Value, Mask) ((Value) &= ~(unsigned)(Mask))
 #define Z_FLAG_TEST_ANY(Value, Mask) !!((Value) & (Mask))
 #define Z_FLAG_TEST_ALL(Value, Mask) (((Value) & (Mask)) == (Mask))
-
-extern void z_platform_spriteBlit(int Sprite, int X, int Y, unsigned Frame);
 
 Z_EXTERN_C_END

@@ -15,4 +15,4 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Arduino setup and loop functions are in platform_meta.cpp
+// Entry point is in main.c

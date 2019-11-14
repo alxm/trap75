@@ -102,8 +102,10 @@ void n_game_levelSet(unsigned Level)
 
     for(unsigned b = 0; b < numBalls; b++) {
         o_ball_new(levels[Level][b],
-                   Z_SCREEN_W / 2 + f_fix_toInt(f_fix_cos(angle) * 16),
-                   Z_SCREEN_H / 2 - f_fix_toInt(f_fix_sin(angle) * 16),
+                   F_CONFIG_SCREEN_SIZE_WIDTH / 2
+                    + f_fix_toInt(f_fix_cos(angle) * 16),
+                   F_CONFIG_SCREEN_SIZE_HEIGHT / 2
+                    - f_fix_toInt(f_fix_sin(angle) * 16),
                    angle);
 
         angle += angleInc;

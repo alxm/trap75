@@ -17,11 +17,13 @@
 
 #include "state_title.h"
 
+#include "data_assets.h"
 #include "obj_game.h"
 #include "obj_map.h"
 #include "util_graphics.h"
 #include "util_font.h"
 #include "util_input.h"
+#include "util_light.h"
 #include "util_save.h"
 #include "util_swipe.h"
 
@@ -45,6 +47,8 @@ void s_title_tick(void)
         z_swipe_start(Z_SWIPE_FADE_HIDE);
 
         n_game_new();
+
+        z_light_pulseSet(Z_LIGHT_GAME_START);
     }
 }
 
@@ -52,35 +56,49 @@ void s_title_draw(void)
 {
     n_map_draw();
 
-    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_1);
-    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_TOP);
+    f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_TOP);
+
+    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+    f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_1].pixel);
 
     #define Z_ALPHA_MIN 64
-    #define Z_ALPHA_BASELINE (Z_ALPHA_MIN + (256 - Z_ALPHA_MIN) / 2)
+    #define Z_ALPHA_BASELINE \
+        (Z_ALPHA_MIN + (F_COLOR_ALPHA_MAX - Z_ALPHA_MIN) / 2)
 
-    z_graphics_alphaSet(
+    f_color_alphaSet(
         Z_ALPHA_BASELINE
             + f_fix_toInt((Z_ALPHA_BASELINE - Z_ALPHA_MIN)
                             * f_fix_sin(f_fps_ticksGet() << 5)));
 
-    z_sprite_blitAlphaMask(Z_SPRITE_TITLE_GLOW, 0, Z_SCREEN_W / 2, 6);
+    f_sprite_blit(f_gfx_assets_gfx_title_glow_png,
+                  0,
+                  F_CONFIG_SCREEN_SIZE_WIDTH / 2, 6);
 
-    z_sprite_blit(Z_SPRITE_TITLE, 0, Z_SCREEN_W / 2, 10);
+    f_color_blendSet(F_COLOR_BLEND_PLAIN);
 
-    z_sprite_blit(Z_SPRITE_ALXM_FOOTER, 0, Z_SCREEN_W / 2, 53);
+    f_sprite_blit(f_gfx_assets_gfx_title_png,
+                  0,
+                  F_CONFIG_SCREEN_SIZE_WIDTH / 2,
+                  10);
 
-    z_graphics_alphaSet(256);
+    f_sprite_blit(f_gfx_assets_gfx_alxm_footer_png,
+                  0,
+                  F_CONFIG_SCREEN_SIZE_WIDTH / 2,
+                  53);
+
+    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+    f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
     if(f_fps_ticksGet() & 0x28) {
-        z_font_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_TOP);
-        z_font_printText(Z_SCREEN_W / 2, 38, "Press Any Key");
+        z_font_align(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_TOP);
+        z_font_printText(F_CONFIG_SCREEN_SIZE_WIDTH / 2, 38, "Press Any Key");
     }
 
-    z_font_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+    z_font_align(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
 
-    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_2);
+    f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_2].pixel);
     z_font_printText(15, 31, "Hiscore");
 
-    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_3);
+    f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_3].pixel);
     z_font_printIntup(47, 31, z_save_hiscoreGet(), 5);
 }

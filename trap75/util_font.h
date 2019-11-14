@@ -21,8 +21,7 @@
 
 #include "util_graphics.h"
 
-extern void z_font_set(ZSpriteId Sprite);
-extern void z_font_align(ZAlign Alignment);
+extern void z_font_align(FSpriteAlign Alignment);
 extern void z_font_printText(int X, int Y, const char* Text);
 extern void z_font_printInt(int X, int Y, int Integer);
 extern void z_font_printIntu(int X, int Y, unsigned Integer);

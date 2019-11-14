@@ -17,6 +17,7 @@
 
 #include "obj_ball.h"
 
+#include "data_assets.h"
 #include "obj_cursor.h"
 #include "obj_map.h"
 #include "util_graphics.h"
@@ -25,15 +26,15 @@
 #define O_BALL_HISTORY_LEN 8
 
 typedef struct {
-    ZSpriteId sprite;
+    const FSprite* const * sprite;
     int radius;
 } OBallData;
 
 static const OBallData g_ballsData[O_BALL_ID_NUM] = {
-    [O_BALL_ID_1] = {Z_SPRITE_BALL1, 1},
-    [O_BALL_ID_2] = {Z_SPRITE_BALL2, 2},
-    [O_BALL_ID_3] = {Z_SPRITE_BALL3, 3},
-    [O_BALL_ID_4] = {Z_SPRITE_BALL4, 5},
+    [O_BALL_ID_1] = {&f_gfx_assets_gfx_ball1_png, 1},
+    [O_BALL_ID_2] = {&f_gfx_assets_gfx_ball2_png, 2},
+    [O_BALL_ID_3] = {&f_gfx_assets_gfx_ball3_png, 3},
+    [O_BALL_ID_4] = {&f_gfx_assets_gfx_ball4_png, 5},
 };
 
 struct OBall {
@@ -297,12 +298,13 @@ void o_ball_tick(void)
 static void ball_draw_trail(const OBall* Ball)
 {
     for(int i = O_BALL_HISTORY_LEN; i--; ) {
-        z_graphics_alphaSet(
+        f_color_alphaSet(
             O_BALL_TRAIL_ALPHA - O_BALL_TRAIL_ALPHA * i / O_BALL_HISTORY_LEN);
-        z_sprite_blitAlphaMask(g_ballsData[Ball->id].sprite,
-                               0,
-                               Ball->coordsHistory[i].x,
-                               Ball->coordsHistory[i].y);
+
+        f_sprite_blit(*g_ballsData[Ball->id].sprite,
+                      0,
+                      Ball->coordsHistory[i].x,
+                      Ball->coordsHistory[i].y);
     }
 }
 
@@ -310,21 +312,25 @@ static void ball_draw_main(const OBall* Ball)
 {
     FVectorInt screen = f_vectorfix_toInt(Ball->coords);
 
-    z_sprite_blitAlphaMask(g_ballsData[Ball->id].sprite, 0, screen.x, screen.y);
+    f_sprite_blit(*g_ballsData[Ball->id].sprite, 0, screen.x, screen.y);
 }
 
 void o_ball_draw(void)
 {
-    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
-    z_graphics_colorSetId((f_fps_ticksGet() & 0x8)
-                            ? Z_COLOR_BALL_YELLOW_1 : Z_COLOR_BALL_YELLOW_2);
+    ZColorId color = (f_fps_ticksGet() & 0x8)
+                        ? Z_COLOR_BALL_YELLOW_1 : Z_COLOR_BALL_YELLOW_2;
+
+    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+    f_color_colorSetPixel(z_colors[color].pixel);
+
+    f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
 
     for(int i = 0; i < g_tail; i++) {
         ball_draw_trail(&g_balls[i]);
     }
 
-    z_graphics_alphaSet(256);
-    z_graphics_colorSetId(Z_COLOR_BALL_YELLOW_2);
+    f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_2].pixel);
+    f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
     for(int i = 0; i < g_tail; i++) {
         ball_draw_main(&g_balls[i]);

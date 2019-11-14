@@ -17,6 +17,7 @@
 
 #include "obj_cursor.h"
 
+#include "data_assets.h"
 #include "obj_ball.h"
 #include "obj_camera.h"
 #include "obj_game.h"
@@ -50,8 +51,8 @@ static NCursor g_cursor;
 
 void n_cursor_new(void)
 {
-    g_cursor.coords.x = f_fix_fromInt(Z_SCREEN_W / 2);
-    g_cursor.coords.y = f_fix_fromInt(Z_SCREEN_H / 2);
+    g_cursor.coords.x = f_fix_fromInt(F_CONFIG_SCREEN_SIZE_WIDTH / 2);
+    g_cursor.coords.y = f_fix_fromInt(F_CONFIG_SCREEN_SIZE_HEIGHT / 2);
 
     g_cursor.coordsHistory[0] = f_vectorfix_toInt(g_cursor.coords);
 
@@ -94,8 +95,9 @@ void n_cursor_tick(void)
         }
 
         if(f_button_pressGet(u_input_get(U_BUTTON_DOWN))) {
-            g_cursor.coords.y = f_math_min(g_cursor.coords.y + N_CURSOR_SPEED,
-                                           (Z_SCREEN_H - 1) * F_FIX_ONE - 1);
+            g_cursor.coords.y =
+                f_math_min(g_cursor.coords.y + N_CURSOR_SPEED,
+                           (F_CONFIG_SCREEN_SIZE_HEIGHT - 1) * F_FIX_ONE - 1);
         }
 
         if(f_button_pressGet(u_input_get(U_BUTTON_LEFT))) {
@@ -104,8 +106,9 @@ void n_cursor_tick(void)
         }
 
         if(f_button_pressGet(u_input_get(U_BUTTON_RIGHT))) {
-            g_cursor.coords.x = f_math_min(g_cursor.coords.x + N_CURSOR_SPEED,
-                                           (Z_SCREEN_W - 1) * F_FIX_ONE - 1);
+            g_cursor.coords.x =
+                f_math_min(g_cursor.coords.x + N_CURSOR_SPEED,
+                           (F_CONFIG_SCREEN_SIZE_WIDTH - 1) * F_FIX_ONE - 1);
         }
 
         if(!n_map_wallGet(f_vectorfix_toInt(g_cursor.coords))) {
@@ -209,18 +212,19 @@ void n_cursor_tick(void)
 
 void n_cursor_draw(void)
 {
-    z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
-    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
+    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+    f_color_colorSetPixel(z_colors[Z_COLOR_CURSOR_TRAIL].pixel);
+    f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
 
     for(int i = N_CURSOR_HISTORY_LEN; i--; ) {
-        z_graphics_alphaSet(
+        f_color_alphaSet(
             N_CURSOR_TRAIL_ALPHA
                 - N_CURSOR_TRAIL_ALPHA * i / N_CURSOR_HISTORY_LEN);
 
-        z_sprite_blitAlphaMask(Z_SPRITE_CURSOR,
-                               0,
-                               g_cursor.coordsHistory[i].x,
-                               g_cursor.coordsHistory[i].y);
+        f_sprite_blit(f_gfx_assets_gfx_cursor_png,
+                      0,
+                      g_cursor.coordsHistory[i].x,
+                      g_cursor.coordsHistory[i].y);
     }
 
     ZColorId colorLine = Z_COLOR_CURSOR_TRAIL;
@@ -241,111 +245,114 @@ void n_cursor_draw(void)
     }
 
     if(g_cursor.line == Z_LINE_H) {
-        z_graphics_colorSetId(colorLineGlow);
-        z_graphics_alphaSet(64);
+        f_color_colorSetPixel(z_colors[colorLineGlow].pixel);
+        f_color_alphaSet(64);
 
         // Left glow
-        z_draw_rectangleAlpha(coords.x - g_cursor.offsets[0] - shake.x,
-                              coords.y - 1 - shake.y,
-                              g_cursor.offsets[0],
-                              1);
-        z_draw_rectangleAlpha(coords.x - g_cursor.offsets[0] - shake.x,
-                              coords.y + 1 - shake.y,
-                              g_cursor.offsets[0],
-                              1);
-        z_draw_pixelAlpha(
-            coords.x - g_cursor.offsets[0] - 1 - shake.x, coords.y - shake.y);
+        f_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
+                         coords.y - 1 - shake.y,
+                         g_cursor.offsets[0],
+                         1);
+        f_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
+                         coords.y + 1 - shake.y,
+                         g_cursor.offsets[0],
+                         1);
+        f_draw_pixel(coords.x - g_cursor.offsets[0] - 1 - shake.x,
+                     coords.y - shake.y);
 
         // Right glow
-        z_draw_rectangleAlpha(coords.x + 1 - shake.x,
-                              coords.y - 1 - shake.y,
-                              g_cursor.offsets[1],
-                              1);
-        z_draw_rectangleAlpha(coords.x + 1 - shake.x,
-                              coords.y + 1 - shake.y,
-                              g_cursor.offsets[1],
-                              1);
-        z_draw_pixelAlpha(
-            coords.x + g_cursor.offsets[1] + 1 - shake.x, coords.y - shake.y);
+        f_draw_rectangle(coords.x + 1 - shake.x,
+                         coords.y - 1 - shake.y,
+                         g_cursor.offsets[1],
+                         1);
+        f_draw_rectangle(coords.x + 1 - shake.x,
+                         coords.y + 1 - shake.y,
+                         g_cursor.offsets[1],
+                         1);
+        f_draw_pixel(coords.x + g_cursor.offsets[1] + 1 - shake.x,
+                     coords.y - shake.y);
 
         // Bookends
-        z_graphics_alphaSet(32);
+        f_color_alphaSet(32);
 
-        z_draw_pixelAlpha(coords.x - g_cursor.offsets[0] - 1 - shake.x,
-                          coords.y - 1 - shake.y);
-        z_draw_pixelAlpha(coords.x - g_cursor.offsets[0] - 1 - shake.x,
-                          coords.y + 1 - shake.y);
-        z_draw_pixelAlpha(coords.x + g_cursor.offsets[1] + 1 - shake.x,
-                          coords.y - 1 - shake.y);
-        z_draw_pixelAlpha(coords.x + g_cursor.offsets[1] + 1 - shake.x,
-                          coords.y + 1 - shake.y);
+        f_draw_pixel(coords.x - g_cursor.offsets[0] - 1 - shake.x,
+                     coords.y - 1 - shake.y);
+        f_draw_pixel(coords.x - g_cursor.offsets[0] - 1 - shake.x,
+                     coords.y + 1 - shake.y);
+        f_draw_pixel(coords.x + g_cursor.offsets[1] + 1 - shake.x,
+                     coords.y - 1 - shake.y);
+        f_draw_pixel(coords.x + g_cursor.offsets[1] + 1 - shake.x,
+                     coords.y + 1 - shake.y);
 
         // Main
-        z_graphics_colorSetId(colorLine);
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_colorSetPixel(z_colors[colorLine].pixel);
 
-        z_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
+        f_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
                          coords.y - shake.y,
                          g_cursor.offsets[0],
                          1);
-        z_draw_rectangle(coords.x + 1 - shake.x,
+        f_draw_rectangle(coords.x + 1 - shake.x,
                          coords.y - shake.y,
                          g_cursor.offsets[1],
                          1);
     } else if(g_cursor.line == Z_LINE_V) {
-        z_graphics_colorSetId(colorLineGlow);
-        z_graphics_alphaSet(64);
+        f_color_colorSetPixel(z_colors[colorLineGlow].pixel);
+        f_color_alphaSet(64);
 
         // Up glow
-        z_draw_rectangleAlpha(coords.x - 1 - shake.x,
-                              coords.y - g_cursor.offsets[0] - shake.y,
-                              1,
-                              g_cursor.offsets[0]);
-        z_draw_rectangleAlpha(coords.x + 1 - shake.x,
-                              coords.y - g_cursor.offsets[0] - shake.y,
-                              1,
-                              g_cursor.offsets[0]);
-        z_draw_pixelAlpha(coords.x, coords.y - g_cursor.offsets[0] - 1);
-
-        // Down glow
-        z_draw_rectangleAlpha(coords.x - 1 - shake.x,
-                              coords.y + 1 - shake.y,
-                              1,
-                              g_cursor.offsets[1]);
-        z_draw_rectangleAlpha(coords.x + 1 - shake.x,
-                              coords.y + 1 - shake.y,
-                              1,
-                              g_cursor.offsets[1]);
-        z_draw_pixelAlpha(
-            coords.x - shake.x, coords.y + g_cursor.offsets[1] + 1 - shake.y);
-
-        // Bookends
-        z_graphics_alphaSet(32);
-
-        z_draw_pixelAlpha(coords.x - 1 - shake.x,
-                          coords.y - g_cursor.offsets[0] - 1 - shake.y);
-        z_draw_pixelAlpha(coords.x + 1 - shake.x,
-                          coords.y - g_cursor.offsets[0] - 1 - shake.y);
-        z_draw_pixelAlpha(coords.x - 1 - shake.x,
-                          coords.y + g_cursor.offsets[1] + 1 - shake.y);
-        z_draw_pixelAlpha(coords.x + 1 - shake.x,
-                          coords.y + g_cursor.offsets[1] + 1 - shake.y);
-
-        // Main
-        z_graphics_colorSetId(colorLine);
-
-        z_draw_rectangle(coords.x - shake.x,
+        f_draw_rectangle(coords.x - 1 - shake.x,
                          coords.y - g_cursor.offsets[0] - shake.y,
                          1,
                          g_cursor.offsets[0]);
-        z_draw_rectangle(coords.x - shake.x,
+        f_draw_rectangle(coords.x + 1 - shake.x,
+                         coords.y - g_cursor.offsets[0] - shake.y,
+                         1,
+                         g_cursor.offsets[0]);
+        f_draw_pixel(coords.x, coords.y - g_cursor.offsets[0] - 1);
+
+        // Down glow
+        f_draw_rectangle(coords.x - 1 - shake.x,
+                         coords.y + 1 - shake.y,
+                         1,
+                         g_cursor.offsets[1]);
+        f_draw_rectangle(coords.x + 1 - shake.x,
+                         coords.y + 1 - shake.y,
+                         1,
+                         g_cursor.offsets[1]);
+        f_draw_pixel(coords.x - shake.x,
+                     coords.y + g_cursor.offsets[1] + 1 - shake.y);
+
+        // Bookends
+        f_color_alphaSet(32);
+
+        f_draw_pixel(coords.x - 1 - shake.x,
+                     coords.y - g_cursor.offsets[0] - 1 - shake.y);
+        f_draw_pixel(coords.x + 1 - shake.x,
+                     coords.y - g_cursor.offsets[0] - 1 - shake.y);
+        f_draw_pixel(coords.x - 1 - shake.x,
+                     coords.y + g_cursor.offsets[1] + 1 - shake.y);
+        f_draw_pixel(coords.x + 1 - shake.x,
+                     coords.y + g_cursor.offsets[1] + 1 - shake.y);
+
+        // Main
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_colorSetPixel(z_colors[colorLine].pixel);
+
+        f_draw_rectangle(coords.x - shake.x,
+                         coords.y - g_cursor.offsets[0] - shake.y,
+                         1,
+                         g_cursor.offsets[0]);
+        f_draw_rectangle(coords.x - shake.x,
                          coords.y + 1 - shake.y,
                          1,
                          g_cursor.offsets[1]);
     }
 
-    z_graphics_colorSetId(colorCursor);
-    z_graphics_alphaSet(256);
+    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+    f_color_colorSetPixel(z_colors[colorCursor].pixel);
+    f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_CURSOR, 0, coords.x + shake.x, coords.y + shake.x);
+    f_sprite_blit(
+        f_gfx_assets_gfx_cursor_png, 0, coords.x + shake.x, coords.y + shake.x);
 }

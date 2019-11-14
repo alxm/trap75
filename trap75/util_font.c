@@ -17,47 +17,45 @@
 
 #include "util_font.h"
 
-static ZSpriteId g_sprite = Z_SPRITE_FONT_AA;
-static ZAlign g_align = Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP;
+#include "data_assets.h"
 
-void z_font_set(ZSpriteId Sprite)
-{
-    g_sprite = Sprite;
-}
+static const FSprite *const *const g_sprite = &f_gfx_assets_gfx_font_aa_3x5_png;
+static FSpriteAlign g_align = F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP;
 
-void z_font_align(ZAlign Alignment)
+void z_font_align(FSpriteAlign Alignment)
 {
     g_align = Alignment;
 }
 
 void z_font_printText(int X, int Y, const char* Text)
 {
-    int charWidth = z_sprite_sizeGetWidth(g_sprite) + 1;
+    const FSprite* sprite = *g_sprite;
+    int charWidth = f_sprite_sizeGetWidth(sprite) + 1;
 
-    if(g_align & Z_ALIGN_Y_CENTER) {
-        Y -= z_sprite_sizeGetHeight(g_sprite) / 2;
-    } else if(g_align & Z_ALIGN_Y_BOTTOM) {
-        Y -= z_sprite_sizeGetHeight(g_sprite);
+    if(g_align & F_SPRITE_ALIGN_Y_CENTER) {
+        Y -= f_sprite_sizeGetHeight(sprite) / 2;
+    } else if(g_align & F_SPRITE_ALIGN_Y_BOTTOM) {
+        Y -= f_sprite_sizeGetHeight(sprite);
     }
 
-    if(g_align & (Z_ALIGN_X_CENTER | Z_ALIGN_X_RIGHT)) {
+    if(g_align & (F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_X_RIGHT)) {
         int tally = -1;
 
         for(const char* text = Text; *text++ != '\0'; ) {
             tally += charWidth;
         }
 
-        if(g_align & Z_ALIGN_X_CENTER) {
+        if(g_align & F_SPRITE_ALIGN_X_CENTER) {
             X -= tally / 2;
         } else {
             X -= tally;
         }
     }
 
-    z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+    f_sprite_alignSet(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
 
     for(char ch = *Text; ch != '\0'; ch = *++Text) {
-        z_sprite_blitAlphaMask(g_sprite, ((unsigned)ch - 32), X, Y);
+        f_sprite_blit(sprite, ((unsigned)ch - 32), X, Y);
         X += charWidth;
     }
 }

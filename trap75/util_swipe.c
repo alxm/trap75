@@ -31,36 +31,45 @@ static ZSwipeId g_swipe = Z_SWIPE_INVALID;
 
 static void drawFadeHide(void)
 {
-    z_graphics_colorSetId(Z_COLOR_BG_PURPLE_1);
-    z_graphics_alphaSet(f_fix_toInt(f_fix_sinf(g_angle) * 256));
+    f_color_blendSet(F_COLOR_BLEND_ALPHA);
+    f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+    f_color_alphaSet(f_fix_toInt(f_fix_sinf(g_angle) * F_COLOR_ALPHA_MAX));
 
-    z_draw_rectangleAlpha(0, 0, Z_SCREEN_W, Z_SCREEN_H);
+    f_draw_rectangle(
+        0, 0, F_CONFIG_SCREEN_SIZE_WIDTH, F_CONFIG_SCREEN_SIZE_HEIGHT);
 }
 
 static void drawFadeShow(void)
 {
-    z_graphics_colorSetId(Z_COLOR_BG_PURPLE_1);
-    z_graphics_alphaSet(f_fix_toInt(f_fix_sinf(F_DEG_090_FIX - g_angle) * 256));
+    f_color_blendSet(F_COLOR_BLEND_ALPHA);
+    f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+    f_color_alphaSet(
+        f_fix_toInt(f_fix_sinf(F_DEG_090_FIX - g_angle) * F_COLOR_ALPHA_MAX));
 
-    z_draw_rectangleAlpha(0, 0, Z_SCREEN_W, Z_SCREEN_H);
+    f_draw_rectangle(
+        0, 0, F_CONFIG_SCREEN_SIZE_WIDTH, F_CONFIG_SCREEN_SIZE_HEIGHT);
 }
 
 static void drawLines(FFixu Angle)
 {
     FFix sine = f_fix_sinf(Angle);
-    int h = f_fix_toInt(sine * (Z_SCREEN_H / 2));
-    int alpha = f_fix_toInt(sine * 256);
+    int h = f_fix_toInt(sine * (F_CONFIG_SCREEN_SIZE_HEIGHT / 2));
+    int alpha = f_fix_toInt(sine * F_COLOR_ALPHA_MAX);
 
-    z_graphics_colorSetId(Z_COLOR_BG_PURPLE_1);
-    z_graphics_alphaSet(alpha);
+    f_color_blendSet(F_COLOR_BLEND_ALPHA);
+    f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+    f_color_alphaSet(alpha);
 
-    z_draw_rectangleAlpha(0, 0, Z_SCREEN_W, h);
-    z_draw_rectangleAlpha(0, Z_SCREEN_H - h, Z_SCREEN_W, h);
+    f_draw_rectangle(0, 0, F_CONFIG_SCREEN_SIZE_WIDTH, h);
+    f_draw_rectangle(
+        0, F_CONFIG_SCREEN_SIZE_HEIGHT - h, F_CONFIG_SCREEN_SIZE_WIDTH, h);
 
-    z_graphics_colorSetId(Z_COLOR_BG_PURPLE_2);
+    f_color_blendSet(F_COLOR_BLEND_PLAIN);
+    f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_2].pixel);
 
-    z_draw_hline(0, Z_SCREEN_W - 1, h);
-    z_draw_hline(0, Z_SCREEN_W - 1, Z_SCREEN_H - h - 1);
+    f_draw_hline(0, F_CONFIG_SCREEN_SIZE_WIDTH - 1, h);
+    f_draw_hline(
+        0, F_CONFIG_SCREEN_SIZE_WIDTH - 1, F_CONFIG_SCREEN_SIZE_HEIGHT - h - 1);
 }
 
 static void drawLinesHide(void)

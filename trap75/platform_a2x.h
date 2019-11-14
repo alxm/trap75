@@ -20,32 +20,3 @@
 #if Z_DEBUG && F_BUILD_SYSTEM_DESKTOP
     #define Z_DEBUG_INSTRUMENT 1
 #endif
-
-typedef FColorPixel ZPixel;
-
-static inline ZRgb z_pixel_toRgb(ZPixel Pixel)
-{
-    FColorRgb rgb = f_color_pixelToRgb(Pixel);
-
-    return (ZRgb){rgb.r, rgb.g, rgb.b};
-}
-
-static inline int z_pixel_toAnyChannel(ZPixel Pixel)
-{
-    return f_color_pixelToRgb(Pixel).r;
-}
-
-static inline ZPixel z_pixel_fromRgb(int Red, int Green, int Blue)
-{
-    return f_color_pixelFromRgb(Red, Green, Blue);
-}
-
-static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
-{
-    return f_color_pixelFromHex(Hexcode);
-}
-
-#define z_sprite_load(Index, Id) \
-    z_platform__loadSprite(Index, "assets/gfx/" #Id ".png");
-
-extern void z_platform__loadSprite(int Sprite, const char* Path);

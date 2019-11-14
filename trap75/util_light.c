@@ -69,7 +69,7 @@ void z_light_draw(void)
 
     if(g_light.pulseId != Z_LIGHT_INVALID) {
         color = g_patterns[g_light.pulseId].color;
-        alpha = f_fix_toInt(f_fix_sinf(g_light.counter) * 256);
+        alpha = f_fix_toInt(f_fix_sinf(g_light.counter) * F_COLOR_ALPHA_MAX);
     }
 
     if(g_light.bgColor != g_last.bgColor
@@ -79,8 +79,28 @@ void z_light_draw(void)
         g_last.pulseColor = color;
         g_last.alpha = alpha;
 
-        #if Z_PLATFORM_META
-            z_platform_meta_lightsFill(g_light.bgColor, color, alpha);
+        #if F_CONFIG_SYSTEM_GAMEBUINO
+            f_gamebuino_lightsStart();
+
+            f_color_blendSet(F_COLOR_BLEND_PLAIN);
+
+            if(g_light.bgColor == Z_COLOR_INVALID) {
+                f_color_colorSetPixel(0);
+            } else {
+                f_color_colorSetPixel(z_colors[g_light.bgColor].pixel);
+            }
+
+            f_draw_fill();
+
+            if(color != Z_COLOR_INVALID) {
+                f_color_blendSet(F_COLOR_BLEND_ALPHA);
+                f_color_colorSetPixel(z_colors[color].pixel);
+                f_color_alphaSet(alpha);
+
+                f_draw_fill();
+            }
+
+            f_gamebuino_lightsEnd();
         #endif
     }
 }

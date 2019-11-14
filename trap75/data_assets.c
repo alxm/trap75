@@ -21,6 +21,22 @@
 // Workaround for Arduino not building code from subdirs
 //
 #if F_CONFIG_SYSTEM_GAMEBUINO
+    #include "faur_gen/gfx/assets/gfx/alxm.png.c"
+    #include "faur_gen/gfx/assets/gfx/alxm_footer.png.c"
+    #include "faur_gen/gfx/assets/gfx/alxm_wing.png.c"
+    #include "faur_gen/gfx/assets/gfx/ball1.png.c"
+    #include "faur_gen/gfx/assets/gfx/ball2.png.c"
+    #include "faur_gen/gfx/assets/gfx/ball3.png.c"
+    #include "faur_gen/gfx/assets/gfx/ball4.png.c"
+    #include "faur_gen/gfx/assets/gfx/cursor.png.c"
+    #include "faur_gen/gfx/assets/gfx/font_aa_3x5.png.c"
+    #include "faur_gen/gfx/assets/gfx/icon_heart.png.c"
+    #include "faur_gen/gfx/assets/gfx/icon_level.png.c"
+    #include "faur_gen/gfx/assets/gfx/palette.png.c"
+    #include "faur_gen/gfx/assets/gfx/space1.png.c"
+    #include "faur_gen/gfx/assets/gfx/title.png.c"
+    #include "faur_gen/gfx/assets/gfx/title_glow.png.c"
+
     #include "faur_gen/sfx/assets/sfx/swipe_hide.wav.c"
     #include "faur_gen/sfx/assets/sfx/swipe_show.wav.c"
 #endif
