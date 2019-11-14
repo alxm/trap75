@@ -18,26 +18,31 @@
 #include "state_start.h"
 
 #include "obj_game.h"
+#include "state_play.h"
+#include "util_graphics.h"
 #include "util_input.h"
-#include "util_swipe.h"
 
-void s_start_init(void)
+void t_start(void)
 {
-    u_input_reset();
+    F_STATE_INIT
+    {
+        u_input_reset();
 
-    z_swipe_start(Z_SWIPE_FADE_SHOW);
-}
-
-void s_start_tick(void)
-{
-    if(u_input_any()) {
-        z_state_set(Z_STATE_PLAY);
+        f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+        f_fade_startColorFrom(500);
     }
 
-    n_game_tick();
-}
+    F_STATE_TICK
+    {
+        if(u_input_any()) {
+            f_state_replace(t_play);
+        }
 
-void s_start_draw(void)
-{
-    n_game_draw();
+        n_game_tick();
+    }
+
+    F_STATE_DRAW
+    {
+        n_game_draw();
+    }
 }

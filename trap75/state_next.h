@@ -19,9 +19,4 @@
 
 #include <faur.h>
 
-#include "util_state.h"
-
-extern ZStateInit s_next_init;
-extern ZStateTick s_next_tick;
-extern ZStateDraw s_next_draw;
-extern ZStateFree s_next_free;
+extern FStateHandler t_next;

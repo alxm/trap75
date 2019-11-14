@@ -19,19 +19,24 @@
 
 #include "obj_game.h"
 #include "obj_map.h"
+#include "state_next.h"
+#include "state_over.h"
 
-void s_play_tick(void)
+void t_play(void)
 {
-    n_game_tick();
+    F_STATE_TICK
+    {
+        n_game_tick();
 
-    if(n_game_livesGet() == 0) {
-        z_state_set(Z_STATE_OVER);
-    } else if(n_map_wallPercentGet() >= 75) {
-        z_state_set(Z_STATE_NEXT);
+        if(n_game_livesGet() == 0) {
+            f_state_replace(t_over);
+        } else if(n_map_wallPercentGet() >= 75) {
+            f_state_replace(t_next);
+        }
     }
-}
 
-void s_play_draw(void)
-{
-    n_game_draw();
+    F_STATE_DRAW
+    {
+        n_game_draw();
+    }
 }

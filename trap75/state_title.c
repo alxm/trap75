@@ -20,90 +20,97 @@
 #include "data_assets.h"
 #include "obj_game.h"
 #include "obj_map.h"
+#include "state_start.h"
 #include "util_graphics.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_save.h"
-#include "util_swipe.h"
 
-void s_title_init(void)
+void t_title(void)
 {
-    u_input_reset();
+    F_STATE_INIT
+    {
+        u_input_reset();
 
-    n_map_new();
+        n_map_new();
 
-    z_swipe_start(Z_SWIPE_FADE_SHOW);
-}
-
-void s_title_tick(void)
-{
-    if(z_state_changed()) {
-        return;
+        f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+        f_fade_startColorFrom(500);
     }
 
-    if(u_input_any()) {
-        z_state_set(Z_STATE_START);
-        z_swipe_start(Z_SWIPE_FADE_HIDE);
+    F_STATE_TICK
+    {
+        if(f_state_currentChanged()) {
+            return;
+        }
 
-        n_game_new();
+        if(u_input_any()) {
+            z_light_pulseSet(Z_LIGHT_GAME_START);
 
-        z_light_pulseSet(Z_LIGHT_GAME_START);
-    }
-}
+            f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+            f_fade_startColorTo(500);
 
-void s_title_draw(void)
-{
-    n_map_draw();
+            f_state_blockSet(f_fade_eventGet());
+            f_state_replace(t_start);
 
-    f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_TOP);
-
-    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
-    f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_1].pixel);
-
-    #define Z_ALPHA_MIN 64
-    #define Z_ALPHA_BASELINE \
-        (Z_ALPHA_MIN + (F_COLOR_ALPHA_MAX - Z_ALPHA_MIN) / 2)
-
-    f_color_alphaSet(
-        Z_ALPHA_BASELINE
-            + f_fix_toInt((Z_ALPHA_BASELINE - Z_ALPHA_MIN)
-                            * f_fix_sin(f_fps_ticksGet() << 5)));
-
-    f_sprite_blit(f_gfx_assets_gfx_title_glow_png,
-                  0,
-                  F_CONFIG_SCREEN_SIZE_WIDTH / 2, 6);
-
-    f_color_blendSet(F_COLOR_BLEND_PLAIN);
-
-    f_sprite_blit(f_gfx_assets_gfx_title_png,
-                  0,
-                  F_CONFIG_SCREEN_SIZE_WIDTH / 2,
-                  10);
-
-    f_sprite_blit(f_gfx_assets_gfx_alxm_footer_png,
-                  0,
-                  F_CONFIG_SCREEN_SIZE_WIDTH / 2,
-                  53);
-
-    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
-    f_color_alphaSet(F_COLOR_ALPHA_MAX);
-
-    f_font_fontSet(f_gfx_assets_gfx_font_aa_4x5_png);
-
-    if(f_fps_ticksGet() & 0x28) {
-        f_font_alignSet(F_FONT_ALIGN_MIDDLE);
-        f_font_coordsSet(F_CONFIG_SCREEN_SIZE_WIDTH / 2, 38);
-
-        f_font_print("Press Any Key");
+            n_game_new();
+        }
     }
 
-    f_font_alignSet(F_FONT_ALIGN_LEFT);
-    f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_2].pixel);
-    f_font_coordsSet(14, 31);
-    f_font_print("Hiscore");
+    F_STATE_DRAW
+    {
+        n_map_draw();
 
-    f_font_alignSet(F_FONT_ALIGN_RIGHT);
-    f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_3].pixel);
-    f_font_coordsSet(66, 31);
-    f_font_printf("%0*u", 5, z_save_hiscoreGet());
+        f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_TOP);
+
+        f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+        f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_1].pixel);
+
+        #define Z_ALPHA_MIN 64
+        #define Z_ALPHA_BASELINE \
+            (Z_ALPHA_MIN + (F_COLOR_ALPHA_MAX - Z_ALPHA_MIN) / 2)
+
+        f_color_alphaSet(
+            Z_ALPHA_BASELINE
+                + f_fix_toInt((Z_ALPHA_BASELINE - Z_ALPHA_MIN)
+                                * f_fix_sin(f_fps_ticksGet() << 5)));
+
+        f_sprite_blit(f_gfx_assets_gfx_title_glow_png,
+                      0,
+                      F_CONFIG_SCREEN_SIZE_WIDTH / 2, 6);
+
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+
+        f_sprite_blit(f_gfx_assets_gfx_title_png,
+                      0,
+                      F_CONFIG_SCREEN_SIZE_WIDTH / 2,
+                      10);
+
+        f_sprite_blit(f_gfx_assets_gfx_alxm_footer_png,
+                      0,
+                      F_CONFIG_SCREEN_SIZE_WIDTH / 2,
+                      53);
+
+        f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+        f_color_alphaSet(F_COLOR_ALPHA_MAX);
+
+        f_font_fontSet(f_gfx_assets_gfx_font_aa_4x5_png);
+
+        if(f_fps_ticksGet() & 0x28) {
+            f_font_alignSet(F_FONT_ALIGN_MIDDLE);
+            f_font_coordsSet(F_CONFIG_SCREEN_SIZE_WIDTH / 2, 38);
+
+            f_font_print("Press Any Key");
+        }
+
+        f_font_alignSet(F_FONT_ALIGN_LEFT);
+        f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_2].pixel);
+        f_font_coordsSet(14, 31);
+        f_font_print("Hiscore");
+
+        f_font_alignSet(F_FONT_ALIGN_RIGHT);
+        f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_3].pixel);
+        f_font_coordsSet(66, 31);
+        f_font_printf("%0*u", 5, z_save_hiscoreGet());
+    }
 }

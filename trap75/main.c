@@ -17,25 +17,28 @@
 
 #include <faur.h>
 
+#include "state_intro.h"
+#include "state_title.h"
 #include "util_input.h"
-#include "util_state.h"
+#include "util_light.h"
+#include "util_save.h"
+#include "util_timer.h"
 
 static void t_run(void)
 {
     F_STATE_INIT
     {
         u_input_init();
-        z_state_setup();
-    }
+        z_save_setup();
+        z_graphics_setup();
+        u_input_reset();
+        z_light_reset();
 
-    F_STATE_TICK
-    {
-        z_state_tick();
-    }
-
-    F_STATE_DRAW
-    {
-        z_state_draw();
+        #if F_CONFIG_BUILD_DEBUG
+            f_state_push(t_title);
+        #else
+            f_state_push(t_intro);
+        #endif
     }
 
     F_STATE_FREE
@@ -44,7 +47,19 @@ static void t_run(void)
     }
 }
 
+static void stateTickPre(void)
+{
+    z_timer_tick();
+    z_light_tick();
+}
+
+static void stateDrawPost(void)
+{
+    z_light_draw();
+}
+
 void f_main(void)
 {
+    f_state_callbacks(stateTickPre, NULL, NULL, stateDrawPost);
     f_state_push(t_run);
 }

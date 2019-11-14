@@ -18,9 +18,9 @@
 #include "state_intro.h"
 
 #include "data_assets.h"
+#include "state_title.h"
 #include "util_graphics.h"
 #include "util_input.h"
-#include "util_swipe.h"
 #include "util_timer.h"
 
 #define Z_LOGO_WAIT_MS 800
@@ -43,75 +43,82 @@ static const int8_t g_lines[] = {
 
 static int g_pc;
 
-void s_intro_init(void)
+void t_intro(void)
 {
-    f_color_blendSet(F_COLOR_BLEND_PLAIN);
-    f_color_colorSetPixel(z_colors[Z_COLOR_ALXM_BG].pixel);
+    F_STATE_INIT
+    {
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_colorSetPixel(z_colors[Z_COLOR_ALXM_BG].pixel);
 
-    f_draw_fill();
-}
-
-void s_intro_tick(void)
-{
-    if(z_state_changed()) {
-        return;
+        f_draw_fill();
     }
 
-    if(z_timer_isExpired(Z_TIMER_G1)
-        || f_button_pressGetOnce(u_input_get(U_BUTTON_A))
-        || f_button_pressGetOnce(u_input_get(U_BUTTON_B))) {
+    F_STATE_TICK
+    {
+        if(f_state_currentChanged()) {
+            return;
+        }
 
-        z_state_set(Z_STATE_TITLE);
-        z_swipe_start(Z_SWIPE_FADE_HIDE);
+        if(z_timer_isExpired(Z_TIMER_G1)
+            || f_button_pressGetOnce(u_input_get(U_BUTTON_A))
+            || f_button_pressGetOnce(u_input_get(U_BUTTON_B))) {
 
-        g_pc = F_ARRAY_LEN(g_lines) - 1;
+
+            f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+            f_fade_startColorTo(500);
+
+            f_state_blockSet(f_fade_eventGet());
+            f_state_replace(t_title);
+
+            g_pc = F_ARRAY_LEN(g_lines) - 1;
+        }
+
+        if(f_state_currentChanged() || z_timer_isRunning(Z_TIMER_G1)) {
+            return;
+        }
+
+        while(g_lines[g_pc] >= 0) {
+            g_pc++;
+        }
+
+        if(g_lines[g_pc] == -1) {
+            g_pc++;
+        }
+
+        if(g_lines[g_pc] == -2) {
+            z_timer_start(Z_TIMER_G1, Z_LOGO_WAIT_MS, false);
+        }
     }
 
-    if(z_state_changed() || z_timer_isRunning(Z_TIMER_G1)) {
-        return;
-    }
+    F_STATE_DRAW
+    {
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
 
-    while(g_lines[g_pc] >= 0) {
-        g_pc++;
-    }
+        f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
+        f_sprite_blit(f_gfx_assets_gfx_alxm_png,
+                      0,
+                      F_CONFIG_SCREEN_SIZE_WIDTH / 2,
+                      F_CONFIG_SCREEN_SIZE_HEIGHT / 2);
 
-    if(g_lines[g_pc] == -1) {
-        g_pc++;
-    }
+        if(g_lines[g_pc] < 0) {
+            return;
+        }
 
-    if(g_lines[g_pc] == -2) {
-        z_timer_start(Z_TIMER_G1, Z_LOGO_WAIT_MS, false);
-    }
-}
+        FVectorInt logoSize = f_sprite_sizeGet(f_gfx_assets_gfx_alxm_png);
+        int startX1 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 - logoSize.x / 2;
+        int startX2 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 + (logoSize.x + 1) / 2 - 2;
+        int startY = F_CONFIG_SCREEN_SIZE_HEIGHT / 2 - logoSize.y / 2;
 
-void s_intro_draw(void)
-{
-    f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_colorSetPixel(z_colors[Z_COLOR_ALXM_BG].pixel);
 
-    f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
-    f_sprite_blit(f_gfx_assets_gfx_alxm_png,
-                  0,
-                  F_CONFIG_SCREEN_SIZE_WIDTH / 2,
-                  F_CONFIG_SCREEN_SIZE_HEIGHT / 2);
+        for(int pc = g_pc; g_lines[pc] != -2; pc++) {
+            while(g_lines[pc] != -1) {
+                int8_t x = g_lines[pc++];
+                int8_t y = g_lines[pc++];
 
-    if(g_lines[g_pc] < 0) {
-        return;
-    }
-
-    FVectorInt logoSize = f_sprite_sizeGet(f_gfx_assets_gfx_alxm_png);
-    int startX1 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 - logoSize.x / 2;
-    int startX2 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 + (logoSize.x + 1) / 2 - 2;
-    int startY = F_CONFIG_SCREEN_SIZE_HEIGHT / 2 - logoSize.y / 2;
-
-    f_color_colorSetPixel(z_colors[Z_COLOR_ALXM_BG].pixel);
-
-    for(int pc = g_pc; g_lines[pc] != -2; pc++) {
-        while(g_lines[pc] != -1) {
-            int8_t x = g_lines[pc++];
-            int8_t y = g_lines[pc++];
-
-            f_draw_rectangle(startX1 + x, startY + y, 2, 1);
-            f_draw_rectangle(startX2 - x, startY + y, 2, 1);
+                f_draw_rectangle(startX1 + x, startY + y, 2, 1);
+                f_draw_rectangle(startX2 - x, startY + y, 2, 1);
+            }
         }
     }
 }

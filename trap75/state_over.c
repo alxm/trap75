@@ -18,26 +18,33 @@
 #include "state_over.h"
 
 #include "obj_game.h"
+#include "state_title.h"
+#include "util_graphics.h"
 #include "util_save.h"
-#include "util_swipe.h"
 
-void s_over_init(void)
+void t_over(void)
 {
-    z_state_set(Z_STATE_TITLE);
-    z_swipe_start(Z_SWIPE_FADE_HIDE);
-}
+    F_STATE_INIT
+    {
+        f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+        f_fade_startColorTo(500);
 
-void s_over_tick(void)
-{
-    n_game_tick();
-}
+        f_state_blockSet(f_fade_eventGet());
+        f_state_replace(t_title);
+    }
 
-void s_over_draw(void)
-{
-    n_game_draw();
-}
+    F_STATE_TICK
+    {
+        n_game_tick();
+    }
 
-void s_over_free(void)
-{
-    z_save_hiscoreSet(n_game_scoreGet());
+    F_STATE_DRAW
+    {
+        n_game_draw();
+    }
+
+    F_STATE_FREE
+    {
+        z_save_hiscoreSet(n_game_scoreGet());
+    }
 }
