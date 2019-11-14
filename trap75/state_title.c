@@ -63,28 +63,39 @@ void t_title(void)
 
         f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_TOP);
 
+        #define Z_ALPHA_MIN 64
+        #define Z_ALPHA_MAX 192
+        #define Z_ALPHA_SWAY ((Z_ALPHA_MAX - Z_ALPHA_MIN) / 2)
+        #define Z_ALPHA_BASELINE (Z_ALPHA_MIN + Z_ALPHA_SWAY)
+
         f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
         f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_1].pixel);
 
-        #define Z_ALPHA_MIN 64
-        #define Z_ALPHA_BASELINE \
-            (Z_ALPHA_MIN + (F_COLOR_ALPHA_MAX - Z_ALPHA_MIN) / 2)
-
         f_color_alphaSet(
             Z_ALPHA_BASELINE
-                + f_fix_toInt((Z_ALPHA_BASELINE - Z_ALPHA_MIN)
-                                * f_fix_sin(f_fps_ticksGet() << 5)));
+                + f_fix_toInt(f_fps_ticksSin(1, 4, 0) * Z_ALPHA_SWAY));
 
         f_sprite_blit(f_gfx_assets_gfx_title_glow_png,
                       0,
                       F_CONFIG_SCREEN_SIZE_WIDTH / 2, 6);
 
-        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        #undef Z_ALPHA_MIN
+        #undef Z_ALPHA_MAX
+        #define Z_ALPHA_MIN 192
+        #define Z_ALPHA_MAX F_COLOR_ALPHA_MAX
+
+        f_color_blendSet(F_COLOR_BLEND_ALPHA);
+
+        f_color_alphaSet(
+            Z_ALPHA_BASELINE
+                + f_fix_toInt(f_fps_ticksSin(1, 2, 0) * Z_ALPHA_SWAY));
 
         f_sprite_blit(f_gfx_assets_gfx_title_png,
                       0,
                       F_CONFIG_SCREEN_SIZE_WIDTH / 2,
                       10);
+
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
 
         f_sprite_blit(f_gfx_assets_gfx_alxm_footer_png,
                       0,
