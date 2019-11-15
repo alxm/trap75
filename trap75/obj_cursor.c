@@ -25,7 +25,6 @@
 #include "state_play.h"
 #include "util_graphics.h"
 #include "util_input.h"
-#include "util_timer.h"
 
 #define N_CURSOR_LINE_SPEED 2
 #define N_CURSOR_SPEED (F_FIX_ONE / 1)
@@ -45,6 +44,7 @@ typedef struct {
     FVectorInt coordsHistory[N_CURSOR_HISTORY_LEN];
     ZLineState line;
     int offsets[2];
+    FTimer* timer;
 } NCursor;
 
 static NCursor g_cursor;
@@ -65,7 +65,11 @@ void n_cursor_new(void)
     g_cursor.offsets[0] = 0;
     g_cursor.offsets[1] = 0;
 
-    z_timer_stop(Z_TIMER_LINE_HIT);
+    if(g_cursor.timer == NULL) {
+        g_cursor.timer = f_timer_new(F_TIMER_MS, Z_HIT_TIMEOUT_MS, false);
+    }
+
+    f_timer_stop(g_cursor.timer);
 }
 
 void n_cursor_tick(void)
@@ -74,11 +78,11 @@ void n_cursor_tick(void)
         return;
     }
 
-    if(z_timer_isRunning(Z_TIMER_LINE_HIT)) {
+    if(f_timer_isRunning(g_cursor.timer)) {
         return;
     }
 
-    if(z_timer_isExpired(Z_TIMER_LINE_HIT)) {
+    if(f_timer_expiredGet(g_cursor.timer)) {
         g_cursor.line = Z_LINE_INVALID;
     }
 
@@ -168,7 +172,7 @@ void n_cursor_tick(void)
         if(hits) {
             n_game_livesDec();
             n_camera_shakeSet(Z_HIT_TIMEOUT_MS);
-            z_timer_start(Z_TIMER_LINE_HIT, Z_HIT_TIMEOUT_MS, false);
+            f_timer_start(g_cursor.timer);
         } else if(wall[0] && wall[1]) {
             FVectorInt start[2];
             FVectorInt dim[2];
@@ -233,7 +237,7 @@ void n_cursor_draw(void)
     FVectorInt shake = n_camera_shakeGet();
     FVectorInt coords = f_vectorfix_toInt(g_cursor.coords);
 
-    if(z_timer_isRunning(Z_TIMER_LINE_HIT)) {
+    if(f_timer_isRunning(g_cursor.timer)) {
         if(f_fps_ticksGet() & 0x8) {
             colorLine = Z_COLOR_BG_RED_2;
             colorLineGlow = Z_COLOR_BG_RED_4;

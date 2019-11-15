@@ -22,7 +22,6 @@
 #include "util_input.h"
 #include "util_light.h"
 #include "util_save.h"
-#include "util_timer.h"
 
 static void t_run(void)
 {
@@ -49,7 +48,6 @@ static void t_run(void)
 
 static void stateTickPre(void)
 {
-    z_timer_tick();
     z_light_tick();
 }
 

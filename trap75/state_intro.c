@@ -21,7 +21,6 @@
 #include "state_title.h"
 #include "util_graphics.h"
 #include "util_input.h"
-#include "util_timer.h"
 
 #define Z_LOGO_WAIT_MS 800
 
@@ -45,8 +44,12 @@ static int g_pc;
 
 void t_intro(void)
 {
+    static FTimer* timer;
+
     F_STATE_INIT
     {
+        timer = f_timer_new(F_TIMER_MS, Z_LOGO_WAIT_MS, false);
+
         f_color_blendSet(F_COLOR_BLEND_PLAIN);
         f_color_colorSetPixel(z_colors[Z_COLOR_ALXM_BG].pixel);
 
@@ -59,10 +62,9 @@ void t_intro(void)
             return;
         }
 
-        if(z_timer_isExpired(Z_TIMER_G1)
+        if(f_timer_expiredGet(timer)
             || f_button_pressGetOnce(u_input_get(U_BUTTON_A))
             || f_button_pressGetOnce(u_input_get(U_BUTTON_B))) {
-
 
             f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
             f_fade_startColorTo(500);
@@ -73,7 +75,7 @@ void t_intro(void)
             g_pc = F_ARRAY_LEN(g_lines) - 1;
         }
 
-        if(f_state_currentChanged() || z_timer_isRunning(Z_TIMER_G1)) {
+        if(f_state_currentChanged() || f_timer_isRunning(timer)) {
             return;
         }
 
@@ -86,7 +88,7 @@ void t_intro(void)
         }
 
         if(g_lines[g_pc] == -2) {
-            z_timer_start(Z_TIMER_G1, Z_LOGO_WAIT_MS, false);
+            f_timer_start(timer);
         }
     }
 
@@ -120,5 +122,10 @@ void t_intro(void)
                 f_draw_rectangle(startX2 - x, startY + y, 2, 1);
             }
         }
+    }
+
+    F_STATE_FREE
+    {
+        f_timer_free(timer);
     }
 }
