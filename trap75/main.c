@@ -28,10 +28,10 @@ static void t_run(void)
     F_STATE_INIT
     {
         u_input_init();
-        z_save_setup();
-        z_graphics_setup();
+        u_save_init();
+        u_color_init();
+
         u_input_reset();
-        z_light_reset();
 
         #if F_CONFIG_BUILD_DEBUG
             f_state_push(t_title);
@@ -48,12 +48,12 @@ static void t_run(void)
 
 static void stateTickPre(void)
 {
-    z_light_tick();
+    u_light_tick();
 }
 
 static void stateDrawPost(void)
 {
-    z_light_draw();
+    u_light_draw();
 }
 
 void f_main(void)

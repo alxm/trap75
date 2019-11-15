@@ -23,7 +23,7 @@
 #include "obj_game.h"
 #include "obj_map.h"
 #include "state_play.h"
-#include "util_graphics.h"
+#include "util_color.h"
 #include "util_input.h"
 
 #define N_CURSOR_LINE_SPEED 2
@@ -217,7 +217,7 @@ void n_cursor_tick(void)
 void n_cursor_draw(void)
 {
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
-    f_color_colorSetPixel(z_colors[Z_COLOR_CURSOR_TRAIL].pixel);
+    f_color_colorSetPixel(u_colors[U_COLOR_CURSOR_TRAIL].pixel);
     f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
 
     for(int i = N_CURSOR_HISTORY_LEN; i--; ) {
@@ -231,25 +231,25 @@ void n_cursor_draw(void)
                       g_cursor.coordsHistory[i].y);
     }
 
-    ZColorId colorLine = Z_COLOR_CURSOR_TRAIL;
-    ZColorId colorLineGlow = Z_COLOR_CURSOR_MAIN;
-    ZColorId colorCursor = Z_COLOR_CURSOR_MAIN;
+    UColorId colorLine = U_COLOR_CURSOR_TRAIL;
+    UColorId colorLineGlow = U_COLOR_CURSOR_MAIN;
+    UColorId colorCursor = U_COLOR_CURSOR_MAIN;
     FVectorInt shake = n_camera_shakeGet();
     FVectorInt coords = f_vectorfix_toInt(g_cursor.coords);
 
     if(f_timer_isRunning(g_cursor.timer)) {
         if(f_fps_ticksGet() & 0x8) {
-            colorLine = Z_COLOR_BG_RED_2;
-            colorLineGlow = Z_COLOR_BG_RED_4;
+            colorLine = U_COLOR_BG_RED_2;
+            colorLineGlow = U_COLOR_BG_RED_4;
         }
     } else {
         if(f_fps_ticksGet() & 0x4) {
-            colorLine = Z_COLOR_CURSOR_MAIN;
+            colorLine = U_COLOR_CURSOR_MAIN;
         }
     }
 
     if(g_cursor.line == Z_LINE_H) {
-        f_color_colorSetPixel(z_colors[colorLineGlow].pixel);
+        f_color_colorSetPixel(u_colors[colorLineGlow].pixel);
         f_color_alphaSet(64);
 
         // Left glow
@@ -290,7 +290,7 @@ void n_cursor_draw(void)
 
         // Main
         f_color_blendSet(F_COLOR_BLEND_PLAIN);
-        f_color_colorSetPixel(z_colors[colorLine].pixel);
+        f_color_colorSetPixel(u_colors[colorLine].pixel);
 
         f_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
                          coords.y - shake.y,
@@ -301,7 +301,7 @@ void n_cursor_draw(void)
                          g_cursor.offsets[1],
                          1);
     } else if(g_cursor.line == Z_LINE_V) {
-        f_color_colorSetPixel(z_colors[colorLineGlow].pixel);
+        f_color_colorSetPixel(u_colors[colorLineGlow].pixel);
         f_color_alphaSet(64);
 
         // Up glow
@@ -341,7 +341,7 @@ void n_cursor_draw(void)
 
         // Main
         f_color_blendSet(F_COLOR_BLEND_PLAIN);
-        f_color_colorSetPixel(z_colors[colorLine].pixel);
+        f_color_colorSetPixel(u_colors[colorLine].pixel);
 
         f_draw_rectangle(coords.x - shake.x,
                          coords.y - g_cursor.offsets[0] - shake.y,
@@ -354,7 +354,7 @@ void n_cursor_draw(void)
     }
 
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
-    f_color_colorSetPixel(z_colors[colorCursor].pixel);
+    f_color_colorSetPixel(u_colors[colorCursor].pixel);
     f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
     f_sprite_blit(

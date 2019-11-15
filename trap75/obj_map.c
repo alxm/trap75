@@ -19,7 +19,7 @@
 
 #include "data_assets.h"
 #include "obj_camera.h"
-#include "util_graphics.h"
+#include "util_color.h"
 
 typedef struct {
     uint8_t field[F_CONFIG_SCREEN_SIZE_HEIGHT][F_CONFIG_SCREEN_SIZE_WIDTH];

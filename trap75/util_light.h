@@ -19,18 +19,16 @@
 
 #include <faur.h>
 
-#include "util_graphics.h"
+#include "util_color.h"
 
 typedef enum {
-    Z_LIGHT_INVALID = -1,
-    Z_LIGHT_GAME_START,
-    Z_LIGHT_NUM
+    U_LIGHT_INVALID = -1,
+    U_LIGHT_GAME_START,
+    U_LIGHT_NUM
 } ZLightId;
 
-extern void z_light_reset(void);
+extern void u_light_tick(void);
+extern void u_light_draw(void);
 
-extern void z_light_tick(void);
-extern void z_light_draw(void);
-
-extern void z_light_pulseSet(ZLightId Light);
-extern void z_light_backgroundSet(ZColorId Color);
+extern void u_light_pulseSet(ZLightId Light);
+extern void u_light_backgroundSet(UColorId Color);

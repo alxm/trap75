@@ -22,7 +22,7 @@
 #include "obj_cursor.h"
 #include "obj_map.h"
 #include "obj_hud.h"
-#include "util_graphics.h"
+#include "util_color.h"
 #include "util_save.h"
 
 #define N_GAME_LEVELS_NUM 8

@@ -26,7 +26,7 @@ typedef struct {
 
 ZSaveFile g_save;
 
-void z_save_setup(void)
+void u_save_init(void)
 {
     g_save.version = 1;
 
@@ -38,12 +38,12 @@ void z_save_setup(void)
     }
 }
 
-unsigned z_save_hiscoreGet(void)
+unsigned u_save_hiscoreGet(void)
 {
     return g_save.hiscore;
 }
 
-void z_save_hiscoreSet(unsigned Score)
+void u_save_hiscoreSet(unsigned Score)
 {
     if(Score > g_save.hiscore) {
         g_save.hiscore = Score;

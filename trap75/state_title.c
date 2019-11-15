@@ -21,7 +21,7 @@
 #include "obj_game.h"
 #include "obj_map.h"
 #include "state_start.h"
-#include "util_graphics.h"
+#include "util_color.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_save.h"
@@ -34,7 +34,7 @@ void t_title(void)
 
         n_map_new();
 
-        f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+        f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
         f_fade_startColorFrom(500);
     }
 
@@ -45,9 +45,9 @@ void t_title(void)
         }
 
         if(u_input_any()) {
-            z_light_pulseSet(Z_LIGHT_GAME_START);
+            u_light_pulseSet(U_LIGHT_GAME_START);
 
-            f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+            f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
             f_fade_startColorTo(500);
 
             f_state_blockSet(f_fade_eventGet());
@@ -69,7 +69,7 @@ void t_title(void)
         #define Z_ALPHA_BASELINE (Z_ALPHA_MIN + Z_ALPHA_SWAY)
 
         f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
-        f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_1].pixel);
+        f_color_colorSetPixel(u_colors[U_COLOR_BALL_YELLOW_1].pixel);
 
         f_color_alphaSet(
             Z_ALPHA_BASELINE
@@ -115,13 +115,13 @@ void t_title(void)
         }
 
         f_font_alignSet(F_FONT_ALIGN_LEFT);
-        f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_2].pixel);
+        f_color_colorSetPixel(u_colors[U_COLOR_BALL_YELLOW_2].pixel);
         f_font_coordsSet(14, 31);
         f_font_print("Hiscore");
 
         f_font_alignSet(F_FONT_ALIGN_RIGHT);
-        f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_3].pixel);
+        f_color_colorSetPixel(u_colors[U_COLOR_BALL_YELLOW_3].pixel);
         f_font_coordsSet(66, 31);
-        f_font_printf("%0*u", 5, z_save_hiscoreGet());
+        f_font_printf("%0*u", 5, u_save_hiscoreGet());
     }
 }

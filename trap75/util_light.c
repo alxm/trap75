@@ -18,56 +18,53 @@
 #include "util_light.h"
 
 static const struct {
-    ZColorId color;
+    UColorId color;
     FFixu counterSpeed[2];
-} g_patterns[Z_LIGHT_NUM] = {
-    [Z_LIGHT_GAME_START] = {
-        Z_COLOR_BG_PURPLE_2,
+} g_patterns[U_LIGHT_NUM] = {
+    [U_LIGHT_GAME_START] = {
+        U_COLOR_BG_PURPLE_2,
         {F_DEG_090_FIX / 2, F_DEG_090_FIX / 4},
     },
 };
 
 static struct {
-    ZColorId bgColor;
+    UColorId bgColor;
     ZLightId pulseId;
     FFixu counter;
-} g_light;
+} g_light = {
+    U_COLOR_INVALID,
+    U_LIGHT_INVALID,
+    0,
+};
 
 static struct {
-    ZColorId bgColor;
-    ZColorId pulseColor;
+    UColorId bgColor;
+    UColorId pulseColor;
     int alpha;
-} g_last;
+} g_last = {
+    U_COLOR_INVALID,
+    U_COLOR_INVALID,
+    0,
+};
 
-void z_light_reset(void)
+void u_light_tick(void)
 {
-    g_light.bgColor = Z_COLOR_INVALID;
-    g_light.pulseId = Z_LIGHT_INVALID;
-    g_light.counter = 0;
-
-    g_last.bgColor = Z_COLOR_INVALID;
-    g_last.pulseColor = Z_COLOR_INVALID;
-    g_last.alpha = 0;
-}
-
-void z_light_tick(void)
-{
-    if(g_light.pulseId != Z_LIGHT_INVALID) {
+    if(g_light.pulseId != U_LIGHT_INVALID) {
         bool goingDown = g_light.counter >= F_DEG_090_FIX;
         g_light.counter += g_patterns[g_light.pulseId].counterSpeed[goingDown];
 
         if(g_light.counter >= F_DEG_180_FIX) {
-            g_light.pulseId = Z_LIGHT_INVALID;
+            g_light.pulseId = U_LIGHT_INVALID;
         }
     }
 }
 
-void z_light_draw(void)
+void u_light_draw(void)
 {
-    ZColorId color = Z_COLOR_INVALID;
+    UColorId color = U_COLOR_INVALID;
     int alpha = 0;
 
-    if(g_light.pulseId != Z_LIGHT_INVALID) {
+    if(g_light.pulseId != U_LIGHT_INVALID) {
         color = g_patterns[g_light.pulseId].color;
         alpha = f_fix_toInt(f_fix_sinf(g_light.counter) * F_COLOR_ALPHA_MAX);
     }
@@ -84,17 +81,17 @@ void z_light_draw(void)
 
             f_color_blendSet(F_COLOR_BLEND_PLAIN);
 
-            if(g_light.bgColor == Z_COLOR_INVALID) {
+            if(g_light.bgColor == U_COLOR_INVALID) {
                 f_color_colorSetPixel(0);
             } else {
-                f_color_colorSetPixel(z_colors[g_light.bgColor].pixel);
+                f_color_colorSetPixel(u_colors[g_light.bgColor].pixel);
             }
 
             f_draw_fill();
 
-            if(color != Z_COLOR_INVALID) {
+            if(color != U_COLOR_INVALID) {
                 f_color_blendSet(F_COLOR_BLEND_ALPHA);
-                f_color_colorSetPixel(z_colors[color].pixel);
+                f_color_colorSetPixel(u_colors[color].pixel);
                 f_color_alphaSet(alpha);
 
                 f_draw_fill();
@@ -105,7 +102,7 @@ void z_light_draw(void)
     }
 }
 
-void z_light_pulseSet(ZLightId Light)
+void u_light_pulseSet(ZLightId Light)
 {
     if(g_light.pulseId != Light) {
         g_light.pulseId = Light;
@@ -113,7 +110,7 @@ void z_light_pulseSet(ZLightId Light)
     }
 }
 
-void z_light_backgroundSet(ZColorId Color)
+void u_light_backgroundSet(UColorId Color)
 {
     g_light.bgColor = Color;
 }

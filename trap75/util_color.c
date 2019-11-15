@@ -15,13 +15,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "util_graphics.h"
+#include "util_color.h"
 
 #include "data_assets.h"
 
-ZColor z_colors[Z_COLOR_NUM];
+UColor u_colors[U_COLOR_NUM];
 
-void z_graphics_setup(void)
+void u_color_init(void)
 {
     FVectorInt palSize = f_sprite_sizeGet(f_gfx_assets_gfx_palette_png);
     const FColorPixel* pixels =
@@ -36,10 +36,10 @@ void z_graphics_setup(void)
             continue;
         }
 
-        z_colors[color].pixel = pixel;
-        z_colors[color].rgb = f_color_pixelToRgb(pixel);
+        u_colors[color].pixel = pixel;
+        u_colors[color].rgb = f_color_pixelToRgb(pixel);
 
-        if(++color == Z_COLOR_NUM) {
+        if(++color == U_COLOR_NUM) {
             break;
         }
     }

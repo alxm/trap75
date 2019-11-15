@@ -19,13 +19,13 @@
 
 #include "obj_game.h"
 #include "state_start.h"
-#include "util_graphics.h"
+#include "util_color.h"
 
 void t_next(void)
 {
     F_STATE_INIT
     {
-        f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+        f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
         f_fade_startColorTo(500);
 
         f_state_blockSet(f_fade_eventGet());

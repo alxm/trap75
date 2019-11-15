@@ -19,7 +19,7 @@
 
 #include "obj_game.h"
 #include "state_play.h"
-#include "util_graphics.h"
+#include "util_color.h"
 #include "util_input.h"
 
 void t_start(void)
@@ -28,7 +28,7 @@ void t_start(void)
     {
         u_input_reset();
 
-        f_color_colorSetPixel(z_colors[Z_COLOR_BG_PURPLE_1].pixel);
+        f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
         f_fade_startColorFrom(500);
     }
 

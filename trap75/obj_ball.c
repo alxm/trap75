@@ -20,7 +20,7 @@
 #include "data_assets.h"
 #include "obj_cursor.h"
 #include "obj_map.h"
-#include "util_graphics.h"
+#include "util_color.h"
 
 #define O_BALL_TRAIL_ALPHA 64
 #define O_BALL_HISTORY_LEN 8
@@ -317,11 +317,11 @@ static void ball_draw_main(const OBall* Ball)
 
 void o_ball_draw(void)
 {
-    ZColorId color = (f_fps_ticksGet() & 0x8)
-                        ? Z_COLOR_BALL_YELLOW_1 : Z_COLOR_BALL_YELLOW_2;
+    UColorId color = (f_fps_ticksGet() & 0x8)
+                        ? U_COLOR_BALL_YELLOW_1 : U_COLOR_BALL_YELLOW_2;
 
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
-    f_color_colorSetPixel(z_colors[color].pixel);
+    f_color_colorSetPixel(u_colors[color].pixel);
 
     f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
 
@@ -329,7 +329,7 @@ void o_ball_draw(void)
         ball_draw_trail(&g_balls[i]);
     }
 
-    f_color_colorSetPixel(z_colors[Z_COLOR_BALL_YELLOW_2].pixel);
+    f_color_colorSetPixel(u_colors[U_COLOR_BALL_YELLOW_2].pixel);
     f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
     for(int i = 0; i < g_tail; i++) {

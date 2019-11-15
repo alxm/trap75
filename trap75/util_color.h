@@ -22,45 +22,45 @@
 F_EXTERN_C_START
 
 typedef enum {
-    Z_COLOR_INVALID = -1,
+    U_COLOR_INVALID = -1,
 
-    Z_COLOR_ALXM_BG,
-    Z_COLOR_ALXM_Y1,
-    Z_COLOR_ALXM_Y2,
-    Z_COLOR_ALXM_G1,
-    Z_COLOR_ALXM_G2,
-    Z_COLOR_ALXM_B1,
-    Z_COLOR_ALXM_B2,
-    Z_COLOR_ALXM_R1,
-    Z_COLOR_ALXM_R2,
+    U_COLOR_ALXM_BG,
+    U_COLOR_ALXM_Y1,
+    U_COLOR_ALXM_Y2,
+    U_COLOR_ALXM_G1,
+    U_COLOR_ALXM_G2,
+    U_COLOR_ALXM_B1,
+    U_COLOR_ALXM_B2,
+    U_COLOR_ALXM_R1,
+    U_COLOR_ALXM_R2,
 
-    Z_COLOR_BG_PURPLE_1,
-    Z_COLOR_BG_PURPLE_2,
-    Z_COLOR_BG_GREEN_1,
-    Z_COLOR_BG_GREEN_2,
-    Z_COLOR_BG_RED_1,
-    Z_COLOR_BG_RED_2,
-    Z_COLOR_BG_RED_3,
-    Z_COLOR_BG_RED_4,
+    U_COLOR_BG_PURPLE_1,
+    U_COLOR_BG_PURPLE_2,
+    U_COLOR_BG_GREEN_1,
+    U_COLOR_BG_GREEN_2,
+    U_COLOR_BG_RED_1,
+    U_COLOR_BG_RED_2,
+    U_COLOR_BG_RED_3,
+    U_COLOR_BG_RED_4,
 
-    Z_COLOR_BALL_YELLOW_1,
-    Z_COLOR_BALL_YELLOW_2,
-    Z_COLOR_BALL_YELLOW_3,
-    Z_COLOR_BALL_YELLOW_4,
+    U_COLOR_BALL_YELLOW_1,
+    U_COLOR_BALL_YELLOW_2,
+    U_COLOR_BALL_YELLOW_3,
+    U_COLOR_BALL_YELLOW_4,
 
-    Z_COLOR_CURSOR_TRAIL,
-    Z_COLOR_CURSOR_MAIN,
+    U_COLOR_CURSOR_TRAIL,
+    U_COLOR_CURSOR_MAIN,
 
-    Z_COLOR_NUM
-} ZColorId;
+    U_COLOR_NUM
+} UColorId;
 
-typedef struct ZColor {
+typedef struct UColor {
     FColorPixel pixel;
     FColorRgb rgb;
-} ZColor;
+} UColor;
 
-extern ZColor z_colors[Z_COLOR_NUM];
+extern UColor u_colors[U_COLOR_NUM];
 
-extern void z_graphics_setup(void);
+extern void u_color_init(void);
 
 F_EXTERN_C_END
