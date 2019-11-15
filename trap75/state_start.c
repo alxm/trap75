@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,26 +18,31 @@
 #include "state_start.h"
 
 #include "obj_game.h"
+#include "state_play.h"
+#include "util_color.h"
 #include "util_input.h"
-#include "util_swipe.h"
 
-void s_start_init(void)
+void t_start(void)
 {
-    z_input_reset();
+    F_STATE_INIT
+    {
+        u_input_reset();
 
-    z_swipe_start(Z_SWIPE_FADE_SHOW);
-}
-
-void s_start_tick(void)
-{
-    if(z_button_pressGetAny()) {
-        z_state_set(Z_STATE_PLAY);
+        f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
+        f_fade_startColorFrom(500);
     }
 
-    n_game_tick();
-}
+    F_STATE_TICK
+    {
+        if(u_input_any()) {
+            f_state_replace(t_play);
+        }
 
-void s_start_draw(void)
-{
-    n_game_draw();
+        n_game_tick();
+    }
+
+    F_STATE_DRAW
+    {
+        n_game_draw();
+    }
 }

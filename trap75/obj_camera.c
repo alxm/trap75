@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,37 +17,41 @@
 
 #include "obj_camera.h"
 
-#include "util_timer.h"
-
 typedef struct {
-    ZVectorInt shake;
+    FVectorInt shake;
+    FTimer* timer;
 } NCamera;
 
 static NCamera g_camera;
 
 void n_camera_new(void)
 {
-    g_camera.shake = (ZVectorInt){0, 0};
+    g_camera.shake = (FVectorInt){0, 0};
 
-    z_timer_stop(Z_TIMER_CAMERA_SHAKE);
+    if(g_camera.timer == NULL) {
+        g_camera.timer = f_timer_new(F_TIMER_MS, 0, false);
+    }
+
+    f_timer_stop(g_camera.timer);
 }
 
 void n_camera_tick(void)
 {
-    if(z_timer_isRunning(Z_TIMER_CAMERA_SHAKE)) {
-        g_camera.shake = (ZVectorInt){z_random_range(-1, 2),
-                                      z_random_range(-1, 2)};
+    if(f_timer_isRunning(g_camera.timer)) {
+        g_camera.shake = (FVectorInt){f_random_range(-1, 2),
+                                      f_random_range(-1, 2)};
     } else {
-        g_camera.shake = (ZVectorInt){0, 0};
+        g_camera.shake = (FVectorInt){0, 0};
     }
 }
 
-ZVectorInt n_camera_shakeGet(void)
+FVectorInt n_camera_shakeGet(void)
 {
     return g_camera.shake;
 }
 
 void n_camera_shakeSet(unsigned Ms)
 {
-    z_timer_start(Z_TIMER_CAMERA_SHAKE, Ms, false);
+    f_timer_periodSet(g_camera.timer, Ms);
+    f_timer_start(g_camera.timer);
 }

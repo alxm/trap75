@@ -15,13 +15,32 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "util_color.h"
 
-#include <faur.h>
+#include "data_assets.h"
 
-extern void n_camera_new(void);
+UColor u_colors[U_COLOR_NUM];
 
-extern void n_camera_tick(void);
+void u_color_init(void)
+{
+    FVectorInt palSize = f_sprite_sizeGet(f_gfx_assets_gfx_palette_png);
+    const FColorPixel* pixels =
+        f_sprite_pixelsGetBuffer(f_gfx_assets_gfx_palette_png, 0) + palSize.x;
 
-extern FVectorInt n_camera_shakeGet(void);
-extern void n_camera_shakeSet(unsigned Ms);
+    int color = 0;
+
+    for(int p = palSize.x * palSize.y; p--; ) {
+        FColorPixel pixel = *pixels++;
+
+        if(pixel == 0) {
+            continue;
+        }
+
+        u_colors[color].pixel = pixel;
+        u_colors[color].rgb = f_color_pixelToRgb(pixel);
+
+        if(++color == U_COLOR_NUM) {
+            break;
+        }
+    }
+}

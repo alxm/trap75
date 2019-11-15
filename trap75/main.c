@@ -15,13 +15,49 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
-
 #include <faur.h>
 
-extern void n_camera_new(void);
+#include "state_intro.h"
+#include "state_title.h"
+#include "util_input.h"
+#include "util_light.h"
+#include "util_save.h"
 
-extern void n_camera_tick(void);
+static void t_run(void)
+{
+    F_STATE_INIT
+    {
+        u_input_init();
+        u_save_init();
+        u_color_init();
 
-extern FVectorInt n_camera_shakeGet(void);
-extern void n_camera_shakeSet(unsigned Ms);
+        u_input_reset();
+
+        #if F_CONFIG_BUILD_DEBUG
+            f_state_push(t_title);
+        #else
+            f_state_push(t_intro);
+        #endif
+    }
+
+    F_STATE_FREE
+    {
+        u_input_uninit();
+    }
+}
+
+static void stateTickPre(void)
+{
+    u_light_tick();
+}
+
+static void stateDrawPost(void)
+{
+    u_light_draw();
+}
+
+void f_main(void)
+{
+    f_state_callbacks(stateTickPre, NULL, NULL, stateDrawPost);
+    f_state_push(t_run);
+}

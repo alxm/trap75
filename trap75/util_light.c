@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,62 +17,56 @@
 
 #include "util_light.h"
 
-#include "util_fix.h"
-#include "util_fps.h"
-
 static const struct {
-    ZColorId color;
-    ZFixu counterSpeed[2];
-} g_patterns[Z_LIGHT_NUM] = {
-    [Z_LIGHT_GAME_START] = {
-        Z_COLOR_BG_PURPLE_2,
-        {Z_DEG_090_FIX / 2, Z_DEG_090_FIX / 4},
+    UColorId color;
+    FFixu counterSpeed[2];
+} g_patterns[U_LIGHT_NUM] = {
+    [U_LIGHT_GAME_START] = {
+        U_COLOR_BG_PURPLE_2,
+        {F_DEG_090_FIX / 2, F_DEG_090_FIX / 4},
     },
 };
 
 static struct {
-    ZColorId bgColor;
+    UColorId bgColor;
     ZLightId pulseId;
-    ZFixu counter;
-} g_light;
+    FFixu counter;
+} g_light = {
+    U_COLOR_INVALID,
+    U_LIGHT_INVALID,
+    0,
+};
 
 static struct {
-    ZColorId bgColor;
-    ZColorId pulseColor;
+    UColorId bgColor;
+    UColorId pulseColor;
     int alpha;
-} g_last;
+} g_last = {
+    U_COLOR_INVALID,
+    U_COLOR_INVALID,
+    0,
+};
 
-void z_light_reset(void)
+void u_light_tick(void)
 {
-    g_light.bgColor = Z_COLOR_INVALID;
-    g_light.pulseId = Z_LIGHT_INVALID;
-    g_light.counter = 0;
-
-    g_last.bgColor = Z_COLOR_INVALID;
-    g_last.pulseColor = Z_COLOR_INVALID;
-    g_last.alpha = 0;
-}
-
-void z_light_tick(void)
-{
-    if(g_light.pulseId != Z_LIGHT_INVALID) {
-        bool goingDown = g_light.counter >= Z_DEG_090_FIX;
+    if(g_light.pulseId != U_LIGHT_INVALID) {
+        bool goingDown = g_light.counter >= F_DEG_090_FIX;
         g_light.counter += g_patterns[g_light.pulseId].counterSpeed[goingDown];
 
-        if(g_light.counter >= Z_DEG_180_FIX) {
-            g_light.pulseId = Z_LIGHT_INVALID;
+        if(g_light.counter >= F_DEG_180_FIX) {
+            g_light.pulseId = U_LIGHT_INVALID;
         }
     }
 }
 
-void z_light_draw(void)
+void u_light_draw(void)
 {
-    ZColorId color = Z_COLOR_INVALID;
+    UColorId color = U_COLOR_INVALID;
     int alpha = 0;
 
-    if(g_light.pulseId != Z_LIGHT_INVALID) {
+    if(g_light.pulseId != U_LIGHT_INVALID) {
         color = g_patterns[g_light.pulseId].color;
-        alpha = z_fix_toInt(z_fix_sinf(g_light.counter) * 256);
+        alpha = f_fix_toInt(f_fix_sinf(g_light.counter) * F_COLOR_ALPHA_MAX);
     }
 
     if(g_light.bgColor != g_last.bgColor
@@ -83,13 +76,33 @@ void z_light_draw(void)
         g_last.pulseColor = color;
         g_last.alpha = alpha;
 
-        #if Z_PLATFORM_META
-            z_platform_meta_lightsFill(g_light.bgColor, color, alpha);
+        #if F_CONFIG_SYSTEM_GAMEBUINO
+            f_gamebuino_lightsStart();
+
+            f_color_blendSet(F_COLOR_BLEND_PLAIN);
+
+            if(g_light.bgColor == U_COLOR_INVALID) {
+                f_color_colorSetPixel(0);
+            } else {
+                f_color_colorSetPixel(u_colors[g_light.bgColor].pixel);
+            }
+
+            f_draw_fill();
+
+            if(color != U_COLOR_INVALID) {
+                f_color_blendSet(F_COLOR_BLEND_ALPHA);
+                f_color_colorSetPixel(u_colors[color].pixel);
+                f_color_alphaSet(alpha);
+
+                f_draw_fill();
+            }
+
+            f_gamebuino_lightsEnd();
         #endif
     }
 }
 
-void z_light_pulseSet(ZLightId Light)
+void u_light_pulseSet(ZLightId Light)
 {
     if(g_light.pulseId != Light) {
         g_light.pulseId = Light;
@@ -97,7 +110,7 @@ void z_light_pulseSet(ZLightId Light)
     }
 }
 
-void z_light_backgroundSet(ZColorId Color)
+void u_light_backgroundSet(UColorId Color)
 {
     g_light.bgColor = Color;
 }

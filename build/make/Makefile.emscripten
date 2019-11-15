@@ -1,17 +1,9 @@
 include global.mk
 
-F_CONFIG_SCREEN_SIZE_WIDTH := 96
-F_CONFIG_SCREEN_SIZE_HEIGHT := 64
-
-F_CONFIG_SOUND_VOLUME_SCALE_MUSIC := 20
-F_CONFIG_SOUND_VOLUME_SCALE_SAMPLE := 20
-
-Z_ROOT := ../..
-Z_DIR_GFX := assets/gfx
-Z_DIR_SFX := assets/sfx
+F_CONFIG_SCREEN_ZOOM := 8
 
 F_CONFIG_PATH_EMBED_EMSCRIPTEN := \
-	$(addprefix $(Z_DIR_GFX)/, $(notdir $(wildcard $(Z_ROOT)/$(Z_DIR_GFX)/*.png))) \
-	$(addprefix $(Z_DIR_SFX)/, $(notdir $(wildcard $(Z_ROOT)/$(Z_DIR_SFX)/*.wav))) \
+	$(F_CONFIG_PATH_GFX) \
+	$(F_CONFIG_PATH_SFX) \
 
 include $(FAUR_PATH)/make/emscripten.mk

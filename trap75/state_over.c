@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,26 +18,33 @@
 #include "state_over.h"
 
 #include "obj_game.h"
+#include "state_title.h"
+#include "util_color.h"
 #include "util_save.h"
-#include "util_swipe.h"
 
-void s_over_init(void)
+void t_over(void)
 {
-    z_state_set(Z_STATE_TITLE);
-    z_swipe_start(Z_SWIPE_FADE_HIDE);
-}
+    F_STATE_INIT
+    {
+        f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
+        f_fade_startColorTo(500);
 
-void s_over_tick(void)
-{
-    n_game_tick();
-}
+        f_state_blockSet(f_fade_eventGet());
+        f_state_replace(t_title);
+    }
 
-void s_over_draw(void)
-{
-    n_game_draw();
-}
+    F_STATE_TICK
+    {
+        n_game_tick();
+    }
 
-void s_over_free(void)
-{
-    z_save_hiscoreSet(n_game_scoreGet());
+    F_STATE_DRAW
+    {
+        n_game_draw();
+    }
+
+    F_STATE_FREE
+    {
+        u_save_hiscoreSet(n_game_scoreGet());
+    }
 }

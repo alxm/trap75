@@ -22,22 +22,45 @@
 F_EXTERN_C_START
 
 typedef enum {
-    U_BUTTON_INVALID = -1,
-    U_BUTTON_UP,
-    U_BUTTON_DOWN,
-    U_BUTTON_LEFT,
-    U_BUTTON_RIGHT,
-    U_BUTTON_A,
-    U_BUTTON_B,
-    U_BUTTON_MENU,
-    U_BUTTON_NUM
-} UButtonId;
+    U_COLOR_INVALID = -1,
 
-extern void u_input_init(void);
-extern void u_input_uninit(void);
+    U_COLOR_ALXM_BG,
+    U_COLOR_ALXM_Y1,
+    U_COLOR_ALXM_Y2,
+    U_COLOR_ALXM_G1,
+    U_COLOR_ALXM_G2,
+    U_COLOR_ALXM_B1,
+    U_COLOR_ALXM_B2,
+    U_COLOR_ALXM_R1,
+    U_COLOR_ALXM_R2,
 
-extern FButton* u_input_get(UButtonId Button);
-extern void u_input_reset(void);
-extern bool u_input_any(void);
+    U_COLOR_BG_PURPLE_1,
+    U_COLOR_BG_PURPLE_2,
+    U_COLOR_BG_GREEN_1,
+    U_COLOR_BG_GREEN_2,
+    U_COLOR_BG_RED_1,
+    U_COLOR_BG_RED_2,
+    U_COLOR_BG_RED_3,
+    U_COLOR_BG_RED_4,
+
+    U_COLOR_BALL_YELLOW_1,
+    U_COLOR_BALL_YELLOW_2,
+    U_COLOR_BALL_YELLOW_3,
+    U_COLOR_BALL_YELLOW_4,
+
+    U_COLOR_CURSOR_TRAIL,
+    U_COLOR_CURSOR_MAIN,
+
+    U_COLOR_NUM
+} UColorId;
+
+typedef struct UColor {
+    FColorPixel pixel;
+    FColorRgb rgb;
+} UColor;
+
+extern UColor u_colors[U_COLOR_NUM];
+
+extern void u_color_init(void);
 
 F_EXTERN_C_END

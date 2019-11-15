@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,28 +15,35 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "state_over.h"
+#include "state_next.h"
 
 #include "obj_game.h"
-#include "util_swipe.h"
+#include "state_start.h"
+#include "util_color.h"
 
-void s_next_init(void)
+void t_next(void)
 {
-    z_state_set(Z_STATE_START);
-    z_swipe_start(Z_SWIPE_FADE_HIDE);
-}
+    F_STATE_INIT
+    {
+        f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
+        f_fade_startColorTo(500);
 
-void s_next_tick(void)
-{
-    n_game_tick();
-}
+        f_state_blockSet(f_fade_eventGet());
+        f_state_replace(t_start);
+    }
 
-void s_next_draw(void)
-{
-    n_game_draw();
-}
+    F_STATE_TICK
+    {
+        n_game_tick();
+    }
 
-void s_next_free(void)
-{
-    n_game_levelSet(n_game_levelGet() + 1);
+    F_STATE_DRAW
+    {
+        n_game_draw();
+    }
+
+    F_STATE_FREE
+    {
+        n_game_levelSet(n_game_levelGet() + 1);
+    }
 }

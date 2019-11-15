@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,101 +17,68 @@
 
 #include "util_input.h"
 
-#include "util_timer.h"
+static FButton* g_buttons[U_BUTTON_NUM];
 
-typedef enum {
-    Z_PRESSED = Z_FLAG_BIT(0),
-    Z_WAIT_FOR_RELEASE = Z_FLAG_BIT(1),
-} ZButtonFlags;
-
-typedef struct {
-    unsigned flags;
-    unsigned ticksHeldDown;
-} ZButton;
-
-static ZButton g_buttons[Z_BUTTON_NUM];
-
-void z_input_reset(void)
+void u_input_init(void)
 {
-    for(int b = 0; b < Z_BUTTON_NUM; b++) {
-        z_button_pressClear(b);
+    g_buttons[U_BUTTON_UP] = f_button_new();
+    f_button_bindKey(g_buttons[U_BUTTON_UP], F_KEY_UP);
+    f_button_bindButton(g_buttons[U_BUTTON_UP], NULL, F_BUTTON_UP);
+
+    g_buttons[U_BUTTON_DOWN] = f_button_new();
+    f_button_bindKey(g_buttons[U_BUTTON_DOWN], F_KEY_DOWN);
+    f_button_bindButton(g_buttons[U_BUTTON_DOWN], NULL, F_BUTTON_DOWN);
+
+    g_buttons[U_BUTTON_LEFT] = f_button_new();
+    f_button_bindKey(g_buttons[U_BUTTON_LEFT], F_KEY_LEFT);
+    f_button_bindButton(g_buttons[U_BUTTON_LEFT], NULL, F_BUTTON_LEFT);
+    f_button_bindButton(g_buttons[U_BUTTON_LEFT], NULL, F_BUTTON_L);
+
+    g_buttons[U_BUTTON_RIGHT] = f_button_new();
+    f_button_bindKey(g_buttons[U_BUTTON_RIGHT], F_KEY_RIGHT);
+    f_button_bindButton(g_buttons[U_BUTTON_RIGHT], NULL, F_BUTTON_RIGHT);
+    f_button_bindButton(g_buttons[U_BUTTON_RIGHT], NULL, F_BUTTON_R);
+
+    g_buttons[U_BUTTON_A] = f_button_new();
+    f_button_bindKey(g_buttons[U_BUTTON_A], F_KEY_SPACE);
+    f_button_bindKey(g_buttons[U_BUTTON_A], F_KEY_Z);
+    f_button_bindButton(g_buttons[U_BUTTON_A], NULL, F_BUTTON_A);
+
+    g_buttons[U_BUTTON_B] = f_button_new();
+    f_button_bindKey(g_buttons[U_BUTTON_B], F_KEY_X);
+    f_button_bindButton(g_buttons[U_BUTTON_B], NULL, F_BUTTON_B);
+
+    g_buttons[U_BUTTON_MENU] = f_button_new();
+    f_button_bindKey(g_buttons[U_BUTTON_MENU], F_KEY_ENTER);
+    f_button_bindButton(g_buttons[U_BUTTON_MENU], NULL, F_BUTTON_START);
+}
+
+void u_input_uninit(void)
+{
+    for(int b = 0; b < U_BUTTON_NUM; b++) {
+        f_button_free(g_buttons[b]);
     }
 }
 
-void z_input_tick(void)
+FButton* u_input_get(UButtonId Button)
 {
-    for(int b = 0; b < Z_BUTTON_NUM; b++) {
-        ZButton* button = &g_buttons[b];
-        bool pressed = z_platform_buttonPressGet(b);
+    return g_buttons[Button];
+}
 
-        if(Z_FLAG_TEST_ANY(button->flags, Z_WAIT_FOR_RELEASE)) {
-            if(!pressed) {
-                Z_FLAG_CLEAR(button->flags, Z_WAIT_FOR_RELEASE);
-            }
-        } else {
-            if(pressed && Z_FLAG_TEST_ANY(button->flags, Z_PRESSED)) {
-                if(button->ticksHeldDown < UINT_MAX) {
-                    button->ticksHeldDown++;
-                }
-            } else {
-                button->ticksHeldDown = UINT_MAX;
-            }
-
-            if(pressed) {
-                Z_FLAG_SET(button->flags, Z_PRESSED);
-            } else {
-                Z_FLAG_CLEAR(button->flags, Z_PRESSED);
-            }
-        }
+void u_input_reset(void)
+{
+    for(int b = 0; b < U_BUTTON_NUM; b++) {
+        f_button_pressClear(g_buttons[b]);
     }
 }
 
-bool z_button_pressGet(ZButtonId Button)
+bool u_input_any(void)
 {
-    return Z_FLAG_TEST_ANY(g_buttons[Button].flags, Z_PRESSED);
-}
-
-bool z_button_pressGetOnce(ZButtonId Button)
-{
-    if(Z_FLAG_TEST_ANY(g_buttons[Button].flags, Z_PRESSED)) {
-        z_button_pressClear(Button);
-
-        return true;
-    }
-
-    return false;
-}
-
-bool z_button_pressGetDelay(ZButtonId Button, unsigned Ms)
-{
-    ZButton* button = &g_buttons[Button];
-
-    if(Z_FLAG_TEST_ANY(button->flags, Z_PRESSED)
-        && button->ticksHeldDown >= z_timer_msToTicks(Ms)) {
-
-        button->ticksHeldDown = 0;
-
-        return true;
-    }
-
-    return false;
-}
-
-bool z_button_pressGetAny(void)
-{
-    for(int b = 0; b < Z_BUTTON_NUM; b++) {
-        if(Z_FLAG_TEST_ANY(g_buttons[b].flags, Z_PRESSED)) {
+    for(int b = 0; b < U_BUTTON_NUM; b++) {
+        if(f_button_pressGet(g_buttons[b])) {
             return true;
         }
     }
 
     return false;
-}
-
-void z_button_pressClear(ZButtonId Button)
-{
-    ZButton* button = &g_buttons[Button];
-
-    Z_FLAG_CLEAR(button->flags, Z_PRESSED);
-    Z_FLAG_SET(button->flags, Z_WAIT_FOR_RELEASE);
 }

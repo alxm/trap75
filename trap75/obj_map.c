@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,12 +17,12 @@
 
 #include "obj_map.h"
 
+#include "data_assets.h"
 #include "obj_camera.h"
-#include "util_fps.h"
-#include "util_graphics.h"
+#include "util_color.h"
 
 typedef struct {
-    uint8_t field[Z_SCREEN_H][Z_SCREEN_W]; // 0 free, 1 captured
+    uint8_t field[F_CONFIG_SCREEN_SIZE_HEIGHT][F_CONFIG_SCREEN_SIZE_WIDTH];
     int numCaptured;
 } NMap;
 
@@ -31,8 +30,8 @@ static NMap g_map;
 
 void n_map_new(void)
 {
-    for(int y = Z_SCREEN_H; y--; ) {
-        for(int x = Z_SCREEN_W; x--; ) {
+    for(int y = F_CONFIG_SCREEN_SIZE_HEIGHT; y--; ) {
+        for(int x = F_CONFIG_SCREEN_SIZE_WIDTH; x--; ) {
             g_map.field[y][x] = 0;
         }
     }
@@ -49,33 +48,38 @@ void n_map_draw(void)
 {
     #define Z_SPEED (8)
     #define Z_DISTORT (4)
-    #define Z_INC_MAX (Z_DEG_001_INT * 16)
+    #define Z_INC_MAX (F_DEG_001_INT * 16)
 
     #if Z_DISTORT > 4
         #error Z_DISTORT > 4
     #endif
 
-    ZPixel* screen = z_screen_pixelsGet();
-    const ZPixel* sprite = z_sprite_pixelsGet(Z_SPRITE_SPACE1, 0);
-    ZFixu angleStart = z_fixu_fromInt((z_fps_ticksGet() & (Z_FIX_ANGLES_NUM / Z_SPEED - 1)) * Z_SPEED);
+    FColorPixel* screen = f_screen_pixelsGetBuffer();
+    const FColorPixel* sprite =
+        f_sprite_pixelsGetBuffer(f_gfx_assets_gfx_space1_png, 0);
+    FFixu angleStart =
+        f_fixu_fromInt(
+            (f_fps_ticksGet() & (F_FIX_ANGLES_NUM / Z_SPEED - 1)) * Z_SPEED);
 
-    for(int y = 0; y < Z_SCREEN_H; y++) {
-        ZFixu angle = angleStart;
-        ZFixu angleInc = 0;
+    for(int y = 0; y < F_CONFIG_SCREEN_SIZE_HEIGHT; y++) {
+        FFixu angle = angleStart;
+        FFixu angleInc = 0;
 
-        for(int x = 0; x < Z_SCREEN_W; x++) {
+        for(int x = 0; x < F_CONFIG_SCREEN_SIZE_WIDTH; x++) {
             if((x & 7) == 0) {
-                ZFix sinv = z_fix_sin(Z_DEG_180_INT * (unsigned)x / Z_SCREEN_W);
-                ZFix mulv = z_fix_mul(sinv, sinv);
+                FFix sinv = f_fix_sin(F_DEG_180_INT
+                                * (unsigned)x / F_CONFIG_SCREEN_SIZE_WIDTH);
+                FFix mulv = f_fix_mul(sinv, sinv);
 
-                angleInc = (ZFixu)((Z_FIX_ONE - mulv) * Z_INC_MAX);
+                angleInc = (FFixu)((F_FIX_ONE - mulv) * Z_INC_MAX);
             }
 
             angle += angleInc;
 
-            *screen = *(sprite
-                        + (y + Z_DISTORT + z_fix_toInt(Z_DISTORT * z_fix_sinf(angle))) * 88
-                        + (x + Z_DISTORT + z_fix_toInt(Z_DISTORT * z_fix_cosf(angle))));
+            *screen =
+                *(sprite
+                    + (y + Z_DISTORT + f_fix_toInt(Z_DISTORT * f_fix_sinf(angle))) * 88
+                    + (x + Z_DISTORT + f_fix_toInt(Z_DISTORT * f_fix_cosf(angle))));
 
             if(g_map.field[y][x] == 1) {
                 #if 1
@@ -89,28 +93,29 @@ void n_map_draw(void)
             screen++;
         }
 
-        ZFix sinv = z_fix_sin(Z_DEG_180_INT * (unsigned)y / Z_SCREEN_H);
-        ZFix mulv = z_fix_mul(sinv, sinv);
+        FFix sinv = f_fix_sin(F_DEG_180_INT *
+                        (unsigned)y / F_CONFIG_SCREEN_SIZE_HEIGHT);
+        FFix mulv = f_fix_mul(sinv, sinv);
 
-        angleStart += (ZFixu)((Z_FIX_ONE - mulv) * Z_INC_MAX);
+        angleStart += (FFixu)((F_FIX_ONE - mulv) * Z_INC_MAX);
     }
 }
 
-bool n_map_wallGet(ZVectorInt Coords)
+bool n_map_wallGet(FVectorInt Coords)
 {
     return Coords.x < 0
-        || Coords.x >= Z_SCREEN_W
+        || Coords.x >= F_CONFIG_SCREEN_SIZE_WIDTH
         || Coords.y < 0
-        || Coords.y >= Z_SCREEN_H
+        || Coords.y >= F_CONFIG_SCREEN_SIZE_HEIGHT
         || g_map.field[Coords.y][Coords.x] > 0;
 }
 
 bool n_map_wallGet2(int X, int Y)
 {
     return X < 0
-        || X >= Z_SCREEN_W
+        || X >= F_CONFIG_SCREEN_SIZE_WIDTH
         || Y < 0
-        || Y >= Z_SCREEN_H
+        || Y >= F_CONFIG_SCREEN_SIZE_HEIGHT
         || g_map.field[Y][X] > 0;
 }
 
@@ -131,13 +136,14 @@ unsigned n_map_wallFill(int X, int Y, int W, int H)
 
 int n_map_wallPercentGet(void)
 {
-    return 100 * g_map.numCaptured / (Z_SCREEN_W * Z_SCREEN_H);
+    return 100 * g_map.numCaptured
+            / (F_CONFIG_SCREEN_SIZE_WIDTH * F_CONFIG_SCREEN_SIZE_HEIGHT);
 }
 
-void n_map_wallBoundsGet(ZVectorInt Origin, int IncX, int IncY, ZVectorInt* Start, ZVectorInt* Dim)
+void n_map_wallBoundsGet(FVectorInt Origin, int IncX, int IncY, FVectorInt* Start, FVectorInt* Dim)
 {
-    ZVectorInt start = Origin;
-    ZVectorInt end = Origin;
+    FVectorInt start = Origin;
+    FVectorInt end = Origin;
 
     if(IncX == 0) {
         while(!n_map_wallGet(start)) {

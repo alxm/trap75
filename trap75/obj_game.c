@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +22,7 @@
 #include "obj_cursor.h"
 #include "obj_map.h"
 #include "obj_hud.h"
-#include "util_graphics.h"
+#include "util_color.h"
 #include "util_save.h"
 
 #define N_GAME_LEVELS_NUM 8
@@ -98,13 +97,15 @@ void n_game_levelSet(unsigned Level)
         numBalls++;
     }
 
-    unsigned angleInc = Z_FIX_ANGLES_NUM / numBalls;
+    unsigned angleInc = F_FIX_ANGLES_NUM / numBalls;
     unsigned angle = angleInc * 2 / 3;
 
     for(unsigned b = 0; b < numBalls; b++) {
         o_ball_new(levels[Level][b],
-                   Z_SCREEN_W / 2 + z_fix_toInt(z_fix_cos(angle) * 16),
-                   Z_SCREEN_H / 2 - z_fix_toInt(z_fix_sin(angle) * 16),
+                   F_CONFIG_SCREEN_SIZE_WIDTH / 2
+                    + f_fix_toInt(f_fix_cos(angle) * 16),
+                   F_CONFIG_SCREEN_SIZE_HEIGHT / 2
+                    - f_fix_toInt(f_fix_sin(angle) * 16),
                    angle);
 
         angle += angleInc;

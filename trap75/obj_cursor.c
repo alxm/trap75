@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,18 +17,17 @@
 
 #include "obj_cursor.h"
 
+#include "data_assets.h"
 #include "obj_ball.h"
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
-#include "util_fix.h"
-#include "util_graphics.h"
+#include "state_play.h"
+#include "util_color.h"
 #include "util_input.h"
-#include "util_state.h"
-#include "util_timer.h"
 
 #define N_CURSOR_LINE_SPEED 2
-#define N_CURSOR_SPEED (Z_FIX_ONE / 1)
+#define N_CURSOR_SPEED (F_FIX_ONE / 1)
 #define Z_HIT_TIMEOUT_MS 750
 #define N_CURSOR_TRAIL_ALPHA 64
 #define N_CURSOR_HISTORY_LEN 8
@@ -42,20 +40,21 @@ typedef enum {
 } ZLineState;
 
 typedef struct {
-    ZVectorFix coords;
-    ZVectorInt coordsHistory[N_CURSOR_HISTORY_LEN];
+    FVectorFix coords;
+    FVectorInt coordsHistory[N_CURSOR_HISTORY_LEN];
     ZLineState line;
     int offsets[2];
+    FTimer* timer;
 } NCursor;
 
 static NCursor g_cursor;
 
 void n_cursor_new(void)
 {
-    g_cursor.coords.x = z_fix_fromInt(Z_SCREEN_W / 2);
-    g_cursor.coords.y = z_fix_fromInt(Z_SCREEN_H / 2);
+    g_cursor.coords.x = f_fix_fromInt(F_CONFIG_SCREEN_SIZE_WIDTH / 2);
+    g_cursor.coords.y = f_fix_fromInt(F_CONFIG_SCREEN_SIZE_HEIGHT / 2);
 
-    g_cursor.coordsHistory[0] = z_vectorfix_toInt(g_cursor.coords);
+    g_cursor.coordsHistory[0] = f_vectorfix_toInt(g_cursor.coords);
 
     for(int i = 1; i < N_CURSOR_HISTORY_LEN; i++) {
         g_cursor.coordsHistory[i] = g_cursor.coordsHistory[0];
@@ -66,20 +65,24 @@ void n_cursor_new(void)
     g_cursor.offsets[0] = 0;
     g_cursor.offsets[1] = 0;
 
-    z_timer_stop(Z_TIMER_LINE_HIT);
+    if(g_cursor.timer == NULL) {
+        g_cursor.timer = f_timer_new(F_TIMER_MS, Z_HIT_TIMEOUT_MS, false);
+    }
+
+    f_timer_stop(g_cursor.timer);
 }
 
 void n_cursor_tick(void)
 {
-    if(z_state_getCurrent() != Z_STATE_PLAY) {
+    if(f_state_currentGet() != t_play) {
         return;
     }
 
-    if(z_timer_isRunning(Z_TIMER_LINE_HIT)) {
+    if(f_timer_isRunning(g_cursor.timer)) {
         return;
     }
 
-    if(z_timer_isExpired(Z_TIMER_LINE_HIT)) {
+    if(f_timer_expiredGet(g_cursor.timer)) {
         g_cursor.line = Z_LINE_INVALID;
     }
 
@@ -87,42 +90,44 @@ void n_cursor_tick(void)
         g_cursor.coordsHistory[i + 1] = g_cursor.coordsHistory[i];
     }
 
-    g_cursor.coordsHistory[0] = z_vectorfix_toInt(g_cursor.coords);
+    g_cursor.coordsHistory[0] = f_vectorfix_toInt(g_cursor.coords);
 
     if(g_cursor.line == Z_LINE_INVALID) {
-        if(z_button_pressGet(Z_BUTTON_UP)) {
-            g_cursor.coords.y = z_math_max(g_cursor.coords.y - N_CURSOR_SPEED,
-                                           Z_FIX_ONE);
+        if(f_button_pressGet(u_input_get(U_BUTTON_UP))) {
+            g_cursor.coords.y = f_math_max(g_cursor.coords.y - N_CURSOR_SPEED,
+                                           F_FIX_ONE);
         }
 
-        if(z_button_pressGet(Z_BUTTON_DOWN)) {
-            g_cursor.coords.y = z_math_min(g_cursor.coords.y + N_CURSOR_SPEED,
-                                           (Z_SCREEN_H - 1) * Z_FIX_ONE - 1);
+        if(f_button_pressGet(u_input_get(U_BUTTON_DOWN))) {
+            g_cursor.coords.y =
+                f_math_min(g_cursor.coords.y + N_CURSOR_SPEED,
+                           (F_CONFIG_SCREEN_SIZE_HEIGHT - 1) * F_FIX_ONE - 1);
         }
 
-        if(z_button_pressGet(Z_BUTTON_LEFT)) {
-            g_cursor.coords.x = z_math_max(g_cursor.coords.x - N_CURSOR_SPEED,
-                                           Z_FIX_ONE);
+        if(f_button_pressGet(u_input_get(U_BUTTON_LEFT))) {
+            g_cursor.coords.x = f_math_max(g_cursor.coords.x - N_CURSOR_SPEED,
+                                           F_FIX_ONE);
         }
 
-        if(z_button_pressGet(Z_BUTTON_RIGHT)) {
-            g_cursor.coords.x = z_math_min(g_cursor.coords.x + N_CURSOR_SPEED,
-                                           (Z_SCREEN_W - 1) * Z_FIX_ONE - 1);
+        if(f_button_pressGet(u_input_get(U_BUTTON_RIGHT))) {
+            g_cursor.coords.x =
+                f_math_min(g_cursor.coords.x + N_CURSOR_SPEED,
+                           (F_CONFIG_SCREEN_SIZE_WIDTH - 1) * F_FIX_ONE - 1);
         }
 
-        if(!n_map_wallGet(z_vectorfix_toInt(g_cursor.coords))) {
-            if(z_button_pressGetOnce(Z_BUTTON_A)) {
+        if(!n_map_wallGet(f_vectorfix_toInt(g_cursor.coords))) {
+            if(f_button_pressGetOnce(u_input_get(U_BUTTON_A))) {
                 g_cursor.line = Z_LINE_H;
                 g_cursor.offsets[0] = 0;
                 g_cursor.offsets[1] = 0;
-            } else if(z_button_pressGetOnce(Z_BUTTON_B)) {
+            } else if(f_button_pressGetOnce(u_input_get(U_BUTTON_B))) {
                 g_cursor.line = Z_LINE_V;
                 g_cursor.offsets[0] = 0;
                 g_cursor.offsets[1] = 0;
             }
         }
     } else {
-        ZVectorInt origin = z_vectorfix_toInt(g_cursor.coords);
+        FVectorInt origin = f_vectorfix_toInt(g_cursor.coords);
         bool wall[2] = {false, false};
 
         int incs[Z_LINE_NUM][2][2] = {
@@ -150,27 +155,27 @@ void n_cursor_tick(void)
 
         if(g_cursor.line == Z_LINE_H) {
             hits = o_ball_checkArea2(
-                    g_cursor.coords.x - z_fix_fromInt(g_cursor.offsets[0] - 1),
+                    g_cursor.coords.x - f_fix_fromInt(g_cursor.offsets[0] - 1),
                     g_cursor.coords.y,
-                    z_fix_fromInt(
+                    f_fix_fromInt(
                         g_cursor.offsets[0] + 1 + g_cursor.offsets[1] - 2),
-                    Z_FIX_ONE);
+                    F_FIX_ONE);
         } else {
             hits = o_ball_checkArea2(
                     g_cursor.coords.x,
-                    g_cursor.coords.y - z_fix_fromInt(g_cursor.offsets[0] - 1),
-                    Z_FIX_ONE,
-                    z_fix_fromInt(
+                    g_cursor.coords.y - f_fix_fromInt(g_cursor.offsets[0] - 1),
+                    F_FIX_ONE,
+                    f_fix_fromInt(
                         g_cursor.offsets[0] + 1 + g_cursor.offsets[1] - 2));
         }
 
         if(hits) {
             n_game_livesDec();
             n_camera_shakeSet(Z_HIT_TIMEOUT_MS);
-            z_timer_start(Z_TIMER_LINE_HIT, Z_HIT_TIMEOUT_MS, false);
+            f_timer_start(g_cursor.timer);
         } else if(wall[0] && wall[1]) {
-            ZVectorInt start[2];
-            ZVectorInt dim[2];
+            FVectorInt start[2];
+            FVectorInt dim[2];
 
             if(g_cursor.line == Z_LINE_H) {
                 n_map_wallBoundsGet(origin, 0, -1, &start[0], &dim[0]);
@@ -211,143 +216,147 @@ void n_cursor_tick(void)
 
 void n_cursor_draw(void)
 {
-    z_graphics_colorSetId(Z_COLOR_CURSOR_TRAIL);
-    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
+    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+    f_color_colorSetPixel(u_colors[U_COLOR_CURSOR_TRAIL].pixel);
+    f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
 
     for(int i = N_CURSOR_HISTORY_LEN; i--; ) {
-        z_graphics_alphaSet(
+        f_color_alphaSet(
             N_CURSOR_TRAIL_ALPHA
                 - N_CURSOR_TRAIL_ALPHA * i / N_CURSOR_HISTORY_LEN);
 
-        z_sprite_blitAlphaMask(Z_SPRITE_CURSOR,
-                               0,
-                               g_cursor.coordsHistory[i].x,
-                               g_cursor.coordsHistory[i].y);
+        f_sprite_blit(f_gfx_assets_gfx_cursor_png,
+                      0,
+                      g_cursor.coordsHistory[i].x,
+                      g_cursor.coordsHistory[i].y);
     }
 
-    ZColorId colorLine = Z_COLOR_CURSOR_TRAIL;
-    ZColorId colorLineGlow = Z_COLOR_CURSOR_MAIN;
-    ZColorId colorCursor = Z_COLOR_CURSOR_MAIN;
-    ZVectorInt shake = n_camera_shakeGet();
-    ZVectorInt coords = z_vectorfix_toInt(g_cursor.coords);
+    UColorId colorLine = U_COLOR_CURSOR_TRAIL;
+    UColorId colorLineGlow = U_COLOR_CURSOR_MAIN;
+    UColorId colorCursor = U_COLOR_CURSOR_MAIN;
+    FVectorInt shake = n_camera_shakeGet();
+    FVectorInt coords = f_vectorfix_toInt(g_cursor.coords);
 
-    if(z_timer_isRunning(Z_TIMER_LINE_HIT)) {
-        if(z_fps_ticksGet() & 0x8) {
-            colorLine = Z_COLOR_BG_RED_2;
-            colorLineGlow = Z_COLOR_BG_RED_4;
+    if(f_timer_isRunning(g_cursor.timer)) {
+        if(f_fps_ticksGet() & 0x8) {
+            colorLine = U_COLOR_BG_RED_2;
+            colorLineGlow = U_COLOR_BG_RED_4;
         }
     } else {
-        if(z_fps_ticksGet() & 0x4) {
-            colorLine = Z_COLOR_CURSOR_MAIN;
+        if(f_fps_ticksGet() & 0x4) {
+            colorLine = U_COLOR_CURSOR_MAIN;
         }
     }
 
     if(g_cursor.line == Z_LINE_H) {
-        z_graphics_colorSetId(colorLineGlow);
-        z_graphics_alphaSet(64);
+        f_color_colorSetPixel(u_colors[colorLineGlow].pixel);
+        f_color_alphaSet(64);
 
         // Left glow
-        z_draw_rectangleAlpha(coords.x - g_cursor.offsets[0] - shake.x,
-                              coords.y - 1 - shake.y,
-                              g_cursor.offsets[0],
-                              1);
-        z_draw_rectangleAlpha(coords.x - g_cursor.offsets[0] - shake.x,
-                              coords.y + 1 - shake.y,
-                              g_cursor.offsets[0],
-                              1);
-        z_draw_pixelAlpha(
-            coords.x - g_cursor.offsets[0] - 1 - shake.x, coords.y - shake.y);
+        f_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
+                         coords.y - 1 - shake.y,
+                         g_cursor.offsets[0],
+                         1);
+        f_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
+                         coords.y + 1 - shake.y,
+                         g_cursor.offsets[0],
+                         1);
+        f_draw_pixel(coords.x - g_cursor.offsets[0] - 1 - shake.x,
+                     coords.y - shake.y);
 
         // Right glow
-        z_draw_rectangleAlpha(coords.x + 1 - shake.x,
-                              coords.y - 1 - shake.y,
-                              g_cursor.offsets[1],
-                              1);
-        z_draw_rectangleAlpha(coords.x + 1 - shake.x,
-                              coords.y + 1 - shake.y,
-                              g_cursor.offsets[1],
-                              1);
-        z_draw_pixelAlpha(
-            coords.x + g_cursor.offsets[1] + 1 - shake.x, coords.y - shake.y);
+        f_draw_rectangle(coords.x + 1 - shake.x,
+                         coords.y - 1 - shake.y,
+                         g_cursor.offsets[1],
+                         1);
+        f_draw_rectangle(coords.x + 1 - shake.x,
+                         coords.y + 1 - shake.y,
+                         g_cursor.offsets[1],
+                         1);
+        f_draw_pixel(coords.x + g_cursor.offsets[1] + 1 - shake.x,
+                     coords.y - shake.y);
 
         // Bookends
-        z_graphics_alphaSet(32);
+        f_color_alphaSet(32);
 
-        z_draw_pixelAlpha(coords.x - g_cursor.offsets[0] - 1 - shake.x,
-                          coords.y - 1 - shake.y);
-        z_draw_pixelAlpha(coords.x - g_cursor.offsets[0] - 1 - shake.x,
-                          coords.y + 1 - shake.y);
-        z_draw_pixelAlpha(coords.x + g_cursor.offsets[1] + 1 - shake.x,
-                          coords.y - 1 - shake.y);
-        z_draw_pixelAlpha(coords.x + g_cursor.offsets[1] + 1 - shake.x,
-                          coords.y + 1 - shake.y);
+        f_draw_pixel(coords.x - g_cursor.offsets[0] - 1 - shake.x,
+                     coords.y - 1 - shake.y);
+        f_draw_pixel(coords.x - g_cursor.offsets[0] - 1 - shake.x,
+                     coords.y + 1 - shake.y);
+        f_draw_pixel(coords.x + g_cursor.offsets[1] + 1 - shake.x,
+                     coords.y - 1 - shake.y);
+        f_draw_pixel(coords.x + g_cursor.offsets[1] + 1 - shake.x,
+                     coords.y + 1 - shake.y);
 
         // Main
-        z_graphics_colorSetId(colorLine);
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_colorSetPixel(u_colors[colorLine].pixel);
 
-        z_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
+        f_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
                          coords.y - shake.y,
                          g_cursor.offsets[0],
                          1);
-        z_draw_rectangle(coords.x + 1 - shake.x,
+        f_draw_rectangle(coords.x + 1 - shake.x,
                          coords.y - shake.y,
                          g_cursor.offsets[1],
                          1);
     } else if(g_cursor.line == Z_LINE_V) {
-        z_graphics_colorSetId(colorLineGlow);
-        z_graphics_alphaSet(64);
+        f_color_colorSetPixel(u_colors[colorLineGlow].pixel);
+        f_color_alphaSet(64);
 
         // Up glow
-        z_draw_rectangleAlpha(coords.x - 1 - shake.x,
-                              coords.y - g_cursor.offsets[0] - shake.y,
-                              1,
-                              g_cursor.offsets[0]);
-        z_draw_rectangleAlpha(coords.x + 1 - shake.x,
-                              coords.y - g_cursor.offsets[0] - shake.y,
-                              1,
-                              g_cursor.offsets[0]);
-        z_draw_pixelAlpha(coords.x, coords.y - g_cursor.offsets[0] - 1);
-
-        // Down glow
-        z_draw_rectangleAlpha(coords.x - 1 - shake.x,
-                              coords.y + 1 - shake.y,
-                              1,
-                              g_cursor.offsets[1]);
-        z_draw_rectangleAlpha(coords.x + 1 - shake.x,
-                              coords.y + 1 - shake.y,
-                              1,
-                              g_cursor.offsets[1]);
-        z_draw_pixelAlpha(
-            coords.x - shake.x, coords.y + g_cursor.offsets[1] + 1 - shake.y);
-
-        // Bookends
-        z_graphics_alphaSet(32);
-
-        z_draw_pixelAlpha(coords.x - 1 - shake.x,
-                          coords.y - g_cursor.offsets[0] - 1 - shake.y);
-        z_draw_pixelAlpha(coords.x + 1 - shake.x,
-                          coords.y - g_cursor.offsets[0] - 1 - shake.y);
-        z_draw_pixelAlpha(coords.x - 1 - shake.x,
-                          coords.y + g_cursor.offsets[1] + 1 - shake.y);
-        z_draw_pixelAlpha(coords.x + 1 - shake.x,
-                          coords.y + g_cursor.offsets[1] + 1 - shake.y);
-
-        // Main
-        z_graphics_colorSetId(colorLine);
-
-        z_draw_rectangle(coords.x - shake.x,
+        f_draw_rectangle(coords.x - 1 - shake.x,
                          coords.y - g_cursor.offsets[0] - shake.y,
                          1,
                          g_cursor.offsets[0]);
-        z_draw_rectangle(coords.x - shake.x,
+        f_draw_rectangle(coords.x + 1 - shake.x,
+                         coords.y - g_cursor.offsets[0] - shake.y,
+                         1,
+                         g_cursor.offsets[0]);
+        f_draw_pixel(coords.x, coords.y - g_cursor.offsets[0] - 1);
+
+        // Down glow
+        f_draw_rectangle(coords.x - 1 - shake.x,
+                         coords.y + 1 - shake.y,
+                         1,
+                         g_cursor.offsets[1]);
+        f_draw_rectangle(coords.x + 1 - shake.x,
+                         coords.y + 1 - shake.y,
+                         1,
+                         g_cursor.offsets[1]);
+        f_draw_pixel(coords.x - shake.x,
+                     coords.y + g_cursor.offsets[1] + 1 - shake.y);
+
+        // Bookends
+        f_color_alphaSet(32);
+
+        f_draw_pixel(coords.x - 1 - shake.x,
+                     coords.y - g_cursor.offsets[0] - 1 - shake.y);
+        f_draw_pixel(coords.x + 1 - shake.x,
+                     coords.y - g_cursor.offsets[0] - 1 - shake.y);
+        f_draw_pixel(coords.x - 1 - shake.x,
+                     coords.y + g_cursor.offsets[1] + 1 - shake.y);
+        f_draw_pixel(coords.x + 1 - shake.x,
+                     coords.y + g_cursor.offsets[1] + 1 - shake.y);
+
+        // Main
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_colorSetPixel(u_colors[colorLine].pixel);
+
+        f_draw_rectangle(coords.x - shake.x,
+                         coords.y - g_cursor.offsets[0] - shake.y,
+                         1,
+                         g_cursor.offsets[0]);
+        f_draw_rectangle(coords.x - shake.x,
                          coords.y + 1 - shake.y,
                          1,
                          g_cursor.offsets[1]);
     }
 
-    z_graphics_colorSetId(colorCursor);
-    z_graphics_alphaSet(256);
+    f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
+    f_color_colorSetPixel(u_colors[colorCursor].pixel);
+    f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_CURSOR, 0, coords.x + shake.x, coords.y + shake.x);
+    f_sprite_blit(
+        f_gfx_assets_gfx_cursor_png, 0, coords.x + shake.x, coords.y + shake.x);
 }

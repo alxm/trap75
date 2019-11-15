@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,9 +17,6 @@
 
 #pragma once
 
-#include "platform.h"
+#include <faur.h>
 
-#include "util_state.h"
-
-extern ZStateTick s_play_tick;
-extern ZStateDraw s_play_draw;
+extern FStateHandler t_play;

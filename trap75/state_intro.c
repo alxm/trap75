@@ -3,9 +3,8 @@
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    it under the terms of the GNU General Public License version 3,
+    as published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,10 +17,10 @@
 
 #include "state_intro.h"
 
-#include "util_graphics.h"
+#include "data_assets.h"
+#include "state_title.h"
+#include "util_color.h"
 #include "util_input.h"
-#include "util_swipe.h"
-#include "util_timer.h"
 
 #define Z_LOGO_WAIT_MS 800
 
@@ -43,69 +42,90 @@ static const int8_t g_lines[] = {
 
 static int g_pc;
 
-void s_intro_init(void)
+void t_intro(void)
 {
-    z_graphics_colorSetId(Z_COLOR_ALXM_BG);
+    static FTimer* timer;
 
-    z_draw_fill();
-}
+    F_STATE_INIT
+    {
+        timer = f_timer_new(F_TIMER_MS, Z_LOGO_WAIT_MS, false);
 
-void s_intro_tick(void)
-{
-    if(z_state_changed()) {
-        return;
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_colorSetPixel(u_colors[U_COLOR_ALXM_BG].pixel);
+
+        f_draw_fill();
     }
 
-    if(z_timer_isExpired(Z_TIMER_G1)
-        || z_button_pressGetOnce(Z_BUTTON_A)
-        || z_button_pressGetOnce(Z_BUTTON_B)) {
-
-        z_state_set(Z_STATE_TITLE);
-        z_swipe_start(Z_SWIPE_FADE_HIDE);
-
-        g_pc = Z_ARRAY_LEN(g_lines) - 1;
-    }
-
-    if(z_state_changed() || z_timer_isRunning(Z_TIMER_G1)) {
-        return;
-    }
-
-    while(g_lines[g_pc] >= 0) {
-        g_pc++;
-    }
-
-    if(g_lines[g_pc] == -1) {
-        g_pc++;
-    }
-
-    if(g_lines[g_pc] == -2) {
-        z_timer_start(Z_TIMER_G1, Z_LOGO_WAIT_MS, false);
-    }
-}
-
-void s_intro_draw(void)
-{
-    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
-    z_sprite_blit(Z_SPRITE_ALXM, 0, Z_SCREEN_W / 2, Z_SCREEN_H / 2);
-
-    if(g_lines[g_pc] < 0) {
-        return;
-    }
-
-    ZVectorInt logoSize = z_sprite_sizeGet(Z_SPRITE_ALXM);
-    int startX1 = Z_SCREEN_W / 2 - logoSize.x / 2;
-    int startX2 = Z_SCREEN_W / 2 + (logoSize.x + 1) / 2 - 2;
-    int startY = Z_SCREEN_H / 2 - logoSize.y / 2;
-
-    z_graphics_colorSetId(Z_COLOR_ALXM_BG);
-
-    for(int pc = g_pc; g_lines[pc] != -2; pc++) {
-        while(g_lines[pc] != -1) {
-            int8_t x = g_lines[pc++];
-            int8_t y = g_lines[pc++];
-
-            z_draw_rectangle(startX1 + x, startY + y, 2, 1);
-            z_draw_rectangle(startX2 - x, startY + y, 2, 1);
+    F_STATE_TICK
+    {
+        if(f_state_currentChanged()) {
+            return;
         }
+
+        if(f_timer_expiredGet(timer)
+            || f_button_pressGetOnce(u_input_get(U_BUTTON_A))
+            || f_button_pressGetOnce(u_input_get(U_BUTTON_B))) {
+
+            f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
+            f_fade_startColorTo(500);
+
+            f_state_blockSet(f_fade_eventGet());
+            f_state_replace(t_title);
+
+            g_pc = F_ARRAY_LEN(g_lines) - 1;
+        }
+
+        if(f_state_currentChanged() || f_timer_isRunning(timer)) {
+            return;
+        }
+
+        while(g_lines[g_pc] >= 0) {
+            g_pc++;
+        }
+
+        if(g_lines[g_pc] == -1) {
+            g_pc++;
+        }
+
+        if(g_lines[g_pc] == -2) {
+            f_timer_start(timer);
+        }
+    }
+
+    F_STATE_DRAW
+    {
+        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+
+        f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
+        f_sprite_blit(f_gfx_assets_gfx_alxm_png,
+                      0,
+                      F_CONFIG_SCREEN_SIZE_WIDTH / 2,
+                      F_CONFIG_SCREEN_SIZE_HEIGHT / 2);
+
+        if(g_lines[g_pc] < 0) {
+            return;
+        }
+
+        FVectorInt logoSize = f_sprite_sizeGet(f_gfx_assets_gfx_alxm_png);
+        int startX1 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 - logoSize.x / 2;
+        int startX2 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 + (logoSize.x + 1) / 2 - 2;
+        int startY = F_CONFIG_SCREEN_SIZE_HEIGHT / 2 - logoSize.y / 2;
+
+        f_color_colorSetPixel(u_colors[U_COLOR_ALXM_BG].pixel);
+
+        for(int pc = g_pc; g_lines[pc] != -2; pc++) {
+            while(g_lines[pc] != -1) {
+                int8_t x = g_lines[pc++];
+                int8_t y = g_lines[pc++];
+
+                f_draw_rectangle(startX1 + x, startY + y, 2, 1);
+                f_draw_rectangle(startX2 - x, startY + y, 2, 1);
+            }
+        }
+    }
+
+    F_STATE_FREE
+    {
+        f_timer_free(timer);
     }
 }
