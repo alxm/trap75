@@ -20,7 +20,7 @@
 //
 // Workaround for Arduino not building code from subdirs
 //
-#if F_CONFIG_SYSTEM_GAMEBUINO
+#if F_CONFIG_SYSTEM_ARDUINO
     #include "faur_gen/gfx/assets/gfx/alxm.png.c"
     #include "faur_gen/gfx/assets/gfx/alxm_footer.png.c"
     #include "faur_gen/gfx/assets/gfx/alxm_wing.png.c"
