@@ -321,7 +321,7 @@ void o_ball_draw(void)
                         ? U_COLOR_BALL_YELLOW_1 : U_COLOR_BALL_YELLOW_2;
 
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
-    f_color_colorSetPixel(u_colors[color].pixel);
+    f_color_colorSetIndex(color);
 
     f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
 
@@ -329,7 +329,7 @@ void o_ball_draw(void)
         ball_draw_trail(&g_balls[i]);
     }
 
-    f_color_colorSetPixel(u_colors[U_COLOR_BALL_YELLOW_2].pixel);
+    f_color_colorSetIndex(U_COLOR_BALL_YELLOW_2);
     f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
     for(int i = 0; i < g_tail; i++) {

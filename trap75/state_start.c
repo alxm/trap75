@@ -28,7 +28,7 @@ void t_start(void)
     {
         u_input_reset();
 
-        f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
+        f_color_colorSetIndex(U_COLOR_BG_PURPLE_1);
         f_fade_startColorFrom(500);
     }
 

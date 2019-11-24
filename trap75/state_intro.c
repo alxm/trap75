@@ -51,7 +51,7 @@ void t_intro(void)
         timer = f_timer_new(F_TIMER_MS, Z_LOGO_WAIT_MS, false);
 
         f_color_blendSet(F_COLOR_BLEND_PLAIN);
-        f_color_colorSetPixel(u_colors[U_COLOR_ALXM_BG].pixel);
+        f_color_colorSetIndex(U_COLOR_ALXM_BG);
 
         f_draw_fill();
     }
@@ -66,7 +66,7 @@ void t_intro(void)
             || f_button_pressGetOnce(u_input_get(U_BUTTON_A))
             || f_button_pressGetOnce(u_input_get(U_BUTTON_B))) {
 
-            f_color_colorSetPixel(u_colors[U_COLOR_BG_PURPLE_1].pixel);
+            f_color_colorSetIndex(U_COLOR_BG_PURPLE_1);
             f_fade_startColorTo(500);
 
             f_state_blockSet(f_fade_eventGet());
@@ -111,7 +111,7 @@ void t_intro(void)
         int startX2 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 + (logoSize.x + 1) / 2 - 2;
         int startY = F_CONFIG_SCREEN_SIZE_HEIGHT / 2 - logoSize.y / 2;
 
-        f_color_colorSetPixel(u_colors[U_COLOR_ALXM_BG].pixel);
+        f_color_colorSetIndex(U_COLOR_ALXM_BG);
 
         for(int pc = g_pc; g_lines[pc] != -2; pc++) {
             while(g_lines[pc] != -1) {

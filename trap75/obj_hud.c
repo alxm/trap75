@@ -49,15 +49,15 @@ static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, U
 
     // Main bar
 
-    f_color_colorSetPixel(u_colors[ColorProg].pixel);
+    f_color_colorSetIndex(ColorProg);
     f_draw_rectangle(X, Y, progWidth, Height);
 
-    f_color_colorSetPixel(u_colors[ColorBg].pixel);
+    f_color_colorSetIndex(ColorBg);
     f_draw_rectangle(X + progWidth, Y, Width - progWidth, Height);
 
     // Glow border
 
-    f_color_colorSetPixel(u_colors[ColorBorder].pixel);
+    f_color_colorSetIndex(ColorBorder);
     f_color_alphaSet(N_HUD_ALPHA >> 2);
 
     f_draw_rectangle(X, Y - 1, Width, 1);
@@ -70,12 +70,12 @@ static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, U
 
 static void hudDrawLevel(int X, int Y)
 {
-    f_color_colorSetPixel(u_colors[U_COLOR_CURSOR_TRAIL].pixel);
+    f_color_colorSetIndex(U_COLOR_CURSOR_TRAIL);
     f_sprite_blit(f_gfx_assets_gfx_icon_level_png, 0, X, Y);
 
     X += f_sprite_sizeGetWidth(f_gfx_assets_gfx_icon_level_png) + 1;
 
-    f_color_colorSetPixel(u_colors[U_COLOR_CURSOR_MAIN].pixel);
+    f_color_colorSetIndex(U_COLOR_CURSOR_MAIN);
     f_font_coordsSet(X, Y);
     f_font_printf("%0*u", 2, n_game_levelGet());
 }
@@ -99,7 +99,7 @@ static void hudDrawScore(int X, int Y)
 
     UColorId color = score > u_save_hiscoreGet()
                         ? U_COLOR_BALL_YELLOW_2 : U_COLOR_BALL_YELLOW_1;
-    f_color_colorSetPixel(u_colors[color].pixel);
+    f_color_colorSetIndex(color);
 
     f_font_coordsSet(X, Y);
     f_font_printf("%0*u", 5, score);
@@ -107,12 +107,12 @@ static void hudDrawScore(int X, int Y)
 
 static void hudDrawLives(int X, int Y)
 {
-    f_color_colorSetPixel(u_colors[U_COLOR_BG_RED_4].pixel);
+    f_color_colorSetIndex(U_COLOR_BG_RED_4);
     f_sprite_blit(f_gfx_assets_gfx_icon_heart_png, 0, X, Y - 1);
 
     X += f_sprite_sizeGetWidth(f_gfx_assets_gfx_icon_heart_png) + 1;
 
-    f_color_colorSetPixel(u_colors[U_COLOR_CURSOR_TRAIL].pixel);
+    f_color_colorSetIndex(U_COLOR_CURSOR_TRAIL);
     f_font_coordsSet(X, Y);
     f_font_printf("%u", n_game_livesGet());
 }

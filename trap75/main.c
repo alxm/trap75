@@ -27,9 +27,9 @@ static void t_run(void)
 {
     F_STATE_INIT
     {
+        u_color_init();
         u_input_init();
         u_save_init();
-        u_color_init();
 
         u_input_reset();
 
@@ -43,6 +43,7 @@ static void t_run(void)
     F_STATE_FREE
     {
         u_input_uninit();
+        u_color_uninit();
     }
 }
 

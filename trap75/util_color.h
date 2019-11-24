@@ -54,13 +54,7 @@ typedef enum {
     U_COLOR_NUM
 } UColorId;
 
-typedef struct UColor {
-    FColorPixel pixel;
-    FColorRgb rgb;
-} UColor;
-
-extern UColor u_colors[U_COLOR_NUM];
-
 extern void u_color_init(void);
+extern void u_color_uninit(void);
 
 F_EXTERN_C_END

@@ -217,7 +217,7 @@ void n_cursor_tick(void)
 void n_cursor_draw(void)
 {
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
-    f_color_colorSetPixel(u_colors[U_COLOR_CURSOR_TRAIL].pixel);
+    f_color_colorSetIndex(U_COLOR_CURSOR_TRAIL);
     f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
 
     for(int i = N_CURSOR_HISTORY_LEN; i--; ) {
@@ -249,7 +249,7 @@ void n_cursor_draw(void)
     }
 
     if(g_cursor.line == Z_LINE_H) {
-        f_color_colorSetPixel(u_colors[colorLineGlow].pixel);
+        f_color_colorSetIndex(colorLineGlow);
         f_color_alphaSet(64);
 
         // Left glow
@@ -290,7 +290,7 @@ void n_cursor_draw(void)
 
         // Main
         f_color_blendSet(F_COLOR_BLEND_PLAIN);
-        f_color_colorSetPixel(u_colors[colorLine].pixel);
+        f_color_colorSetIndex(colorLine);
 
         f_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
                          coords.y - shake.y,
@@ -301,7 +301,7 @@ void n_cursor_draw(void)
                          g_cursor.offsets[1],
                          1);
     } else if(g_cursor.line == Z_LINE_V) {
-        f_color_colorSetPixel(u_colors[colorLineGlow].pixel);
+        f_color_colorSetIndex(colorLineGlow);
         f_color_alphaSet(64);
 
         // Up glow
@@ -341,7 +341,7 @@ void n_cursor_draw(void)
 
         // Main
         f_color_blendSet(F_COLOR_BLEND_PLAIN);
-        f_color_colorSetPixel(u_colors[colorLine].pixel);
+        f_color_colorSetIndex(colorLine);
 
         f_draw_rectangle(coords.x - shake.x,
                          coords.y - g_cursor.offsets[0] - shake.y,
@@ -354,7 +354,7 @@ void n_cursor_draw(void)
     }
 
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
-    f_color_colorSetPixel(u_colors[colorCursor].pixel);
+    f_color_colorSetIndex(colorCursor);
     f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
     f_sprite_blit(

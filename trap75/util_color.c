@@ -19,28 +19,16 @@
 
 #include "data_assets.h"
 
-UColor u_colors[U_COLOR_NUM];
+FPalette* g_palette;
 
 void u_color_init(void)
 {
-    FVectorInt palSize = f_sprite_sizeGet(f_gfx_assets_gfx_palette_png);
-    const FColorPixel* pixels =
-        f_sprite_pixelsGetBuffer(f_gfx_assets_gfx_palette_png, 0) + palSize.x;
+    g_palette = f_palette_newFromSprite(f_gfx_assets_gfx_palette_png);
 
-    int color = 0;
+    f_color_paletteSet(g_palette);
+}
 
-    for(int p = palSize.x * palSize.y; p--; ) {
-        FColorPixel pixel = *pixels++;
-
-        if(pixel == 0) {
-            continue;
-        }
-
-        u_colors[color].pixel = pixel;
-        u_colors[color].rgb = f_color_pixelToRgb(pixel);
-
-        if(++color == U_COLOR_NUM) {
-            break;
-        }
-    }
+void u_color_uninit(void)
+{
+    f_palette_free(g_palette);
 }

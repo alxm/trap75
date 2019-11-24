@@ -84,14 +84,14 @@ void u_light_draw(void)
             if(g_light.bgColor == U_COLOR_INVALID) {
                 f_color_colorSetPixel(0);
             } else {
-                f_color_colorSetPixel(u_colors[g_light.bgColor].pixel);
+                f_color_colorSetIndex(g_light.bgColor);
             }
 
             f_draw_fill();
 
             if(color != U_COLOR_INVALID) {
                 f_color_blendSet(F_COLOR_BLEND_ALPHA);
-                f_color_colorSetPixel(u_colors[color].pixel);
+                f_color_colorSetIndex(color);
                 f_color_alphaSet(alpha);
 
                 f_draw_fill();
