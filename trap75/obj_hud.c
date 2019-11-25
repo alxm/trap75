@@ -28,7 +28,6 @@
 
 void n_hud_new(void)
 {
-    //
 }
 
 void n_hud_tick(void)
@@ -125,6 +124,7 @@ void n_hud_draw(void)
     f_color_alphaSet(N_HUD_ALPHA);
     f_sprite_alignSet(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
 
+    f_font_fontSet(f_gfx_assets_gfx_font_aa_4x5_png);
     f_font_alignSet(F_FONT_ALIGN_LEFT);
 
     hudDrawLevel(3 - shake.x, 3 - shake.y);

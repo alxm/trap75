@@ -41,7 +41,6 @@ void n_map_new(void)
 
 void n_map_tick(void)
 {
-    //
 }
 
 void n_map_draw(void)

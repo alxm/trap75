@@ -53,6 +53,8 @@ void t_title(void)
             f_state_blockSet(f_fade_eventGet());
             f_state_replace(t_start);
 
+            f_random_seedSet(f_time_getMs());
+
             n_game_new();
         }
     }

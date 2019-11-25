@@ -48,12 +48,10 @@ void t_intro(void)
 
     F_STATE_INIT
     {
+        f_color_colorSetIndex(U_COLOR_BG_PURPLE_1);
+        f_screen_clear();
+
         timer = f_timer_new(F_TIMER_MS, Z_LOGO_WAIT_MS, false);
-
-        f_color_blendSet(F_COLOR_BLEND_PLAIN);
-        f_color_colorSetIndex(U_COLOR_ALXM_BG);
-
-        f_draw_fill();
     }
 
     F_STATE_TICK
@@ -95,6 +93,8 @@ void t_intro(void)
     F_STATE_DRAW
     {
         f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_colorSetIndex(U_COLOR_ALXM_BG);
+        f_draw_fill();
 
         f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
         f_sprite_blit(f_gfx_assets_gfx_alxm_png,

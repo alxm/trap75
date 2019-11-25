@@ -33,11 +33,7 @@ static void t_run(void)
 
         u_input_reset();
 
-        #if F_CONFIG_BUILD_DEBUG
-            f_state_push(t_title);
-        #else
-            f_state_push(t_intro);
-        #endif
+        f_state_push(t_intro);
     }
 
     F_STATE_FREE
