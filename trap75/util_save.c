@@ -28,13 +28,8 @@ ZSaveFile g_save;
 
 void u_save_init(void)
 {
-    g_save.version = 1;
-
-    FFile* f = f_file_new(Z_SAVE_FILE_NAME, F_FILE_READ);
-
-    if(f) {
-        f_file_read(f, &g_save, sizeof(g_save));
-        f_file_free(f);
+    if(!f_file_bufferRead(Z_SAVE_FILE_NAME, &g_save, sizeof(g_save))) {
+        g_save.version = 1;
     }
 }
 
@@ -48,11 +43,6 @@ void u_save_hiscoreSet(unsigned Score)
     if(Score > g_save.hiscore) {
         g_save.hiscore = Score;
 
-        FFile* f = f_file_new(Z_SAVE_FILE_NAME, F_FILE_WRITE);
-
-        if(f) {
-            f_file_write(f, &g_save, sizeof(g_save));
-            f_file_free(f);
-        }
+        f_file_bufferWrite(Z_SAVE_FILE_NAME, &g_save, sizeof(g_save));
     }
 }
