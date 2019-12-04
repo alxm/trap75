@@ -76,29 +76,23 @@ void u_light_draw(void)
         g_last.pulseColor = color;
         g_last.alpha = alpha;
 
-        #if F_CONFIG_SYSTEM_GAMEBUINO
-            f_gamebuino_lightsStart();
+        f_gamebuino_lightsStart();
 
-            f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        if(g_light.bgColor != U_COLOR_INVALID) {
+            f_color_colorSetIndex(g_light.bgColor);
+        }
 
-            if(g_light.bgColor == U_COLOR_INVALID) {
-                f_color_colorSetPixel(0);
-            } else {
-                f_color_colorSetIndex(g_light.bgColor);
-            }
+        f_draw_fill();
+
+        if(color != U_COLOR_INVALID) {
+            f_color_blendSet(F_COLOR_BLEND_ALPHA);
+            f_color_colorSetIndex(color);
+            f_color_alphaSet(alpha);
 
             f_draw_fill();
+        }
 
-            if(color != U_COLOR_INVALID) {
-                f_color_blendSet(F_COLOR_BLEND_ALPHA);
-                f_color_colorSetIndex(color);
-                f_color_alphaSet(alpha);
-
-                f_draw_fill();
-            }
-
-            f_gamebuino_lightsEnd();
-        #endif
+        f_gamebuino_lightsEnd();
     }
 }
 
