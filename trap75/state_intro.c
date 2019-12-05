@@ -92,7 +92,7 @@ void t_intro(void)
 
     F_STATE_DRAW
     {
-        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_blendSet(F_COLOR_BLEND_SOLID);
         f_color_colorSetIndex(U_COLOR_ALXM_BG);
         f_draw_fill();
 

@@ -97,7 +97,7 @@ void t_title(void)
                       F_CONFIG_SCREEN_SIZE_WIDTH / 2,
                       10);
 
-        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_blendSet(F_COLOR_BLEND_SOLID);
 
         f_sprite_blit(f_gfx_assets_gfx_alxm_footer_png,
                       0,

@@ -289,7 +289,7 @@ void n_cursor_draw(void)
                      coords.y + 1 - shake.y);
 
         // Main
-        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_blendSet(F_COLOR_BLEND_SOLID);
         f_color_colorSetIndex(colorLine);
 
         f_draw_rectangle(coords.x - g_cursor.offsets[0] - shake.x,
@@ -340,7 +340,7 @@ void n_cursor_draw(void)
                      coords.y + g_cursor.offsets[1] + 1 - shake.y);
 
         // Main
-        f_color_blendSet(F_COLOR_BLEND_PLAIN);
+        f_color_blendSet(F_COLOR_BLEND_SOLID);
         f_color_colorSetIndex(colorLine);
 
         f_draw_rectangle(coords.x - shake.x,
