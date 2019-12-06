@@ -120,12 +120,10 @@ void n_hud_draw(void)
 {
     FVectorInt shake = n_camera_shakeGet();
 
+    f_align_set(F_ALIGN_X_LEFT, F_ALIGN_Y_TOP);
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
     f_color_alphaSet(N_HUD_ALPHA);
-    f_sprite_alignSet(F_SPRITE_ALIGN_X_LEFT | F_SPRITE_ALIGN_Y_TOP);
-
     f_font_fontSet(f_gfx_assets_gfx_font_aa_4x5_png);
-    f_font_alignSet(F_FONT_ALIGN_LEFT);
 
     hudDrawLevel(3 - shake.x, 3 - shake.y);
     hudDrawPercent(22 - shake.x, 3 + shake.y);

@@ -216,9 +216,9 @@ void n_cursor_tick(void)
 
 void n_cursor_draw(void)
 {
+    f_align_set(F_ALIGN_X_CENTER, F_ALIGN_Y_CENTER);
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
     f_color_colorSetIndex(U_COLOR_CURSOR_TRAIL);
-    f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
 
     for(int i = N_CURSOR_HISTORY_LEN; i--; ) {
         f_color_alphaSet(

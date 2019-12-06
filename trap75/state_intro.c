@@ -96,7 +96,7 @@ void t_intro(void)
         f_color_colorSetIndex(U_COLOR_ALXM_BG);
         f_draw_fill();
 
-        f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
+        f_align_set(F_ALIGN_X_CENTER, F_ALIGN_Y_CENTER);
         f_sprite_blit(f_gfx_assets_gfx_alxm_png,
                       0,
                       F_CONFIG_SCREEN_SIZE_WIDTH / 2,

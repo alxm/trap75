@@ -63,16 +63,14 @@ void t_title(void)
     {
         n_map_draw();
 
-        f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_TOP);
-
         #define Z_ALPHA_MIN 64
         #define Z_ALPHA_MAX 192
         #define Z_ALPHA_SWAY ((Z_ALPHA_MAX - Z_ALPHA_MIN) / 2)
         #define Z_ALPHA_BASELINE (Z_ALPHA_MIN + Z_ALPHA_SWAY)
 
+        f_align_set(F_ALIGN_X_CENTER, F_ALIGN_Y_TOP);
         f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
         f_color_colorSetIndex(U_COLOR_BALL_YELLOW_1);
-
         f_color_alphaSet(
             Z_ALPHA_BASELINE
                 + f_fix_toInt(f_fps_ticksSin(1, 4, 0) * Z_ALPHA_SWAY));
@@ -110,18 +108,17 @@ void t_title(void)
         f_font_fontSet(f_gfx_assets_gfx_font_aa_4x5_png);
 
         if(f_fps_ticksGet() & 0x28) {
-            f_font_alignSet(F_FONT_ALIGN_MIDDLE);
             f_font_coordsSet(F_CONFIG_SCREEN_SIZE_WIDTH / 2, 38);
 
             f_font_print("Press Any Key");
         }
 
-        f_font_alignSet(F_FONT_ALIGN_LEFT);
+        f_align_set(F_ALIGN_X_LEFT, F_ALIGN_Y_TOP);
         f_color_colorSetIndex(U_COLOR_BALL_YELLOW_2);
         f_font_coordsSet(14, 31);
         f_font_print("Hiscore");
 
-        f_font_alignSet(F_FONT_ALIGN_RIGHT);
+        f_align_set(F_ALIGN_X_RIGHT, F_ALIGN_Y_TOP);
         f_color_colorSetIndex(U_COLOR_BALL_YELLOW_3);
         f_font_coordsSet(66, 31);
         f_font_printf("%0*u", 5, u_save_hiscoreGet());

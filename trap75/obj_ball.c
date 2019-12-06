@@ -320,10 +320,9 @@ void o_ball_draw(void)
     UColorId color = (f_fps_ticksGet() & 0x8)
                         ? U_COLOR_BALL_YELLOW_1 : U_COLOR_BALL_YELLOW_2;
 
+    f_align_set(F_ALIGN_X_CENTER, F_ALIGN_Y_CENTER);
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
     f_color_colorSetIndex(color);
-
-    f_sprite_alignSet(F_SPRITE_ALIGN_X_CENTER | F_SPRITE_ALIGN_Y_CENTER);
 
     for(int i = 0; i < g_tail; i++) {
         ball_draw_trail(&g_balls[i]);
