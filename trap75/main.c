@@ -23,6 +23,11 @@
 #include "util_light.h"
 #include "util_save.h"
 
+void f_init(void)
+{
+    f_init_app("Trap75", "alxm", 0, 2, 0);
+}
+
 static void t_run(void)
 {
     F_STATE_INIT
