@@ -26,6 +26,7 @@
 void f_init(void)
 {
     f_init_app("Trap75", "alxm", 0, 2, 0);
+    f_init_fps(30, 30);
 }
 
 static void t_run(void)
