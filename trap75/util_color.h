@@ -22,8 +22,6 @@
 F_EXTERN_C_START
 
 typedef enum {
-    U_COLOR_INVALID = -1,
-
     U_COLOR_ALXM_BG,
     U_COLOR_ALXM_Y1,
     U_COLOR_ALXM_Y2,
@@ -51,7 +49,8 @@ typedef enum {
     U_COLOR_CURSOR_TRAIL,
     U_COLOR_CURSOR_MAIN,
 
-    U_COLOR_NUM
+    U_COLOR_NUM,
+    U_COLOR_INVALID
 } UColorId;
 
 extern void u_color_init(void);
