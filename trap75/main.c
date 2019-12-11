@@ -18,7 +18,6 @@
 #include <faur.h>
 
 #include "state_intro.h"
-#include "state_title.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_save.h"
@@ -29,7 +28,7 @@ void f_init(void)
     f_init_fps(30, 30);
 }
 
-static void t_run(void)
+void f_main(void)
 {
     F_STATE_INIT
     {
@@ -37,9 +36,8 @@ static void t_run(void)
         u_input_init();
         u_save_init();
 
-        u_input_reset();
-
         f_state_push(t_intro);
+        f_state_callbacks(u_light_tick, NULL, NULL, u_light_draw);
     }
 
     F_STATE_FREE
@@ -47,20 +45,4 @@ static void t_run(void)
         u_input_uninit();
         u_color_uninit();
     }
-}
-
-static void stateTickPre(void)
-{
-    u_light_tick();
-}
-
-static void stateDrawPost(void)
-{
-    u_light_draw();
-}
-
-void f_main(void)
-{
-    f_state_callbacks(stateTickPre, NULL, NULL, stateDrawPost);
-    f_state_push(t_run);
 }
