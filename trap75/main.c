@@ -22,12 +22,6 @@
 #include "util_light.h"
 #include "util_save.h"
 
-void f_init(void)
-{
-    f_init_app("Trap75", "alxm", 0, 2, 0);
-    f_init_fps(30, 30);
-}
-
 void f_main(void)
 {
     F_STATE_INIT
