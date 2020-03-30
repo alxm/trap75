@@ -81,7 +81,7 @@ static void hudDrawLevel(int X, int Y)
 
 static void hudDrawPercent(int X, int Y)
 {
-    drawBar(n_map_wallPercentGet(),
+    drawBar(n_map_percentGet(),
             75,
             X,
             Y,

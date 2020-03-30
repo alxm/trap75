@@ -30,7 +30,7 @@ void t_play(void)
 
         if(n_game_livesGet() == 0) {
             f_state_replace(t_over);
-        } else if(n_map_wallPercentGet() >= 75) {
+        } else if(n_map_percentGet() >= 75) {
             f_state_replace(t_next);
         }
     }

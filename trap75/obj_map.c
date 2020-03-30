@@ -1,5 +1,5 @@
 /*
-    Copyright 2019 Alex Margarit <alex@alxm.org>
+    Copyright 2019-2020 Alex Margarit <alex@alxm.org>
     This file is part of Trap75, a video game.
 
     This program is free software: you can redistribute it and/or modify
@@ -100,7 +100,7 @@ void n_map_draw(void)
     }
 }
 
-bool n_map_wallGet(FVectorInt Coords)
+bool n_map_test(FVectorInt Coords)
 {
     return Coords.x < 0
         || Coords.x >= F_CONFIG_SCREEN_SIZE_WIDTH
@@ -109,16 +109,7 @@ bool n_map_wallGet(FVectorInt Coords)
         || g_map.field[Coords.y][Coords.x] > 0;
 }
 
-bool n_map_wallGet2(int X, int Y)
-{
-    return X < 0
-        || X >= F_CONFIG_SCREEN_SIZE_WIDTH
-        || Y < 0
-        || Y >= F_CONFIG_SCREEN_SIZE_HEIGHT
-        || g_map.field[Y][X] > 0;
-}
-
-unsigned n_map_wallFill(int X, int Y, int W, int H)
+unsigned n_map_fill(int X, int Y, int W, int H)
 {
     int area = W * H;
 
@@ -133,31 +124,31 @@ unsigned n_map_wallFill(int X, int Y, int W, int H)
     return (unsigned)area;
 }
 
-int n_map_wallPercentGet(void)
+int n_map_percentGet(void)
 {
     return 100 * g_map.numCaptured
             / (F_CONFIG_SCREEN_SIZE_WIDTH * F_CONFIG_SCREEN_SIZE_HEIGHT);
 }
 
-void n_map_wallBoundsGet(FVectorInt Origin, int IncX, int IncY, FVectorInt* Start, FVectorInt* Dim)
+void n_map_boundsGet(FVectorInt Origin, int IncX, int IncY, FVectorInt* Start, FVectorInt* Dim)
 {
     FVectorInt start = Origin;
     FVectorInt end = Origin;
 
     if(IncX == 0) {
-        while(!n_map_wallGet(start)) {
+        while(!n_map_test(start)) {
             start.x--;
         }
 
-        while(!n_map_wallGet(end)) {
+        while(!n_map_test(end)) {
             end.x++;
         }
     } else if(IncX == -1) {
-        while(!n_map_wallGet(start)) {
+        while(!n_map_test(start)) {
             start.x--;
         }
     } else {
-        while(!n_map_wallGet(end)) {
+        while(!n_map_test(end)) {
             end.x++;
         }
     }
@@ -169,19 +160,19 @@ void n_map_wallBoundsGet(FVectorInt Origin, int IncX, int IncY, FVectorInt* Star
     end = Origin;
 
     if(IncY == 0) {
-        while(!n_map_wallGet(start)) {
+        while(!n_map_test(start)) {
             start.y--;
         }
 
-        while(!n_map_wallGet(end)) {
+        while(!n_map_test(end)) {
             end.y++;
         }
     } else if(IncY == -1) {
-        while(!n_map_wallGet(start)) {
+        while(!n_map_test(start)) {
             start.y--;
         }
     } else {
-        while(!n_map_wallGet(end)) {
+        while(!n_map_test(end)) {
             end.y++;
         }
     }

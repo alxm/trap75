@@ -115,7 +115,7 @@ void n_cursor_tick(void)
                            (F_CONFIG_SCREEN_SIZE_WIDTH - 1) * F_FIX_ONE - 1);
         }
 
-        if(!n_map_wallGet(f_vectorfix_toInt(g_cursor.coords))) {
+        if(!n_map_test(f_vectorfix_toInt(g_cursor.coords))) {
             if(f_button_pressGetOnce(u_input_get(U_BUTTON_A))) {
                 g_cursor.line = Z_LINE_H;
                 g_cursor.offsets[0] = 0;
@@ -137,13 +137,14 @@ void n_cursor_tick(void)
 
         for(int w = 0; w < 2; w++) {
             for(int i = N_CURSOR_LINE_SPEED; i--; ) {
-                int wx = origin.x
-                            + incs[g_cursor.line][w][0] * g_cursor.offsets[w];
-                int wy = origin.y
-                            + incs[g_cursor.line][w][1] * g_cursor.offsets[w];
+                FVectorInt coords = {
+                    origin.x + incs[g_cursor.line][w][0] * g_cursor.offsets[w],
+                    origin.y + incs[g_cursor.line][w][1] * g_cursor.offsets[w]
+                };
 
-                if(n_map_wallGet2(wx, wy)) {
+                if(n_map_test(coords)) {
                     wall[w] = true;
+
                     break;
                 }
 
@@ -178,29 +179,29 @@ void n_cursor_tick(void)
             FVectorInt dim[2];
 
             if(g_cursor.line == Z_LINE_H) {
-                n_map_wallBoundsGet(origin, 0, -1, &start[0], &dim[0]);
-                n_map_wallBoundsGet(origin, 0, 1, &start[1], &dim[1]);
+                n_map_boundsGet(origin, 0, -1, &start[0], &dim[0]);
+                n_map_boundsGet(origin, 0, 1, &start[1], &dim[1]);
             } else {
-                n_map_wallBoundsGet(origin, -1, 0, &start[0], &dim[0]);
-                n_map_wallBoundsGet(origin, 1, 0, &start[1], &dim[1]);
+                n_map_boundsGet(origin, -1, 0, &start[0], &dim[0]);
+                n_map_boundsGet(origin, 1, 0, &start[1], &dim[1]);
             }
 
             unsigned area;
 
             if(!o_ball_checkArea(start[0], dim[0])) {
-                area = n_map_wallFill(
+                area = n_map_fill(
                         start[0].x, start[0].y, dim[0].x, dim[0].y);
             } else if(!o_ball_checkArea(start[1], dim[1])) {
-                area = n_map_wallFill(
+                area = n_map_fill(
                         start[1].x, start[1].y, dim[1].x, dim[1].y);
             } else if(g_cursor.line == Z_LINE_H) {
-                area = n_map_wallFill(
+                area = n_map_fill(
                         origin.x - g_cursor.offsets[0] + 1,
                         origin.y,
                         g_cursor.offsets[0] + 1 + g_cursor.offsets[1] - 2,
                         1);
             } else {
-                area = n_map_wallFill(
+                area = n_map_fill(
                         origin.x,
                         origin.y - g_cursor.offsets[0] + 1,
                         1,

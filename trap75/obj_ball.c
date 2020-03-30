@@ -98,11 +98,11 @@ static int ballCheckWalls(const OBall* Ball, FVectorFix Coords)
 
     int ret = 0;
 
-    if(n_map_wallGet(left) || n_map_wallGet(right)) {
+    if(n_map_test(left) || n_map_test(right)) {
         ret |= 1;
     }
 
-    if(n_map_wallGet(up) || n_map_wallGet(down)) {
+    if(n_map_test(up) || n_map_test(down)) {
         ret |= 2;
     }
 
