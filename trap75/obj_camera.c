@@ -32,12 +32,12 @@ void n_camera_new(void)
         g_camera.timer = f_timer_new(F_TIMER_MS, 0, false);
     }
 
-    f_timer_stop(g_camera.timer);
+    f_timer_runStop(g_camera.timer);
 }
 
 void n_camera_tick(void)
 {
-    if(f_timer_isRunning(g_camera.timer)) {
+    if(f_timer_runGet(g_camera.timer)) {
         g_camera.shake = (FVectorInt){f_random_range(-1, 2),
                                       f_random_range(-1, 2)};
     } else {
@@ -53,5 +53,5 @@ FVectorInt n_camera_shakeGet(void)
 void n_camera_shakeSet(unsigned Ms)
 {
     f_timer_periodSet(g_camera.timer, Ms);
-    f_timer_start(g_camera.timer);
+    f_timer_runStart(g_camera.timer);
 }

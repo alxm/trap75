@@ -69,7 +69,7 @@ void n_cursor_new(void)
         g_cursor.timer = f_timer_new(F_TIMER_MS, Z_HIT_TIMEOUT_MS, false);
     }
 
-    f_timer_stop(g_cursor.timer);
+    f_timer_runStop(g_cursor.timer);
 }
 
 void n_cursor_tick(void)
@@ -78,7 +78,7 @@ void n_cursor_tick(void)
         return;
     }
 
-    if(f_timer_isRunning(g_cursor.timer)) {
+    if(f_timer_runGet(g_cursor.timer)) {
         return;
     }
 
@@ -173,7 +173,7 @@ void n_cursor_tick(void)
         if(hits) {
             n_game_livesDec();
             n_camera_shakeSet(Z_HIT_TIMEOUT_MS);
-            f_timer_start(g_cursor.timer);
+            f_timer_runStart(g_cursor.timer);
         } else if(wall[0] && wall[1]) {
             FVectorInt start[2];
             FVectorInt dim[2];
@@ -238,7 +238,7 @@ void n_cursor_draw(void)
     FVectorInt shake = n_camera_shakeGet();
     FVectorInt coords = f_vectorfix_toInt(g_cursor.coords);
 
-    if(f_timer_isRunning(g_cursor.timer)) {
+    if(f_timer_runGet(g_cursor.timer)) {
         if(f_fps_ticksGet() & 0x8) {
             colorLine = U_COLOR_BG_RED_2;
             colorLineGlow = U_COLOR_BG_RED_4;

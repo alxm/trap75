@@ -73,7 +73,7 @@ void t_intro(void)
             g_pc = F_ARRAY_LEN(g_lines) - 1;
         }
 
-        if(f_state_currentChanged() || f_timer_isRunning(timer)) {
+        if(f_state_currentChanged() || f_timer_runGet(timer)) {
             return;
         }
 
@@ -86,7 +86,7 @@ void t_intro(void)
         }
 
         if(g_lines[g_pc] == -2) {
-            f_timer_start(timer);
+            f_timer_runStart(timer);
         }
     }
 
