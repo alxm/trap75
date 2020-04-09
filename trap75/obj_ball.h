@@ -39,5 +39,5 @@ extern void o_ball_new(OBallId Id, int X, int Y, unsigned Angle);
 extern void o_ball_tick(void);
 extern void o_ball_draw(void);
 
-extern bool o_ball_checkArea(FVectorInt Start, FVectorInt Dim);
+extern bool o_ball_checkArea(FVecInt Start, FVecInt Dim);
 extern bool o_ball_checkArea2(FFix X, FFix Y, FFix W, FFix H);

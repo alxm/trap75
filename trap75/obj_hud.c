@@ -118,7 +118,7 @@ static void hudDrawLives(int X, int Y)
 
 void n_hud_draw(void)
 {
-    FVectorInt shake = n_camera_shakeGet();
+    FVecInt shake = n_camera_shakeGet();
 
     f_align_set(F_ALIGN_X_LEFT, F_ALIGN_Y_TOP);
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);

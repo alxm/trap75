@@ -18,7 +18,7 @@
 #include "obj_camera.h"
 
 typedef struct {
-    FVectorInt shake;
+    FVecInt shake;
     FTimer* timer;
 } NCamera;
 
@@ -26,7 +26,7 @@ static NCamera g_camera;
 
 void n_camera_new(void)
 {
-    g_camera.shake = (FVectorInt){0, 0};
+    g_camera.shake = (FVecInt){0, 0};
 
     if(g_camera.timer == NULL) {
         g_camera.timer = f_timer_new(F_TIMER_MS, 0, false);
@@ -38,14 +38,14 @@ void n_camera_new(void)
 void n_camera_tick(void)
 {
     if(f_timer_runGet(g_camera.timer)) {
-        g_camera.shake = (FVectorInt){f_random_range(-1, 2),
-                                      f_random_range(-1, 2)};
+        g_camera.shake = (FVecInt){f_random_range(-1, 2),
+                                   f_random_range(-1, 2)};
     } else {
-        g_camera.shake = (FVectorInt){0, 0};
+        g_camera.shake = (FVecInt){0, 0};
     }
 }
 
-FVectorInt n_camera_shakeGet(void)
+FVecInt n_camera_shakeGet(void)
 {
     return g_camera.shake;
 }

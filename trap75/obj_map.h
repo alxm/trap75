@@ -24,7 +24,7 @@ extern void n_map_new(void);
 extern void n_map_tick(void);
 extern void n_map_draw(void);
 
-extern bool n_map_test(FVectorInt Coords);
+extern bool n_map_test(FVecInt Coords);
 extern unsigned n_map_fill(int X, int Y, int W, int H);
 extern int n_map_percentGet(void);
-extern void n_map_boundsGet(FVectorInt Origin, int IncX, int IncY, FVectorInt* Start, FVectorInt* Dim);
+extern void n_map_boundsGet(FVecInt Origin, int IncX, int IncY, FVecInt* Start, FVecInt* Dim);

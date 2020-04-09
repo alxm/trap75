@@ -39,9 +39,9 @@ static const OBallData g_ballsData[O_BALL_ID_NUM] = {
 
 struct OBall {
     OBallId id;
-    FVectorFix coords, coordsNext;
-    FVectorInt coordsHistory[O_BALL_HISTORY_LEN];
-    FVectorFix velocity, velocityNext;
+    FVecFix coords, coordsNext;
+    FVecInt coordsHistory[O_BALL_HISTORY_LEN];
+    FVecFix velocity, velocityNext;
     bool hitWall, hitBall, committed, ignore;
 };
 
@@ -66,7 +66,7 @@ void o_ball_new(OBallId Id, int X, int Y, unsigned Angle)
     b->coords.x = f_fix_fromInt(X);
     b->coords.y = f_fix_fromInt(Y);
 
-    b->coordsHistory[0] = f_vectorfix_toInt(b->coords);
+    b->coordsHistory[0] = f_vecfix_toInt(b->coords);
 
     for(int i = 1; i < O_BALL_HISTORY_LEN; i++) {
         b->coordsHistory[i] = b->coordsHistory[0];
@@ -88,13 +88,13 @@ static inline FFix ballRadiusf(const OBall* Ball)
     return f_fix_fromInt(ballRadius(Ball));
 }
 
-static int ballCheckWalls(const OBall* Ball, FVectorFix Coords)
+static int ballCheckWalls(const OBall* Ball, FVecFix Coords)
 {
-    FVectorInt coords = f_vectorfix_toInt(Coords);
-    FVectorInt up = {coords.x, coords.y - ballRadius(Ball)};
-    FVectorInt down = {coords.x, coords.y + ballRadius(Ball)};
-    FVectorInt left = {coords.x - ballRadius(Ball), coords.y};
-    FVectorInt right = {coords.x + ballRadius(Ball), coords.y};
+    FVecInt coords = f_vecfix_toInt(Coords);
+    FVecInt up = {coords.x, coords.y - ballRadius(Ball)};
+    FVecInt down = {coords.x, coords.y + ballRadius(Ball)};
+    FVecInt left = {coords.x - ballRadius(Ball), coords.y};
+    FVecInt right = {coords.x + ballRadius(Ball), coords.y};
 
     int ret = 0;
 
@@ -114,7 +114,7 @@ static inline bool collideBoxes(int X1, int Y1, int W1, int H1, int X2, int Y2, 
     return !(Y1 >= Y2 + H2 || Y2 >= Y1 + H1 || X1 >= X2 + W2 || X2 >= X1 + W1);
 }
 
-static inline bool circleAndCirclef(FVectorFix Coords1, FFix R1, FVectorFix Coords2, FFix R2)
+static inline bool circleAndCirclef(FVecFix Coords1, FFix R1, FVecFix Coords2, FFix R2)
 {
     const int64_t x = Coords1.x - Coords2.x;
     const int64_t y = Coords1.y - Coords2.y;
@@ -133,7 +133,7 @@ static void ball_tick_move(OBall* Ball)
         Ball->coordsHistory[i + 1] = Ball->coordsHistory[i];
     }
 
-    Ball->coordsHistory[0] = f_vectorfix_toInt(Ball->coords);
+    Ball->coordsHistory[0] = f_vecfix_toInt(Ball->coords);
 
     Ball->coordsNext.x = Ball->coords.x + Ball->velocity.x;
     Ball->coordsNext.y = Ball->coords.y + Ball->velocity.y;
@@ -216,7 +216,7 @@ static void ball_tick_commit_1(OBall* Ball)
     }
 }
 
-static bool ballCommitValid(const OBall* Ball, FVectorFix Coords)
+static bool ballCommitValid(const OBall* Ball, FVecFix Coords)
 {
     if(ballCheckWalls(Ball, Coords)) {
         return false;
@@ -248,9 +248,9 @@ static void ball_tick_commit_2(OBall* Ball)
         return;
     }
 
-    FVectorFix vel = Ball->velocity;
+    FVecFix vel = Ball->velocity;
 
-    FVectorFix nextCoords[] = {
+    FVecFix nextCoords[] = {
         Ball->coords,
         {Ball->coords.x + vel.x / 4, Ball->coords.y + vel.y / 4},
         {Ball->coords.x - vel.x / 4, Ball->coords.y - vel.y / 4},
@@ -310,7 +310,7 @@ static void ball_draw_trail(const OBall* Ball)
 
 static void ball_draw_main(const OBall* Ball)
 {
-    FVectorInt screen = f_vectorfix_toInt(Ball->coords);
+    FVecInt screen = f_vecfix_toInt(Ball->coords);
 
     f_sprite_blit(*g_ballsData[Ball->id].sprite, 0, screen.x, screen.y);
 }
@@ -336,10 +336,10 @@ void o_ball_draw(void)
     }
 }
 
-bool o_ball_checkArea(FVectorInt Start, FVectorInt Dim)
+bool o_ball_checkArea(FVecInt Start, FVecInt Dim)
 {
-    FVectorFix start = f_vectorint_toFix(Start);
-    FVectorFix dim = f_vectorint_toFix(Dim);
+    FVecFix start = f_vecint_toFix(Start);
+    FVecFix dim = f_vecint_toFix(Dim);
 
     return o_ball_checkArea2(start.x, start.y, dim.x, dim.y);
 }

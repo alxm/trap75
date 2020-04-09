@@ -100,7 +100,7 @@ void n_map_draw(void)
     }
 }
 
-bool n_map_test(FVectorInt Coords)
+bool n_map_test(FVecInt Coords)
 {
     return Coords.x < 0
         || Coords.x >= F_CONFIG_SCREEN_SIZE_WIDTH
@@ -130,10 +130,10 @@ int n_map_percentGet(void)
             / (F_CONFIG_SCREEN_SIZE_WIDTH * F_CONFIG_SCREEN_SIZE_HEIGHT);
 }
 
-void n_map_boundsGet(FVectorInt Origin, int IncX, int IncY, FVectorInt* Start, FVectorInt* Dim)
+void n_map_boundsGet(FVecInt Origin, int IncX, int IncY, FVecInt* Start, FVecInt* Dim)
 {
-    FVectorInt start = Origin;
-    FVectorInt end = Origin;
+    FVecInt start = Origin;
+    FVecInt end = Origin;
 
     if(IncX == 0) {
         while(!n_map_test(start)) {

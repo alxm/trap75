@@ -40,8 +40,8 @@ typedef enum {
 } ZLineState;
 
 typedef struct {
-    FVectorFix coords;
-    FVectorInt coordsHistory[N_CURSOR_HISTORY_LEN];
+    FVecFix coords;
+    FVecInt coordsHistory[N_CURSOR_HISTORY_LEN];
     ZLineState line;
     int offsets[2];
     FTimer* timer;
@@ -54,7 +54,7 @@ void n_cursor_new(void)
     g_cursor.coords.x = f_fix_fromInt(F_CONFIG_SCREEN_SIZE_WIDTH / 2);
     g_cursor.coords.y = f_fix_fromInt(F_CONFIG_SCREEN_SIZE_HEIGHT / 2);
 
-    g_cursor.coordsHistory[0] = f_vectorfix_toInt(g_cursor.coords);
+    g_cursor.coordsHistory[0] = f_vecfix_toInt(g_cursor.coords);
 
     for(int i = 1; i < N_CURSOR_HISTORY_LEN; i++) {
         g_cursor.coordsHistory[i] = g_cursor.coordsHistory[0];
@@ -90,7 +90,7 @@ void n_cursor_tick(void)
         g_cursor.coordsHistory[i + 1] = g_cursor.coordsHistory[i];
     }
 
-    g_cursor.coordsHistory[0] = f_vectorfix_toInt(g_cursor.coords);
+    g_cursor.coordsHistory[0] = f_vecfix_toInt(g_cursor.coords);
 
     if(g_cursor.line == Z_LINE_INVALID) {
         if(f_button_pressGet(u_input_get(U_BUTTON_UP))) {
@@ -115,7 +115,7 @@ void n_cursor_tick(void)
                            (F_CONFIG_SCREEN_SIZE_WIDTH - 1) * F_FIX_ONE - 1);
         }
 
-        if(!n_map_test(f_vectorfix_toInt(g_cursor.coords))) {
+        if(!n_map_test(f_vecfix_toInt(g_cursor.coords))) {
             if(f_button_pressGetOnce(u_input_get(U_BUTTON_A))) {
                 g_cursor.line = Z_LINE_H;
                 g_cursor.offsets[0] = 0;
@@ -127,7 +127,7 @@ void n_cursor_tick(void)
             }
         }
     } else {
-        FVectorInt origin = f_vectorfix_toInt(g_cursor.coords);
+        FVecInt origin = f_vecfix_toInt(g_cursor.coords);
         bool wall[2] = {false, false};
 
         int incs[Z_LINE_NUM][2][2] = {
@@ -137,7 +137,7 @@ void n_cursor_tick(void)
 
         for(int w = 0; w < 2; w++) {
             for(int i = N_CURSOR_LINE_SPEED; i--; ) {
-                FVectorInt coords = {
+                FVecInt coords = {
                     origin.x + incs[g_cursor.line][w][0] * g_cursor.offsets[w],
                     origin.y + incs[g_cursor.line][w][1] * g_cursor.offsets[w]
                 };
@@ -175,8 +175,8 @@ void n_cursor_tick(void)
             n_camera_shakeSet(Z_HIT_TIMEOUT_MS);
             f_timer_runStart(g_cursor.timer);
         } else if(wall[0] && wall[1]) {
-            FVectorInt start[2];
-            FVectorInt dim[2];
+            FVecInt start[2];
+            FVecInt dim[2];
 
             if(g_cursor.line == Z_LINE_H) {
                 n_map_boundsGet(origin, 0, -1, &start[0], &dim[0]);
@@ -235,8 +235,8 @@ void n_cursor_draw(void)
     UColorId colorLine = U_COLOR_CURSOR_TRAIL;
     UColorId colorLineGlow = U_COLOR_CURSOR_MAIN;
     UColorId colorCursor = U_COLOR_CURSOR_MAIN;
-    FVectorInt shake = n_camera_shakeGet();
-    FVectorInt coords = f_vectorfix_toInt(g_cursor.coords);
+    FVecInt shake = n_camera_shakeGet();
+    FVecInt coords = f_vecfix_toInt(g_cursor.coords);
 
     if(f_timer_runGet(g_cursor.timer)) {
         if(f_fps_ticksGet() & 0x8) {

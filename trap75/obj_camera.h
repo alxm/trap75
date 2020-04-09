@@ -23,5 +23,5 @@ extern void n_camera_new(void);
 
 extern void n_camera_tick(void);
 
-extern FVectorInt n_camera_shakeGet(void);
+extern FVecInt n_camera_shakeGet(void);
 extern void n_camera_shakeSet(unsigned Ms);
