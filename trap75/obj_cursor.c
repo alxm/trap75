@@ -66,7 +66,7 @@ void n_cursor_new(void)
     g_cursor.offsets[1] = 0;
 
     if(g_cursor.timer == NULL) {
-        g_cursor.timer = f_timer_new(F_TIMER_MS, Z_HIT_TIMEOUT_MS, false);
+        g_cursor.timer = f_timer_new(Z_HIT_TIMEOUT_MS, false);
     }
 
     f_timer_runStop(g_cursor.timer);

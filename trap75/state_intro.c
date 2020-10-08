@@ -51,7 +51,7 @@ void t_intro(void)
         f_color_colorSetIndex(U_COLOR_BG_PURPLE_1);
         f_screen_clear();
 
-        timer = f_timer_new(F_TIMER_MS, Z_LOGO_WAIT_MS, false);
+        timer = f_timer_new(Z_LOGO_WAIT_MS, false);
     }
 
     F_STATE_TICK

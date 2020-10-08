@@ -29,7 +29,7 @@ void n_camera_new(void)
     g_camera.shake = (FVecInt){0, 0};
 
     if(g_camera.timer == NULL) {
-        g_camera.timer = f_timer_new(F_TIMER_MS, 0, false);
+        g_camera.timer = f_timer_new(0, false);
     }
 
     f_timer_runStop(g_camera.timer);
