@@ -19,4 +19,4 @@
 
 #include <faur.h>
 
-extern FState t_play;
+extern FCallState t_play;

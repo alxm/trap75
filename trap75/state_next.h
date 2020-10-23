@@ -19,4 +19,4 @@
 
 #include <faur.h>
 
-extern FState t_next;
+extern FCallState t_next;

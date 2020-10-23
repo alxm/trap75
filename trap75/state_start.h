@@ -19,4 +19,4 @@
 
 #include <faur.h>
 
-extern FState t_start;
+extern FCallState t_start;

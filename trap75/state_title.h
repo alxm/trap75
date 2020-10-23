@@ -19,4 +19,4 @@
 
 #include <faur.h>
 
-extern FState t_title;
+extern FCallState t_title;
