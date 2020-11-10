@@ -17,8 +17,6 @@
 
 #include "util_color.h"
 
-#include "data_assets.h"
-
 FPalette* g_palette;
 
 void u_color_init(void)

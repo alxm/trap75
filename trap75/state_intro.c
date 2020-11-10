@@ -17,7 +17,6 @@
 
 #include "state_intro.h"
 
-#include "data_assets.h"
 #include "state_title.h"
 #include "util_color.h"
 #include "util_input.h"

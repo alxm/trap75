@@ -17,7 +17,6 @@
 
 #include "obj_map.h"
 
-#include "data_assets.h"
 #include "obj_camera.h"
 #include "util_color.h"
 

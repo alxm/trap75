@@ -17,7 +17,6 @@
 
 #include "obj_hud.h"
 
-#include "data_assets.h"
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"

@@ -17,7 +17,6 @@
 
 #include "obj_cursor.h"
 
-#include "data_assets.h"
 #include "obj_ball.h"
 #include "obj_camera.h"
 #include "obj_game.h"

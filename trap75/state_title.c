@@ -17,7 +17,6 @@
 
 #include "state_title.h"
 
-#include "data_assets.h"
 #include "obj_game.h"
 #include "obj_map.h"
 #include "state_start.h"

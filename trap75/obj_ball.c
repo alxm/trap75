@@ -17,7 +17,6 @@
 
 #include "obj_ball.h"
 
-#include "data_assets.h"
 #include "obj_cursor.h"
 #include "obj_map.h"
 #include "util_color.h"
