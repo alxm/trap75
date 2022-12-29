@@ -1,5 +1,5 @@
 include global.mk
 
-F_CONFIG_SCREEN_ZOOM := 8
+F_CONFIG_SCREEN_SIZE_ZOOM := 8
 
 include $(FAUR_PATH)/make/emscripten.mk

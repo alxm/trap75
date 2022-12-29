@@ -1,5 +1,5 @@
 include global.mk
 
-F_CONFIG_SCREEN_ZOOM := 3
+F_CONFIG_SCREEN_SIZE_ZOOM := 3
 
 include $(FAUR_PATH)/make/odroidgo.mk

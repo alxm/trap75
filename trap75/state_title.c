@@ -54,6 +54,10 @@ void t_title(void)
 
             f_random_seedSet(f_time_msGet());
 
+            f_channel_playStart(F_CHANNEL_ANY,
+                                f_sfx_assets_sfx_pressed_a_wav,
+                                F_CHANNEL_PLAY_NORMAL);
+
             n_game_new();
         }
     }
