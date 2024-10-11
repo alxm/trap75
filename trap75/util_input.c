@@ -23,34 +23,34 @@ void u_input_init(void)
 {
     g_buttons[U_BUTTON_UP] = f_button_new();
     f_button_bindKey(g_buttons[U_BUTTON_UP], F_KEY_UP);
-    f_button_bindButton(g_buttons[U_BUTTON_UP], NULL, F_BUTTON_UP);
+    f_button_bindButton(g_buttons[U_BUTTON_UP], F_BUTTON_UP);
 
     g_buttons[U_BUTTON_DOWN] = f_button_new();
     f_button_bindKey(g_buttons[U_BUTTON_DOWN], F_KEY_DOWN);
-    f_button_bindButton(g_buttons[U_BUTTON_DOWN], NULL, F_BUTTON_DOWN);
+    f_button_bindButton(g_buttons[U_BUTTON_DOWN], F_BUTTON_DOWN);
 
     g_buttons[U_BUTTON_LEFT] = f_button_new();
     f_button_bindKey(g_buttons[U_BUTTON_LEFT], F_KEY_LEFT);
-    f_button_bindButton(g_buttons[U_BUTTON_LEFT], NULL, F_BUTTON_LEFT);
-    f_button_bindButton(g_buttons[U_BUTTON_LEFT], NULL, F_BUTTON_L);
+    f_button_bindButton(g_buttons[U_BUTTON_LEFT], F_BUTTON_LEFT);
+    f_button_bindButton(g_buttons[U_BUTTON_LEFT], F_BUTTON_L);
 
     g_buttons[U_BUTTON_RIGHT] = f_button_new();
     f_button_bindKey(g_buttons[U_BUTTON_RIGHT], F_KEY_RIGHT);
-    f_button_bindButton(g_buttons[U_BUTTON_RIGHT], NULL, F_BUTTON_RIGHT);
-    f_button_bindButton(g_buttons[U_BUTTON_RIGHT], NULL, F_BUTTON_R);
+    f_button_bindButton(g_buttons[U_BUTTON_RIGHT], F_BUTTON_RIGHT);
+    f_button_bindButton(g_buttons[U_BUTTON_RIGHT], F_BUTTON_R);
 
     g_buttons[U_BUTTON_A] = f_button_new();
     f_button_bindKey(g_buttons[U_BUTTON_A], F_KEY_SPACE);
     f_button_bindKey(g_buttons[U_BUTTON_A], F_KEY_Z);
-    f_button_bindButton(g_buttons[U_BUTTON_A], NULL, F_BUTTON_A);
+    f_button_bindButton(g_buttons[U_BUTTON_A], F_BUTTON_A);
 
     g_buttons[U_BUTTON_B] = f_button_new();
     f_button_bindKey(g_buttons[U_BUTTON_B], F_KEY_X);
-    f_button_bindButton(g_buttons[U_BUTTON_B], NULL, F_BUTTON_B);
+    f_button_bindButton(g_buttons[U_BUTTON_B], F_BUTTON_B);
 
     g_buttons[U_BUTTON_MENU] = f_button_new();
     f_button_bindKey(g_buttons[U_BUTTON_MENU], F_KEY_ENTER);
-    f_button_bindButton(g_buttons[U_BUTTON_MENU], NULL, F_BUTTON_START);
+    f_button_bindButton(g_buttons[U_BUTTON_MENU], F_BUTTON_START);
 }
 
 void u_input_uninit(void)

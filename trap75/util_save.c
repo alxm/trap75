@@ -17,7 +17,7 @@
 
 #include "util_save.h"
 
-#define Z_SAVE_FILE_NAME F_CONFIG_FILES_PREFIX "trap75.sav"
+#define Z_SAVE_FILE_NAME F_CONFIG_FILES_STORAGE_PREFIX "trap75.sav"
 
 typedef struct {
     uint32_t version;

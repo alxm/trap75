@@ -1,4 +1,4 @@
 #!/bin/sh
-geany -i build/make/* trap75/* dev.sh README.md .gitignore &
-gimp -n assets/gfx/palette.png &
+geany -i build/make/* `find trap75 -type f` dev.sh README.md .gitignore &
+#gimp -n assets/gfx/palette.png &
 cd build/make
