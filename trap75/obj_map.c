@@ -54,7 +54,7 @@ void n_map_draw(void)
 
     FColorPixel* screen = f_screen_pixelsGetBuffer();
     const FColorPixel* sprite =
-        f_sprite_pixelsGetBuffer(f_gfx_assets_gfx_space1_png, 0);
+        f_sprite_pixelsGetBuffer(FSprite_embed_gfx_space1_png, 0);
     FFixu angleStart =
         f_fixu_fromInt(
             (f_fps_ticksGet() & (F_FIX_ANGLES_NUM / Z_SPEED - 1)) * Z_SPEED);

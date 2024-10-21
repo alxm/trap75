@@ -55,7 +55,7 @@ void t_title(void)
             f_random_seedSet(f_time_msGet());
 
             f_channel_playStart(F_CHANNEL_ANY,
-                                f_sfx_assets_sfx_pressed_a_wav,
+                                FSample_embed_sfx_pressed_a_wav,
                                 F_CHANNEL_PLAY_NORMAL);
 
             n_game_new();
@@ -78,7 +78,7 @@ void t_title(void)
             Z_ALPHA_BASELINE
                 + f_fix_toInt(f_fps_ticksSin(1, 4, 0) * Z_ALPHA_SWAY));
 
-        f_sprite_blit(f_gfx_assets_gfx_title_glow_png,
+        f_sprite_blit(FSprite_embed_gfx_title_glow_png,
                       0,
                       F_CONFIG_SCREEN_SIZE_WIDTH / 2, 6);
 
@@ -93,14 +93,14 @@ void t_title(void)
             Z_ALPHA_BASELINE
                 + f_fix_toInt(f_fps_ticksSin(1, 2, 0) * Z_ALPHA_SWAY));
 
-        f_sprite_blit(f_gfx_assets_gfx_title_png,
+        f_sprite_blit(FSprite_embed_gfx_title_png,
                       0,
                       F_CONFIG_SCREEN_SIZE_WIDTH / 2,
                       10);
 
         f_color_blendSet(F_COLOR_BLEND_SOLID);
 
-        f_sprite_blit(f_gfx_assets_gfx_alxm_footer_png,
+        f_sprite_blit(FSprite_embed_gfx_alxm_footer_png,
                       0,
                       F_CONFIG_SCREEN_SIZE_WIDTH / 2,
                       53);
@@ -108,7 +108,7 @@ void t_title(void)
         f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
         f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
-        f_font_fontSet(f_gfx_assets_gfx_font_aa_4x5_png);
+        f_font_fontSet(FSprite_embed_gfx_font_aa_4x5_png);
 
         if(f_fps_ticksGet() & 0x28) {
             f_font_coordsSet(F_CONFIG_SCREEN_SIZE_WIDTH / 2, 38);

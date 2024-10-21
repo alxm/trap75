@@ -225,7 +225,7 @@ void n_cursor_draw(void)
             N_CURSOR_TRAIL_ALPHA
                 - N_CURSOR_TRAIL_ALPHA * i / N_CURSOR_HISTORY_LEN);
 
-        f_sprite_blit(f_gfx_assets_gfx_cursor_png,
+        f_sprite_blit(FSprite_embed_gfx_cursor_png,
                       0,
                       g_cursor.coordsHistory[i].x,
                       g_cursor.coordsHistory[i].y);
@@ -357,6 +357,8 @@ void n_cursor_draw(void)
     f_color_colorSetIndex(colorCursor);
     f_color_alphaSet(F_COLOR_ALPHA_MAX);
 
-    f_sprite_blit(
-        f_gfx_assets_gfx_cursor_png, 0, coords.x + shake.x, coords.y + shake.x);
+    f_sprite_blit(FSprite_embed_gfx_cursor_png,
+                  0,
+                  coords.x + shake.x,
+                  coords.y + shake.x);
 }

@@ -69,9 +69,9 @@ static void drawBar(int Value, int Total, int X, int Y, int Width, int Height, U
 static void hudDrawLevel(int X, int Y)
 {
     f_color_colorSetIndex(U_COLOR_CURSOR_TRAIL);
-    f_sprite_blit(f_gfx_assets_gfx_icon_level_png, 0, X, Y);
+    f_sprite_blit(FSprite_embed_gfx_icon_level_png, 0, X, Y);
 
-    X += f_sprite_sizeGetWidth(f_gfx_assets_gfx_icon_level_png) + 1;
+    X += f_sprite_sizeGetWidth(FSprite_embed_gfx_icon_level_png) + 1;
 
     f_color_colorSetIndex(U_COLOR_CURSOR_MAIN);
     f_font_coordsSet(X, Y);
@@ -106,9 +106,9 @@ static void hudDrawScore(int X, int Y)
 static void hudDrawLives(int X, int Y)
 {
     f_color_colorSetIndex(U_COLOR_BG_RED_4);
-    f_sprite_blit(f_gfx_assets_gfx_icon_heart_png, 0, X, Y - 1);
+    f_sprite_blit(FSprite_embed_gfx_icon_heart_png, 0, X, Y - 1);
 
-    X += f_sprite_sizeGetWidth(f_gfx_assets_gfx_icon_heart_png) + 1;
+    X += f_sprite_sizeGetWidth(FSprite_embed_gfx_icon_heart_png) + 1;
 
     f_color_colorSetIndex(U_COLOR_CURSOR_TRAIL);
     f_font_coordsSet(X, Y);
@@ -122,7 +122,7 @@ void n_hud_draw(void)
     f_align_set(F_ALIGN_X_LEFT, F_ALIGN_Y_TOP);
     f_color_blendSet(F_COLOR_BLEND_ALPHA_MASK);
     f_color_alphaSet(N_HUD_ALPHA);
-    f_font_fontSet(f_gfx_assets_gfx_font_aa_4x5_png);
+    f_font_fontSet(FSprite_embed_gfx_font_aa_4x5_png);
 
     hudDrawLevel(3 - shake.x, 3 - shake.y);
     hudDrawPercent(22 - shake.x, 3 + shake.y);

@@ -1,7 +1,3 @@
-Z_PROJECT_ROOT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
-Z_PNG := $(shell find $(Z_PROJECT_ROOT)/assets/gfx -name "*.png")
-Z_WAV := $(shell find $(Z_PROJECT_ROOT)/assets/sfx -name "*.wav")
-
 F_CONFIG_APP_AUTHOR := alxm
 F_CONFIG_APP_NAME := Trap75
 
@@ -13,9 +9,6 @@ F_CONFIG_COLOR_SCREEN_BORDER := 0x201040
 
 F_CONFIG_DIR_MEDIA := assets
 F_CONFIG_DIR_SRC := trap75
-
-F_CONFIG_FILES_EMBED_OBJ_SPRITE := $(Z_PNG:$(Z_PROJECT_ROOT)/%=%)
-F_CONFIG_FILES_EMBED_OBJ_SAMPLE := $(Z_WAV:$(Z_PROJECT_ROOT)/%=%)
 
 F_CONFIG_SCREEN_FORMAT := F_COLOR_FORMAT_RGB_565
 F_CONFIG_SCREEN_RENDER := F_SCREEN_RENDER_SOFTWARE

@@ -96,7 +96,7 @@ void t_intro(void)
         f_draw_fill();
 
         f_align_set(F_ALIGN_X_CENTER, F_ALIGN_Y_CENTER);
-        f_sprite_blit(f_gfx_assets_gfx_alxm_png,
+        f_sprite_blit(FSprite_embed_gfx_alxm_png,
                       0,
                       F_CONFIG_SCREEN_SIZE_WIDTH / 2,
                       F_CONFIG_SCREEN_SIZE_HEIGHT / 2);
@@ -105,7 +105,7 @@ void t_intro(void)
             return;
         }
 
-        FVecInt logoSize = f_sprite_sizeGet(f_gfx_assets_gfx_alxm_png);
+        FVecInt logoSize = f_sprite_sizeGet(FSprite_embed_gfx_alxm_png);
         int startX1 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 - logoSize.x / 2;
         int startX2 = F_CONFIG_SCREEN_SIZE_WIDTH / 2 + (logoSize.x + 1) / 2 - 2;
         int startY = F_CONFIG_SCREEN_SIZE_HEIGHT / 2 - logoSize.y / 2;

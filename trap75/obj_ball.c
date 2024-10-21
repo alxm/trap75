@@ -30,10 +30,10 @@ typedef struct {
 } OBallData;
 
 static const OBallData g_ballsData[O_BALL_ID_NUM] = {
-    [O_BALL_ID_1] = {&f_gfx_assets_gfx_ball1_png, 1},
-    [O_BALL_ID_2] = {&f_gfx_assets_gfx_ball2_png, 2},
-    [O_BALL_ID_3] = {&f_gfx_assets_gfx_ball3_png, 3},
-    [O_BALL_ID_4] = {&f_gfx_assets_gfx_ball4_png, 5},
+    [O_BALL_ID_1] = {&FSprite_embed_gfx_ball1_png, 1},
+    [O_BALL_ID_2] = {&FSprite_embed_gfx_ball2_png, 2},
+    [O_BALL_ID_3] = {&FSprite_embed_gfx_ball3_png, 3},
+    [O_BALL_ID_4] = {&FSprite_embed_gfx_ball4_png, 5},
 };
 
 struct OBall {

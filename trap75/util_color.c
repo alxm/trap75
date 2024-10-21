@@ -21,7 +21,7 @@ FPalette* g_palette;
 
 void u_color_init(void)
 {
-    g_palette = f_palette_newFromSprite(f_gfx_assets_gfx_palette_png);
+    g_palette = f_palette_newFromSprite(FSprite_embed_gfx_palette_png);
 
     f_color_paletteSet(g_palette);
 }
